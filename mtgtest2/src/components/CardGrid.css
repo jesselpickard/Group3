@@ -1,0 +1,102 @@
+.cardgrid-wrapper {
+  padding: 1.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.page-indicator {
+    align-self:flex-end;
+    color: #71179C;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 1rem;
+  width: 100%;
+}
+
+.cardgrid-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.card-placeholder {
+  aspect-ratio: 2/3;
+  border-radius: 8px;
+  transition: transform 0.1s;
+  cursor: pointer;
+}
+
+.card-placeholder:hover {
+  transform: scale(1.05);
+}
+
+.pagination {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.pagination-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.page-dots {
+    padding: 0 0.25rem;
+    color: #71179C;
+    font-weight: bold;
+}
+
+.page-jump {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #71179C;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.page-jump input {
+    width: 60px;
+    padding: 0.4rem;
+    order: 2px solid #71179C;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.page-btn {
+  padding: 0.4rem 0.75rem;
+  border: 2px solid #71179C;
+  background-color: white;
+  color: #71179C;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.page-btn:hover {
+  background-color: #f0e0f7;
+}
+
+.page-btn.active {
+  background-color: #71179C;
+  color: white;
+}
+
+.page-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
