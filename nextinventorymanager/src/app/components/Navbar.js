@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './Navbar.css';
 import AvatarPicker from './AvatarPicker';
 
@@ -6,6 +6,17 @@ function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState("🎮")
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <>
@@ -18,7 +29,7 @@ function Navbar() {
         </div>
       </div>
       {isLoggedIn ? (
-        <div className="avatar-wrapper">
+        <div className="avatar-wrapper" ref={menuRef}>
           <div className="avatar" onClick={() => setMenuOpen(!menuOpen)}>
             {selectedAvatar}
           </div>

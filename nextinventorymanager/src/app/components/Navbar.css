@@ -10,6 +10,8 @@ Navbar CSS
   background-color: #71179C;
   height: 55px;
   overflow: visible;
+  position: relative;
+  z-index: 100;
 }
 
 .logo {
