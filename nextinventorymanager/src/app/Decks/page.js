@@ -1,5 +1,4 @@
-"use client";
-import Navbar from "../components/Navbar.js"
+import Navbar from '../components/Navbar.js'
 
 export default function Home() {
   return (
