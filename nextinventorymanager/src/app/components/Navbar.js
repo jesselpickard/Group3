@@ -57,7 +57,7 @@ function Navbar() {
 function NavLinks() {
   return (
     <div className="nav-links">
-      <a href="./app">Home</a>
+      <a href="./Home">Home</a>
       <a href="./Inventory">Inventory</a>
       <a href="./Decks">Decks</a>
     </div>
