@@ -1,5 +1,5 @@
 "use client";
-import './App.css';
+import '../App.css';
 import Link from 'next/link';
 import {useState} from 'react';
 import Navbar from '../components/Navbar';
@@ -11,7 +11,7 @@ export default function Home() {
     <div>
       <Navbar />
       <CardGrid />
-      <p>Testing the link to [TestPage](<Link href="/Testpage">/Testpage</Link>).</p>
+      <p>Testing the link to [TestPage](<Link href="../Testpage">/Testpage</Link>).</p>
     </div>
   );
 }
