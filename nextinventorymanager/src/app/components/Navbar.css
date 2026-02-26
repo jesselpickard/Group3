@@ -23,6 +23,7 @@ Navbar CSS
 
 .search-container {
   display: flex;
+  background-color: white;
   align-items: center;
   background-color: white;
   border-radius: 8px;
