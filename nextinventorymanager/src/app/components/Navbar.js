@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import './Navbar.css';
 import AvatarPicker from './AvatarPicker';
 
@@ -57,7 +58,7 @@ function NavLinks() {
     <div className="nav-links">
       <a href="#">Home</a>
       <a href="#">Inventory</a>
-      <a href="#">Decks</a>
+      <a href="./Decks">Decks</a>
     </div>
   )
 }
