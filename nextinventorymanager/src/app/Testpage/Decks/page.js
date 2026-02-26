@@ -1,9 +1,9 @@
-//import Navbar from "./components/"
+import Navbar from "./components/Navbar.js"
 
 export default function Home() {
   return (
     <div>
-      <header>Hello World!</header>
+      <Navbar />
     </div>
   );
 }
