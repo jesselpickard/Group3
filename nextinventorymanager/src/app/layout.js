@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "InventoryManger",
+  title: "InventoryManager",
   description: "Magic the Gathering Inventory Manager capstone project",
 };
 
