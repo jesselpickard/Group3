@@ -7,7 +7,7 @@ export default function Home() {
   //this page exists to test pieces without implementing it into another page
   return (
     <div>
-      <collapsibleMenu open={open} toggle={() => setOpen(!open)} />
+      <CollapsibleMenu open={open} toggle={() => setOpen(!open)} />
     </div>
  
   );
