@@ -30,7 +30,7 @@ export default function collapsibleMenu(){
       </div>
 
       <div className="content">
-        Hello world!
+        <p>Hello World!</p>
       </div>
     </div>
   );
