@@ -3,23 +3,24 @@
 import { useState } from "react";
 import "./MenuTest.css";
 
-/*export default function Home() {
+export default function Home() {
   //this page exists to test pieces without implementing it into another page
   return (
     <div>
-      <collapsibleMenu open={open} toggle={() => setOpen(!open)} />
+      <CollapsibleMenu/>
     </div>
  
   );
-}*/
-export default function collapsibleMenu(){
+}
+
+function CollapsibleMenu(){
   const [open, setOpen] = useState(true);
 
   return (
     <div className="container">
       <div className={`menu ${open ? "open" : "closed"}`}>
         <button onClick={() => setOpen(!open)}>
-          {open ? "←" : "→"}
+          {open ? "-" : "+"}
         </button>
 
         {open && (
