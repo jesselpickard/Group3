@@ -3,16 +3,16 @@
 import { useState } from "react";
 import "./MenuTest.css";
 
-export default function Home() {
+/*export default function Home() {
   //this page exists to test pieces without implementing it into another page
   return (
     <div>
-      <CollapsibleMenu open={open} toggle={() => setOpen(!open)} />
+      <collapsibleMenu open={open} toggle={() => setOpen(!open)} />
     </div>
  
   );
-}
- function CollapsibleMenu(){
+}*/
+export default function collapsibleMenu(){
   const [open, setOpen] = useState(true);
 
   return (
@@ -30,7 +30,7 @@ export default function Home() {
       </div>
 
       <div className="content">
-        <p>Hello world!</p>
+        Hello world!
       </div>
     </div>
   );
