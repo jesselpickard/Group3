@@ -1,8 +1,8 @@
 .container {
   display: flex;
   height: 100vh;
-  padding-top: 20%;
-  padding-bottom: 20%;
+  padding-top: 80%;
+  padding-bottom: 80%;
 }
 
 .menu {
@@ -11,7 +11,8 @@
   gap: 10px;
   overflow: hidden;
   transition: width 0.3s ease;
-  background: #eee;
+  background: #71179C;
+  border-radius: 10%
 }
 
 .menu.open {
