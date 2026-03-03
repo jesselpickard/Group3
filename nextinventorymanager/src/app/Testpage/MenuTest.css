@@ -1,8 +1,8 @@
 .container {
   display: flex;
   height: 100vh;
-  padding-top: 80%;
-  padding-bottom: 80%;
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 
 .menu {
