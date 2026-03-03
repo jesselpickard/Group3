@@ -31,7 +31,7 @@ function CollapsibleMenu(){
       </div>
 
       <div className="content">
-        <p>Hello World!</p>
+        <p>Hello world! 2</p>
       </div>
     </div>
   );
