@@ -27,6 +27,7 @@ function CollapsibleMenu(){
             <div className = "searchContainer">
               <input type="text" placeholder="Filter:..."></input>
             </div>
+            <CardTypeBox/>
           </>
         )}
       </div>
@@ -36,4 +37,18 @@ function CollapsibleMenu(){
       </div>
     </div>
   );
+}
+function CardTypeBox(){
+  return(
+    <select>
+      <option value="artifact">Artifact</option>
+      <option value="battle">Battle</option>
+      <option value="creature">Creature</option>
+      <option value="enchantment">Enchantment</option>
+      <option value="instant">Instant</option>
+      <option value="kindred">Kindred</option>
+      <option value="planeswalker">Planeswalker</option>
+      <option value="sorcery">Sorcery</option>
+    </select>
+  )
 }
