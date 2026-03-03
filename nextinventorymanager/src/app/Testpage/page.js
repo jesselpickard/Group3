@@ -12,7 +12,7 @@ export default function Home() {
  
   );
 }
-
+//to improve upon this, I should make components for the rows and stack them within
 function CollapsibleMenu(){
   const [open, setOpen] = useState(true);
 

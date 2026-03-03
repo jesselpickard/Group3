@@ -9,12 +9,12 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  overflow: hidden;
+  overflow: hidden;/*Hides any items that will not fit in the closed menu*/
   transition: width 0.3s ease;
   background: #71179C;
   border-radius: 3%;
-  flex-direction: column;
-  justify-content: flex-start;
+  flex-direction: column;/*Declares placement type*/
+  justify-content: flex-start;/*Changes where the placement begins*/
 }
 
 .menu.open {
