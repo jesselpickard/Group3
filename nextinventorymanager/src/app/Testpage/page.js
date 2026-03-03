@@ -31,7 +31,6 @@ function CollapsibleMenu(){
               <input type="text" placeholder="Filter:..."></input>
             </div>
             <CardTypeBox/>
-            <SubtypeSearch/>
           </>
         )}
       </div>
