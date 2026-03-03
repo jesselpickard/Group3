@@ -16,6 +16,19 @@
   flex-direction: column;/*Declares placement type*/
   justify-content: flex-start;/*Changes where the placement begins*/
 }
+@media screen and (max-width: 800px) {
+    .menu{
+        display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;/*Hides any items that will not fit in the closed menu*/
+  transition: width 0.3s ease;
+  background: #179c19;
+  border-radius: 3%;
+  flex-direction: column;/*Declares placement type*/
+  justify-content: flex-start;/*Changes where the placement begins*/
+    }
+}
 
 .menu.open {
   width: 300px;

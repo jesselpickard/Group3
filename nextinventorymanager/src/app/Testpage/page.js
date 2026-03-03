@@ -7,6 +7,9 @@ export default function Home() {
   //this page exists to test pieces without implementing it into another page
   return (
     <div>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </head>
       <CollapsibleMenu/>
     </div>
   );
@@ -51,5 +54,10 @@ function CardTypeBox(){
       <option value="planeswalker">Planeswalker</option>
       <option value="sorcery">Sorcery</option>
     </select>
+  )
+}
+function SubtypeSearch(){
+  return(
+    <></>
   )
 }
