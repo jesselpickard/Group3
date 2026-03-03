@@ -9,7 +9,6 @@ export default function Home() {
     <div>
       <CollapsibleMenu/>
     </div>
- 
   );
 }
 //to improve upon this, I should make components for the rows and stack them within
@@ -26,6 +25,9 @@ function CollapsibleMenu(){
         {open && (
           <>
             <textarea>Test: filter</textarea>
+            <div className = "searchContainer">
+              <input type="text" placeholder="Filter:..."></input>
+            </div>
           </>
         )}
       </div>
