@@ -24,7 +24,6 @@ function CollapsibleMenu(){
 
         {open && (
           <>
-            <textarea>Test: filter</textarea>
             <div className = "searchContainer">
               <input type="text" placeholder="Filter:..."></input>
             </div>
