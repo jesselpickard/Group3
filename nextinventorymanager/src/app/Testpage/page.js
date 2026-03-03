@@ -41,6 +41,7 @@ function CollapsibleMenu(){
 function CardTypeBox(){
   return(
     <select>
+      <option></option>
       <option value="artifact">Artifact</option>
       <option value="battle">Battle</option>
       <option value="creature">Creature</option>
