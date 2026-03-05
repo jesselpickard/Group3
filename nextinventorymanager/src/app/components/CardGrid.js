@@ -27,24 +27,36 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
     }
   };
 
-  // builds the list of page numbers/dots to display
-  // always shows page 1, current page +/- 2, and last page
-  // fills gaps with '...'
+  // always returns exactly 7 slots, using null for empty placeholders
   const getPageNumbers = () => {
-    const pages = [];
     if (totalPages <= 7) {
-      // shoes all pages if there are 7 or fewer
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
+      return Array.from({ length: 7 }, (_, i) => i < totalPages ? i + 1 : null);
     }
-    pages.push(1);
-    if (currentPage > 4) pages.push('...');
-    for (let i = Math.max(2, currentPage - 2); i <= Math.min(totalPages - 1, currentPage + 2); i++) {
-      pages.push(i); // pages around current
+    if (currentPage <= 4) {
+      return [1, 2, 3, 4, 5, '...', totalPages];
     }
-    if (currentPage < totalPages - 3) pages.push('...'); // gap before the last page
-    pages.push(totalPages);
-    return pages;
+    if (currentPage >= totalPages - 3) {
+      return [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    }
+    return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
   };
+
+  {getPageNumbers().map((page, i) =>
+    page === null ? (
+      /* invisible placeholder keeps width consistent */
+      <span key={`empty-${i}`} className="page-placeholder" />
+    ) : page === '...' ? (
+      <span key={`dots-${i}`} className="page-dots">...</span>
+    ) : (
+      <button
+        key={page}
+        className={`page-btn ${currentPage === page ? 'active' : ''}`}
+        onClick={() => onPageChange(page)}
+      >
+        {page}
+      </button>
+    )
+  )}
 
   return (
     <div className="pagination-bar">

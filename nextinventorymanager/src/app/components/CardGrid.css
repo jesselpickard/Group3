@@ -17,14 +17,6 @@
   width: 100%;
 }
 
-/* page indicator text on the left (i.e., page 1 of 20) */
-.page-indicator {
-  align-self:flex-end;
-  color: #71179C;
-  font-weight: bold;
-  font-size: 0.9rem;
-}
-
 /* ---- CARD GRID ---- */
 /* responsive grid - auto fills columns based on screen width */
 .card-grid {
@@ -53,6 +45,7 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
+  width: 520px;
   flex-wrap: wrap; /* wraps page buttons to next line */
   justify-content: center;
 }
@@ -67,11 +60,30 @@
   width: 100%;
 }
 
-/* dots between page numbers (i.e., 1 ... 5 6 7 ... 20) */
-.page-dots {
-  padding: 0 0.25rem;
+/* page indicator text on the left (i.e., page 1 of 20) */
+.page-indicator {
+  align-self:flex-end;
   color: #71179C;
   font-weight: bold;
+  font-size: 0.9rem;
+}
+
+/* invisible placeholder - same size as a button to keep pagination width fixed */
+.page-placeholder {
+  display: inline-block;
+  min-width: 42px;
+  padding: 0.4rem 0.75rem;
+  border: 2px solid transparent;
+}
+
+/* dots between page numbers (i.e., 1 ... 5 6 7 ... 20) */
+.page-dots {
+  color: #71179C;
+  font-weight: bold;
+  min-width: 42px;
+  text-align: center;
+  display: inline-block;
+  padding: 0.4rem 0;
 }
 
 /* ---- PAGE JUMP ---- */
@@ -123,4 +135,51 @@
 .page-btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
+}
+
+/* ---- DARK MODE ADJUSTMENTS ---- */
+/* dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  /* lighter purple background so it's easier on the eyes in dark mode */
+  .cardgrid-wrapper {
+    background-color: #1a1a1a;
+  }
+
+  /* make page indicator text visible in dark mode */
+  .page-indicator {
+    color: #c084e8;
+  }
+
+  /* lighter purple borders and text for pagination buttons */
+  .page-btn {
+    background-color: #1a1a1a;
+    color: #c084e8;
+    border-color: #c084e8;
+  }
+
+  .page-btn:hover {
+    background-color: #2d1040;
+  }
+
+  .page-btn.active {
+    background-color: #c084e8;
+    color: #1a1a1a;
+  }
+
+  /* make go to page text visible */
+  .page-jump {
+    color: #c084e8;
+  }
+
+  /* fix the go to page input box */
+  .page-jump input {
+    background-color: #2d1040;
+    border-color: #c084e8;
+    color: white;
+  }
+
+  /* make dots visible */
+  .page-dots {
+    color: #c084e8;
+  }
 }
