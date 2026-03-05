@@ -32,7 +32,7 @@ function CollapsibleMenu(){
             </div>
             <CardTypeBox/>
             <SubtypeSearch/>
-            Testing(CardTypeBox);
+            <Testing itemA={CardTypeBox}/>
           </>
         )}
       </div>
@@ -66,7 +66,7 @@ function SubtypeSearch(){
   )
 }
 
-function Testing(itemA){
+function Testing({itemA}){
   return(
     <div>
       {itemA}
