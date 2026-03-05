@@ -77,7 +77,8 @@ function Testing({itemA}){
 function Row({itemA},{itemB}){
   return(
     <div className="row">
-
+      {itemA}
+      {itemB}
     </div>
   )
 }
