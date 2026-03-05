@@ -11,7 +11,6 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <CollapsibleMenu/>
-      <img src="https://tcgplayer-cdn.tcgplayer.com/product/3479_in_1000x1000.jpg"></img>
     </div>
   );
 }
