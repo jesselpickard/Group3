@@ -42,3 +42,9 @@
   flex: 1;
   padding: 20px;
 }
+
+.row {
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 8px;
+}

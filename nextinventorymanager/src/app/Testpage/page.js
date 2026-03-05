@@ -32,7 +32,7 @@ function CollapsibleMenu(){
             </div>
             <CardTypeBox/>
             <SubtypeSearch/>
-            <Testing itemA={<CardTypeBox/>}/>
+            <Row itemA={<CardTypeBox/>} itemB={<SubtypeSearch/>}/>
           </>
         )}
       </div>
@@ -70,6 +70,14 @@ function Testing({itemA}){
   return(
     <div>
       {itemA}
+    </div>
+  )
+}
+
+function Row({itemA},{itemB}){
+  return(
+    <div className="row">
+
     </div>
   )
 }
