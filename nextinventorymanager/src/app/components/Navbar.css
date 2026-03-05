@@ -1,43 +1,141 @@
-/*
-Navbar CSS
-*/
+/* ---- Navbar ---- */
 
+/* main top bar. purple strip with logo, search, and login/avatar */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   padding: 0.75rem 2rem 0 2rem;
   background-color: #71179C;
-  height: 55px;
-  overflow: visible;
+  min-height: 55px;
+  height: auto; /* allows navbar to grow instead of overflow */
+  overflow: visible; /* allows submenu to appear outside of the navbar bounds */
   position: relative;
-  z-index: 100;
+  z-index: 100; /* keeps navbar above navlinks */
+  flex-wrap: nowrap;
 }
 
+/* right side of navbar. holds mobile search button and avatar/login */
+.navbar-right {
+  display: flex;
+  align-items: flex-start;
+  /*gap: 0.75rem;*/
+  flex-shrink: 0; /* doesn't shrink or wrap */
+  margin-top: 0.2rem;
+  flex: 1;
+}
+
+/* pushes avatar/login all the way to the right */
+.avatar-wrapper, .login-btn {
+  margin-left: auto;
+}
+
+/* wrapper for mobile search button and popup. anchors the dropdown */
+.search-popup-wrapper {
+  position: relative;
+  display: none; /* hidden by default, shown on small screens */
+  margin: 0 auto;
+}
+
+/* the 🔍 icon button shown on mobile */
+.search-toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.4rem;
+}
+
+/* search dropdown popup below the icon */
+.search-popup {
+  position: absolute;
+  right: 0;
+  top: 44px; /* appears just below the search button */
+  background-color: white;
+  border-radius: 8px;
+  padding: 0.5rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 999;
+  width: 220px;
+}
+
+/* input inside the popup */
+.search-popup input {
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  width: 100%;
+  padding: 0.25rem;
+}
+
+/* on small screens - hide normal search, show icon button */
+@media (max-width: 600px) {
+  .search-wrapper {
+    display: none;
+  }
+  .search-popup-wrapper {
+    display: block;
+  }
+}
+
+/* on large screens - show normal search, hide icon button */
+@media (min-width: 601px) {
+  .search-popup-wrapper {
+    display: none;
+  }
+}
+
+/* app title on the left */
 .logo {
   color: white;
   font-size: 1.5rem;
   font-weight:bold;
   margin-top:0.4rem;
+  flex-shrink: 0; /* locks logo size */
 }
 
+/* stretches to fill space between logo and avatar
+    shrinks on small screens */
+.search-wrapper {
+  display: flex;
+  align-items: center; 
+  flex: 1; /* fills available space elastically */
+  max-width: 500px;
+  margin: 0 1rem; /* keeps spacing from logo and avatar */
+}
+
+/* hide on small screens */
+@media (max-width: 600px) {
+  .search-wrapper {
+    display: none;
+  }
+  .search-popup-wrapper {
+    display: block;
+  }
+}
+
+/* white rounded search box in the center. width driven by search-wrapper */
 .search-container {
   display: flex;
   background-color: white;
   align-items: center;
-  background-color: white;
   border-radius: 8px;
   padding: 0.4rem 0.75rem;
   width: 100%;
-  align-self: flex-end;
+  align-self: flex-end; /* pushes search bar to the bottom of the navbar */
   margin-top: 0.75rem;
 }
 
+/* magnifying glass icon inside the search box */
 .search-icon {
   margin-right:0.75rem;
   cursor:pointer;
 }
 
+/* the actual text input. borderless to blend into container */
 .search-bar {
   border: none;
   outline: none;
@@ -45,16 +143,16 @@ Navbar CSS
   width: 100%;
 }
 
+/* login button on the right */
 .login-btn {
   padding: 0.5rem 1rem;
   cursor: pointer;
   margin-top: 0.75rem;
+  flex-shrink: 0; /* locks button size */
 }
 
-/*
-NavLinks CSS
-*/
-
+/* ---- NavLinks ---- */
+/* secondary purple strip below navbar with page links */
 .nav-links {
   background-color: #71179C;
   display: flex;
@@ -64,25 +162,25 @@ NavLinks CSS
   margin-top: -0.5rem;
 }
 
+/* white page link text */
 .nav-links a {
   color: white;
   text-decoration: none;
   font-size: 0.95rem;
 }
 
+/* underline on hover */
 .nav-links a:hover {
   text-decoration: underline;
 }
 
 
-/*
-Submenu CSS
-*/
-
+/* ---- Submenu ---- */
+/* dropdown card that appears when the avatar is clicked */
 .submenu {
   position: absolute;
   right: 0;
-  top: 50px;
+  top: 50px; /* positions dropdown just below avatar */
   background-color: white;
   border-radius: 8px;
   padding: 0.5rem;
@@ -90,22 +188,25 @@ Submenu CSS
   flex-direction: column;
   gap: 0.5rem;
   min-width: 160px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  z-index: 999;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* soft drop shadow */
+  z-index: 999; /* sits above everything else */
 }
 
+/* user email shown in grey at the top of the submenu */
 .submenu-email {
   color: #888;
   font-size: 0.8rem;
   padding: 0.25rem 0.5rem;
 }
 
+/* the grey line separating sections */
 .submenu-divider {
   border: none;
   border-top: 1px solid #eee;
   margin: 0.25rem 0;
 }
 
+/* purple link text inside submenu */
 .submenu a {
   color: #71179C;
   text-decoration: none;
@@ -113,6 +214,7 @@ Submenu CSS
   border-radius: 4px;
 }
 
+/* light purple highlight on hover */
 .submenu a:hover {
   background-color: #f0e0f7;
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './CardGrid.css';
 
+// placeholder colors, one per page. cycles if there are more pages than colors
 const colors = [
   '#FF4444', '#FF8C00', '#FFD700', '#4CAF50',
   '#2196F3', '#4B0082', '#8F00FF', '#FF69B4',
@@ -9,11 +10,15 @@ const colors = [
   '#DDA0DD', '#F0E68C', '#87CEEB', '#FFA07A',
 ];
 
+// total number of pages
 const TOTAL_PAGES = 20;
 
+// pagination bar component. at the top and bottom of the grid
 function PaginationBar({ currentPage, totalPages, onPageChange }) {
+  // tracks the value typed into the "go to page" input
   const [jumpValue, setJumpValue] = useState('');
 
+  // jumps to the typed page number if it is valid, then clears the input
   const handleJump = () => {
     const num = parseInt(jumpValue);
     if (num >= 1 && num <= totalPages) {
@@ -22,17 +27,21 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
     }
   };
 
+  // builds the list of page numbers/dots to display
+  // always shows page 1, current page +/- 2, and last page
+  // fills gaps with '...'
   const getPageNumbers = () => {
     const pages = [];
     if (totalPages <= 7) {
+      // shoes all pages if there are 7 or fewer
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
     pages.push(1);
     if (currentPage > 4) pages.push('...');
     for (let i = Math.max(2, currentPage - 2); i <= Math.min(totalPages - 1, currentPage + 2); i++) {
-      pages.push(i);
+      pages.push(i); // pages around current
     }
-    if (currentPage < totalPages - 3) pages.push('...');
+    if (currentPage < totalPages - 3) pages.push('...'); // gap before the last page
     pages.push(totalPages);
     return pages;
   };
@@ -40,6 +49,7 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
   return (
     <div className="pagination-bar">
       <div className="pagination">
+        {/* prev button. disabled on first page */}
         <button
           className="page-btn"
           onClick={() => onPageChange(Math.max(1, currentPage - 1))}
@@ -48,6 +58,7 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
           ← Prev
         </button>
 
+        {/* render each page number or dots */}
         {getPageNumbers().map((page, i) =>
           page === '...' ? (
             <span key={`dots-${i}`} className="page-dots">...</span>
@@ -62,6 +73,7 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
           )
         )}
 
+        {/* next button. disabled on last page */}
         <button
           className="page-btn"
           onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
@@ -71,6 +83,7 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
         </button>
       </div>
 
+      {/* manual page jump input. also triggers on Enter key */}
       <div className="page-jump">
         <span>Go to page:</span>
         <input
@@ -88,16 +101,20 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
 }
 
 export default function CardGrid() {
+  // tracks which page the user is currently on
   const [currentPage, setCurrentPage] = useState(1);
+  // picks a color based on the current page, cycling through the colors array
   const currentColor = colors[(currentPage - 1) % colors.length];
 
   return (
     <div className="cardgrid-wrapper">
+      {/* top bar with page indicator on the left and pagination on the right */}
       <div className="cardgrid-topbar">
         <div className="page-indicator">Page {currentPage} of {TOTAL_PAGES}</div>
         <PaginationBar currentPage={currentPage} totalPages={TOTAL_PAGES} onPageChange={setCurrentPage} />
       </div>
 
+      {/* 81 placeholder card rectangles in the current page color */}
       <div className="card-grid">
         {Array.from({ length: 81 }).map((_, i) => (
           <div
@@ -108,6 +125,7 @@ export default function CardGrid() {
         ))}
       </div>
 
+      {/* duplicate pagination bar at the bottom for convenience */}
       <PaginationBar currentPage={currentPage} totalPages={TOTAL_PAGES} onPageChange={setCurrentPage} />
     </div>
   )

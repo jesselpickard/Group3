@@ -1,3 +1,5 @@
+/* ---- CARD GRID WRAPPER ---- */
+/* outer container for the whole page - stacks everything vertically */
 .cardgrid-wrapper {
   padding: 1.5rem 3rem;
   display: flex;
@@ -6,77 +8,96 @@
   gap: 1.5rem;
 }
 
-.page-indicator {
-    align-self:flex-end;
-    color: #71179C;
-    font-weight: bold;
-    font-size: 0.9rem;
+/* ---- TOP BAR ---- */
+/* row that holds the page indicator and top pagination bar */
+.cardgrid-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
+/* page indicator text on the left (i.e., page 1 of 20) */
+.page-indicator {
+  align-self:flex-end;
+  color: #71179C;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+/* ---- CARD GRID ---- */
+/* responsive grid - auto fills columns based on screen width */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(9, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
   gap: 1rem;
   width: 100%;
 }
 
-.cardgrid-topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
-
+/* individual card placeholder rectangle */
 .card-placeholder {
-  aspect-ratio: 2/3;
-  border-radius: 8px;
+  aspect-ratio: 2/3; /*matches real MTG card proportions */
+  border-radius: 8px; 
   transition: transform 0.1s;
   cursor: pointer;
 }
 
+/* slight zoom on hover*/
 .card-placeholder:hover {
   transform: scale(1.05);
 }
 
+/* ---- PAGINATION ---- */
+/* row containing prev, page numbers, and next buttons */
 .pagination {
   display: flex;
   gap: 0.5rem;
   align-items: center;
+  flex-wrap: wrap; /* wraps page buttons to next line */
+  justify-content: center;
 }
 
+/* outer wrapper for pagination row and go-to-page input */
 .pagination-bar {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center; /* centers everything when wrapped */
+  width: 100%;
 }
 
+/* dots between page numbers (i.e., 1 ... 5 6 7 ... 20) */
 .page-dots {
-    padding: 0 0.25rem;
-    color: #71179C;
-    font-weight: bold;
+  padding: 0 0.25rem;
+  color: #71179C;
+  font-weight: bold;
 }
 
+/* ---- PAGE JUMP ---- */
+/* "go to page" input and button */
 .page-jump {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #71179C;
-    font-weight: bold;
-    font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #71179C;
+  font-weight: bold;
+  font-size: 0.9rem;
 }
 
+/* number input for typing a page directly */
 .page-jump input {
-    width: 60px;
-    padding: 0.4rem;
-    order: 2px solid #71179C;
-    border-radius: 6px;
-    text-align: center;
-    font-size: 0.9rem;
-    outline: none;
+  width: 60px;
+  padding: 0.4rem;
+  border: 2px solid #71179C;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 0.9rem;
+  outline: none;
 }
 
+/* ---- PAGE BUTTONS ---- */
+/* shared style for prev, next, and numbered page buttons */
 .page-btn {
   padding: 0.4rem 0.75rem;
   border: 2px solid #71179C;
@@ -87,15 +108,18 @@
   font-weight: bold;
 }
 
+/* light purple on hover */
 .page-btn:hover {
   background-color: #f0e0f7;
 }
 
+/* solid purple for currently active page */
 .page-btn.active {
   background-color: #71179C;
   color: white;
 }
 
+/* faded out when prev/next are unavailable */
 .page-btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
