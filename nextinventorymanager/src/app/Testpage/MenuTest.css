@@ -48,10 +48,12 @@
   flex-direction: row;
   justify-content: flex-start;
   padding: 8px 8px;
+  scale:1.02;
 }
 .itemA {
-  display: flex;
+  border-radius: 3%;
 }
 .itemB {
+  border-radius: 3%;
   margin-left: 6px;
 }
