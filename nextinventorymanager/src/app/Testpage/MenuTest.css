@@ -53,5 +53,5 @@
   display: flex;
 }
 .itemB {
-  gap: 6px;
+  margin-left: 6px;
 }
