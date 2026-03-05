@@ -16,7 +16,7 @@
   flex-direction: column;/*Declares placement type*/
   justify-content: flex-start;/*Changes where the placement begins*/
 }
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 800px) {/*test case for media tag - responsive design*/
     .menu{
         display: flex;
   align-items: center;
