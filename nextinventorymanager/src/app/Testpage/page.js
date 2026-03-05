@@ -60,7 +60,7 @@ function CardTypeBox(){
 function SubtypeSearch(){
   return(
     <div className="subtypeSearch">
-      <input type="text" className="subtypeSearch.input">Subtype...</input>
+      <input type="text" className="subtypeSearch.input" placeHolder="Subtype..."></input>
     </div>
   )
 }
