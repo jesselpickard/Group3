@@ -69,8 +69,12 @@ function SubtypeSearch(){
 function Row({itemA,itemB}){
   return(
     <div className="row">
-      {itemA}
-      {itemB}
+      <div className="itemA">
+        {itemA}
+      </div>
+      <div className="itemB">
+        {itemB}
+      </div>
     </div>
   )
 }
