@@ -66,14 +66,6 @@ function SubtypeSearch(){
   )
 }
 
-function Testing({itemA}){
-  return(
-    <div>
-      {itemA}
-    </div>
-  )
-}
-
 function Row({itemA,itemB}){
   return(
     <div className="row">
