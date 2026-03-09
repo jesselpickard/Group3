@@ -32,10 +32,12 @@
 }
 .itemA {
   border-radius: 3%;
+  flex: 1;
 }
 .itemB {
   border-radius: 3%;
   margin-left: 6px;
+  flex: 3;
 }
 
 
