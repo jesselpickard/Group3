@@ -11,14 +11,14 @@ export default function CollapsibleMenu() {
   const [open, setOpen] = useState(true);
 
   return (
-    <div className="sidebar-inner" style={{width: open ? "300px" : "50px", transition: "width 0.3s",}}>
+    <div className="menu" style={{width: open ? "300px" : "50px", transition: "width 0.3s",}}>
       {/* Toggle button */}
       <button onClick={() => setOpen(!open)}>
         {open ? "-" : "+"}
       </button>
       {/* Menu content*/}
       {open && (
-        <div className="menu-content">
+        <div className="content">
           <div className="searchContainer">
             <input type="text" placeholder="Filter:..." />
           </div>

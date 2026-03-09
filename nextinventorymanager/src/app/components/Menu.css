@@ -12,6 +12,7 @@
   transition: width 0.3s ease;
   background: #71179C;
   border-radius: 3%;
+  width: 100%;
 }
 
 .menu.open {
@@ -22,9 +23,6 @@
   width: 50px;
 }
 
-.sidebar-inner button {
-  width: 100%;
-}
 .row {
   display: flex;
   flex-direction: row;
