@@ -5,7 +5,7 @@ import {useState} from 'react';
 import Navbar from './components/Navbar';
 import CardGrid from './components/CardGrid';
 import Menu from './components/CollapsibleMenu';
-import Row from './components/CollapsibleMenu';
+import {Row} from './components/CollapsibleMenu';
 
 
 export default function Home() {

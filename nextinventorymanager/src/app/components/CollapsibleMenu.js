@@ -65,7 +65,7 @@ function SubtypeSearch(){
   )
 }
 
-function Row({itemA,itemB}){
+export function Row({itemA,itemB}){
   return(
     <div className="row">
       <div className="itemA">
