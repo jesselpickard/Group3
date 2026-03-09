@@ -39,10 +39,6 @@ function CollapsibleMenu(){
           </>
         )}
       </div>
-
-      <div className="content">
-        <p>Hello world! 2</p>
-      </div>
     </div>
   );
 }

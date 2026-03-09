@@ -37,12 +37,6 @@
 .menu.closed {
   width: 50px;
 }
-
-.content {
-  flex: 1;
-  padding: 20px;
-}
-
 .row {
   display: flex;
   flex-direction: row;

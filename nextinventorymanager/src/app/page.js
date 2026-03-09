@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <div>
       <Navbar />
-      <Row itemA={<CardGrid/>} itemB={<Menu/>}></Row>
+      <Row itemA={<CardGrid/>} itemB={<Menu/>}/>
       <p>Link to test page [TestPage](<Link href="/Testpage">/Testpage</Link>)(<Link href="/CardInfo">/CardInfo</Link>).</p>
     </div>
   );
