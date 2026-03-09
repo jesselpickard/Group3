@@ -13,9 +13,6 @@ export default function Home() {
       <Navbar />
       <div className="main-layout">
         {/* LEFT SIDEBAR */}
-        <div className="sidebar-area">
-          <Menu />
-        </div>
         {/* MAIN CONTENT */}
         <div className="content-area">
           <CardGrid />

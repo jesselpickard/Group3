@@ -126,16 +126,26 @@ export default function CardGrid() {
         <PaginationBar currentPage={currentPage} totalPages={TOTAL_PAGES} onPageChange={setCurrentPage} />
       </div>
 
-      {/* 81 placeholder card rectangles in the current page color */}
-      <div className="card-grid">
-        {Array.from({ length: 81 }).map((_, i) => (
-          <div
-            key={i}
-            className="card-placeholder"
-            style={{ backgroundColor: currentColor }}
-          />
-        ))}
+      <div className="main-layout">
+        {/* LEFT SIDEBAR */}
+        <div className="sidebar-area">
+          <Menu />
+        </div>
+        {/* MAIN CONTENT */}          
+        <div className="content-area">
+          {/* 81 placeholder card rectangles in the current page color */}
+          <div className="card-grid">
+            {Array.from({ length: 81 }).map((_, i) => (
+              <div
+                key={i}
+                className="card-placeholder"
+                style={{ backgroundColor: currentColor }}
+              />
+            ))}
+          </div>
+        </div>
       </div>
+
 
       {/* duplicate pagination bar at the bottom for convenience */}
       <PaginationBar currentPage={currentPage} totalPages={TOTAL_PAGES} onPageChange={setCurrentPage} />
