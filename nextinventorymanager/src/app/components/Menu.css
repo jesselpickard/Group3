@@ -1,0 +1,59 @@
+.container {
+  display: flex;
+  height: 100vh;
+  padding-top: 40px;
+  padding-bottom: 50px;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;/*Hides any items that will not fit in the closed menu*/
+  transition: width 0.3s ease;
+  background: #71179C;
+  border-radius: 3%;
+  flex-direction: column;/*Declares placement type*/
+  justify-content: flex-start;/*Changes where the placement begins*/
+}
+@media screen and (max-width: 800px) {/*test case for media tag - responsive design*/
+    .menu{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;/*Hides any items that will not fit in the closed menu*/
+  transition: width 0.3s ease;
+  background: #179c19;
+  border-radius: 3%;
+  flex-direction: column;/*Declares placement type*/
+  justify-content: flex-start;/*Changes where the placement begins*/
+    }
+}
+
+.menu.open {
+  width: 300px;
+}
+
+.menu.closed {
+  width: 50px;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 8px 8px;
+  scale:1.2;
+}
+.itemA {
+  border-radius: 3%;
+}
+.itemB {
+  border-radius: 3%;
+  margin-left: 6px;
+}
