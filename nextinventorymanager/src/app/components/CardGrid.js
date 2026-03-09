@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './CardGrid.css';
-import './CollapsibleMenu.js';
+import Menu from './CollapsibleMenu.js';
 
 // placeholder colors, one per page. cycles if there are more pages than colors
 const colors = [
