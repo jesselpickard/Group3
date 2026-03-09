@@ -192,6 +192,7 @@
 .main-layout {
   display: flex;
   height: calc(100vh - 60px); /* adjusts for navbar */
+  width: 100%;
 }
 
 .sidebar-area {
