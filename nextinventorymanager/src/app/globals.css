@@ -57,3 +57,13 @@ a {
     color-scheme: dark;
   }
 }
+
+@media screen and (max-width: 800px) { /* changes arrangement for small screens */
+  .main-layout {
+    flex-direction: column;
+  }
+  .sidebar-area {
+    width: 100%;
+    order: -1; /* move to top */
+  }
+}
