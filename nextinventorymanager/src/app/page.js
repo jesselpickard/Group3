@@ -12,9 +12,11 @@ export default function Home() {
   return (
     <div>
       <Navbar />
-      <CardGrid />
-      <Menu />
+      <Row itemA={<CardGrid/>} itemB={<Menu/>}></Row>
       <p>Link to test page [TestPage](<Link href="/Testpage">/Testpage</Link>)(<Link href="/CardInfo">/CardInfo</Link>).</p>
     </div>
   );
 }
+
+//      <CardGrid />
+  //    <Menu />
