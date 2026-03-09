@@ -40,10 +40,9 @@ a {
   height: calc(100vh - 60px); /* adjusts for navbar */
 }
 
-.sidebar-area {/*left menu space*/
-  width: 300px;
+.sidebar-area {
   overflow-y: auto;
-  padding: 1rem;
+  transition: width 0.3s ease;
 }
 
 .content-area { /* content space */
