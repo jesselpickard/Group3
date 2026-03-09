@@ -21,6 +21,10 @@
 .menu.closed {
   width: 50px;
 }
+
+.sidebar-inner button {
+  width: 100%;
+}
 .row {
   display: flex;
   flex-direction: row;

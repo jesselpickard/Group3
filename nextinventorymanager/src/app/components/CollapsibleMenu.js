@@ -6,39 +6,27 @@ import "./Menu.css";
 
 
 
-export default function Menu() {//The menu itself -
-  return (
-    <div>
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </head>
-      <CollapsibleMenu/>
-    </div>
-  );
-}
 
-
-function CollapsibleMenu(){
+export default function CollapsibleMenu() {
   const [open, setOpen] = useState(true);
 
   return (
-    <div className="container">
-      <div className={`menu ${open ? "open" : "closed"}`}>
-        <button onClick={() => setOpen(!open)}>
-          {open ? "-" : "+"}
-        </button>
-
-        {open && (
-          <>
-            <div className = "searchContainer">
-              <input type="text" placeholder="Filter:..."></input>
-            </div>
-            <CardTypeBox/>
-            <SubtypeSearch/>
-            <Row itemA={<CardTypeBox/>} itemB={<SubtypeSearch/>}/>
-          </>
-        )}
-      </div>
+    <div className="sidebar-inner" style={{width: open ? "300px" : "50px", transition: "width 0.3s",}}>
+      {/* Toggle button */}
+      <button onClick={() => setOpen(!open)}>
+        {open ? "-" : "+"}
+      </button>
+      {/* Menu content*/}
+      {open && (
+        <div className="menu-content">
+          <div className="searchContainer">
+            <input type="text" placeholder="Filter:..." />
+          </div>
+          <CardTypeBox />
+          <SubtypeSearch />
+          <Row itemA={<CardTypeBox />} itemB={<SubtypeSearch />} />
+        </div>
+      )}
     </div>
   );
 }
