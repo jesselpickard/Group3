@@ -100,10 +100,12 @@ function CardSearch() {
           <li key={card.id}>
             {card.name}
             <br/>
-            <img
-              src={card.image_uris?.small||card.card_faces?.[0]?.image_uris?.small}
-              alt={card.name}
-            />
+            <a href={card.scryfall_uri}></a>
+              <img
+                src={card.image_uris?.small||card.card_faces?.[0]?.image_uris?.small}
+                alt={card.name}
+              />
+            <a/>
           </li>
         ))}
       </ul>
