@@ -116,6 +116,7 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
 export default function CardGrid() {
   // tracks which page the user is currently on
   const [currentPage, setCurrentPage] = useState(1);
+  const [cards, setCards] = useState([]);
   // picks a color based on the current page, cycling through the colors array
   const currentColor = colors[(currentPage - 1) % colors.length];
 
@@ -130,19 +131,33 @@ export default function CardGrid() {
       <div className="main-layout">
         {/* LEFT SIDEBAR */}
         <div className="sidebar-area">
-          <Menu />
+          <Menu setCards={setCards} />
         </div>
         {/* MAIN CONTENT */}          
         <div className="content-area">
           {/* 81 placeholder card rectangles in the current page color */}
           <div className="card-grid">
-            {Array.from({ length: 81 }).map((_, i) => (
-              <div
-                key={i}
-                className="card-placeholder"
-                style={{ backgroundColor: currentColor }}
-              />
-            ))}
+            {cards.length > 0 ? (
+              cards.map((card) => (
+                <div key={card.id} className="card">
+                  <img
+                    src={
+                      card.image_uris?.small ||
+                      card.card_faces?.[0]?.image_uris?.small
+                    }
+                    alt={card.name}
+                  />
+                </div>
+              ))
+            ) : (
+              Array.from({ length: 81 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="card-placeholder"
+                  style={{ backgroundColor: currentColor }}
+                />
+              ))
+            )}
           </div>
         </div>
       </div>

@@ -1,14 +1,21 @@
 "use client"
 
 import { useState } from "react";
+import { scryfallApi } from '../API/Scryfall';
 import "./Menu.css";
 
 
 
 
 
-export default function CollapsibleMenu() {
+export default function CollapsibleMenu({setCards}) {
   const [open, setOpen] = useState(true);
+  const [query, setQuery] = useState("");
+
+  const CardSearch = async () => {
+    const data = await scryfallApi.search(query);
+    setCards(data.data || []);
+  };
 
   return (
     <div className="menu" style={{width: open ? "300px" : "50px", transition: "width 0.3s",}}>
@@ -20,7 +27,10 @@ export default function CollapsibleMenu() {
       {open && (
         <div className="content">
           <div className="searchContainer">
-            <input type="text" placeholder="Filter:..." />
+            <input type="text" placeholder="Filter:..." value={query} 
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => {if (e.key === "Enter") {CardSearch();}}}
+              />
           </div>
           <CardTypeBox />
           <SubtypeSearch />
