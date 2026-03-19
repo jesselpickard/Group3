@@ -102,7 +102,7 @@ function CardSearch() {
             <br/>
             <a href={card.scryfall_uri}>
               <img
-                src={card.image_uris?.small||card.card_faces?.[0]?.image_uris?.small}
+                src={card.image_uris?.small}//remember to return here to try displaying double faced cards
                 alt={card.name}
               />
             </a>
