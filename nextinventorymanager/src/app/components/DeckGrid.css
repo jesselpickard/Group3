@@ -1,0 +1,324 @@
+/* ---- DECK GRID WRAPPER ---- */
+/* outer container - stacks everything vertically */
+.deckgrid-wrapper {
+  padding: 1.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* ---- TOP BAR ---- */
+/* row with page indicator on left and new deck button on right */
+.deckgrid-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* new deck button */
+.new-deck-btn {
+  padding: 0.5rem 1rem;
+  background-color: #71179C;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.95rem;
+  margin-left: auto;
+}
+
+.new-deck-btn:hover {
+  background-color: #5a1080;
+}
+
+/* ---- DECK GRID ---- */
+/* responsive grid - auto fills columns based on screen width */
+.deck-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  overflow: visible;
+}
+
+/* ---- DECK TILE ---- */
+/* individual deck tile - contains fan, info, and hover popup */
+.deck-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 1rem;
+  border-radius: 12px;
+  transition: transform 0.2s;
+  overflow: visible;
+  z-index: 1; /* base z-index */
+}
+
+.deck-tile:hover {
+  transform: scale(1.03);
+  z-index: 100;
+}
+
+/* ---- CARD FAN ---- */
+/* container for the three fanned cards */
+.deck-fan {
+  position: relative;
+  width: 120px;
+  height: 160px;
+}
+
+/* base style for all three fan cards */
+.fan-card {
+  position: absolute;
+  width: 90px;
+  height: 126px; /* 2/3 aspect ratio matching real MTG cards */
+  border-radius: 6px;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+  transition: transform 0.2s;
+}
+
+/* left card - rotated left and shifted */
+.fan-left {
+  transform: rotate(-15deg) translateX(-20px);
+  top: 10px;
+  left: 0;
+  z-index: 1;
+}
+
+/* middle card - straight up, slightly behind */
+.fan-middle {
+  transform: rotate(0deg);
+  top: 0;
+  left: 15px;
+  z-index: 2;
+}
+
+/* right card - rotated right and shifted */
+.fan-right {
+  transform: rotate(15deg) translateX(20px);
+  top: 10px;
+  left: 30px;
+  z-index: 1;
+}
+
+/* fan out more on hover */
+.deck-tile.hovered .fan-left {
+  transform: rotate(-25deg) translateX(-30px);
+}
+
+.deck-tile.hovered .fan-right {
+  transform: rotate(25deg) translateX(30px);
+}
+
+/* ---- DECK INFO ---- */
+/* text info below the fan */
+.deck-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  text-align: center;
+}
+
+.deck-name {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #71179C;
+}
+
+.deck-count {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+/* complete/incomplete status badge */
+.deck-status {
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.deck-status.complete {
+  color: #4CAF50;
+}
+
+.deck-status.incomplete {
+  color: #FF8C00;
+}
+
+/* ---- HOVER POPUP ---- */
+/* small popup that appears beside the tile on hover */
+/* popup to the right by default */
+.deck-popup {
+  position: absolute;
+  left: calc(100% + 0.75rem);
+  top: 0;
+  background-color: white;
+  border-radius: 8px;
+  padding: 0.75rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 9999; /* high enough to clear everything */
+  min-width: 180px;
+  max-width: 220px;
+}
+
+/* popup flips to the left when tile is near the right edge */
+.deck-popup.popup-left {
+  left: auto;
+  right: calc(100% + 0.75rem);
+}
+
+.popup-divider {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 0.5rem 0;
+}
+
+.popup-complete {
+  color: #4CAF50;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.popup-missing-title {
+  font-weight: bold;
+  color: #71179C;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.popup-missing-list {
+  padding-left: 1rem;
+  margin: 0;
+  font-size: 0.85rem;
+  color: #555;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+/* "and X more" text at the bottom of the list */
+.popup-more {
+  color: #9b6bb5;
+  font-style: italic;
+  list-style: none;
+  margin-top: 0.25rem;
+}
+
+.popup-missing-list li {
+  margin-bottom: 0.2rem;
+}
+
+/* ---- EMPTY STATE ---- */
+/* shown when the user has no decks */
+.deck-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 4rem;
+  color: #888;
+  font-size: 1.1rem;
+}
+
+/* ---- PAGINATION ---- */
+/* reusing same styles as CardGrid */
+.pagination-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.pagination {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  width: 520px;
+  justify-content: center;
+}
+
+.page-placeholder {
+  display: inline-block;
+  min-width: 42px;
+  padding: 0.4rem 0.75rem;
+  border: 2px solid transparent;
+}
+
+.page-dots {
+  color: #71179C;
+  font-weight: bold;
+  min-width: 42px;
+  text-align: center;
+  display: inline-block;
+  padding: 0.4rem 0;
+}
+
+.page-jump {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #71179C;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+/* inline page indicator for simple 2-page pagination */
+.page-indicator-inline {
+  color: #71179C;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+/* tighter pagination for small page counts */
+.pagination-simple {
+  width: auto;
+  gap: 1rem;
+}
+
+.page-jump input {
+  width: 60px;
+  padding: 0.4rem;
+  border: 2px solid #71179C;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.page-btn {
+  padding: 0.4rem 0.75rem;
+  border: 2px solid #71179C;
+  background-color: white;
+  color: #71179C;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.page-btn:hover { background-color: #f0e0f7; }
+.page-btn.active { background-color: #71179C; color: white; }
+.page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ---- DARK MODE ---- */
+@media (prefers-color-scheme: dark) {
+  .deckgrid-wrapper { background-color: #1a1a1a; }
+  .deck-name { color: #c084e8; }
+  .deck-popup { background-color: #2d1040; color: white; }
+  .popup-missing-list { color: #e0c0f0; }
+  .popup-divider { border-top-color: #5a1080; }
+  .page-indicator { color: #c084e8; }
+  .page-btn { background-color: #1a1a1a; color: #c084e8; border-color: #c084e8; }
+  .page-btn:hover { background-color: #2d1040; }
+  .page-btn.active { background-color: #c084e8; color: #1a1a1a; }
+  .page-jump { color: #c084e8; }
+  .page-jump input { background-color: #2d1040; border-color: #c084e8; color: white; }
+  .page-dots { color: #c084e8; }
+  .page-indicator-inline { color: #c084e8; }
+}

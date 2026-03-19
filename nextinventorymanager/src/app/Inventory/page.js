@@ -1,10 +1,11 @@
-import Navbar from '../components/Navbar.js'
+import Navbar from '../components/Navbar';
+import CardGrid from '../components/CardGrid';
 
-
-export default function Home() {
+export default function Inventory() {
   return (
     <div>
       <Navbar />
+      <CardGrid /> {/* same component, different data later */}
     </div>
-  );
+  )
 }

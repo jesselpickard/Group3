@@ -1,3 +1,4 @@
+"use client";
 import { useState } from 'react';
 import './CardGrid.css';
 import Menu from './CollapsibleMenu.js';
@@ -11,15 +12,12 @@ const colors = [
   '#DDA0DD', '#F0E68C', '#87CEEB', '#FFA07A',
 ];
 
-// total number of pages
-const TOTAL_PAGES = 20;
-
-// pagination bar component. at the top and bottom of the grid
+// pagination bar component. used at top and bottom of the grid
 function PaginationBar({ currentPage, totalPages, onPageChange }) {
   // tracks the value typed into the "go to page" input
   const [jumpValue, setJumpValue] = useState('');
 
-  // jumps to the typed page number if it is valid, then clears the input
+  // jumps to the typed page number if valid, then clears the input
   const handleJump = () => {
     const num = parseInt(jumpValue);
     if (num >= 1 && num <= totalPages) {
@@ -42,23 +40,6 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
     return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
   };
 
-  {getPageNumbers().map((page, i) =>
-    page === null ? (
-      /* invisible placeholder keeps width consistent */
-      <span key={`empty-${i}`} className="page-placeholder" />
-    ) : page === '...' ? (
-      <span key={`dots-${i}`} className="page-dots">...</span>
-    ) : (
-      <button
-        key={page}
-        className={`page-btn ${currentPage === page ? 'active' : ''}`}
-        onClick={() => onPageChange(page)}
-      >
-        {page}
-      </button>
-    )
-  )}
-
   return (
     <div className="pagination-bar">
       <div className="pagination">
@@ -71,9 +52,12 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
           ← Prev
         </button>
 
-        {/* render each page number or dots */}
+        {/* render each page number, dot, or empty placeholder */}
         {getPageNumbers().map((page, i) =>
-          page === '...' ? (
+          page === null ? (
+            // invisible placeholder keeps pagination width consistent
+            <span key={`empty-${i}`} className="page-placeholder" />
+          ) : page === '...' ? (
             <span key={`dots-${i}`} className="page-dots">...</span>
           ) : (
             <button
@@ -113,7 +97,9 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
   )
 }
 
-export default function CardGrid() {
+// accepts optional props for future Scryfall data integration
+// totalPages defaults to 20 for now
+export default function CardGrid({ totalPages = 20 }) {
   // tracks which page the user is currently on
   const [currentPage, setCurrentPage] = useState(1);
   const [cards, setCards] = useState([]);
@@ -124,18 +110,18 @@ export default function CardGrid() {
     <div className="cardgrid-wrapper">
       {/* top bar with page indicator on the left and pagination on the right */}
       <div className="cardgrid-topbar">
-        <div className="page-indicator">Page {currentPage} of {TOTAL_PAGES}</div>
-        <PaginationBar currentPage={currentPage} totalPages={TOTAL_PAGES} onPageChange={setCurrentPage} />
+        <div className="page-indicator">Page {currentPage} of {totalPages}</div>
+        <PaginationBar currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
       </div>
 
       <div className="main-layout">
-        {/* LEFT SIDEBAR */}
+        {/* left sidebar with collapsible menu */}
         <div className="sidebar-area">
           <Menu setCards={setCards} />
         </div>
-        {/* MAIN CONTENT */}          
+
+        {/* main card display area */}
         <div className="content-area">
-          {/* 81 placeholder card rectangles in the current page color */}
           <div className="card-grid">
             {cards.length > 0 ? (
               cards.map((card) => (
@@ -161,10 +147,6 @@ export default function CardGrid() {
           </div>
         </div>
       </div>
-
-
-      {/* duplicate pagination bar at the bottom for convenience */}
-      <PaginationBar currentPage={currentPage} totalPages={TOTAL_PAGES} onPageChange={setCurrentPage} />
     </div>
   )
 }
