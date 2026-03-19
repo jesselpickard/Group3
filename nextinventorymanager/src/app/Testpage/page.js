@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react";
+import { useState } from 'react';
+import { scryfallApi } from '../API/Scryfall';
 import "./MenuTest.css";
 
 export default function Home() {
@@ -11,6 +12,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <CollapsibleMenu/>
+      <CardSearch/>
     </div>
   );
 }
@@ -77,4 +79,34 @@ function Row({itemA,itemB}){
       </div>
     </div>
   )
+}
+
+function CardSearch() {
+  const [query, setQuery] = useState("");
+  const [cards, setCards] = useState([]);
+
+  const searchCards = async () => {
+    const data = await scryfallApi.search(query);//calls to the api
+    setCards(data.data || []);
+  };
+
+  return (
+    <div>
+      <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search cards..."/>
+      <button onClick={searchCards}>Search</button>
+
+      <ul>
+        {cards.map((card) => (
+          <li key={card.id}>
+            {card.name}
+            <br/>
+            <img
+              src={card.image_uris?.small||card.card_faces?.[0]?.image_uris?.small}
+              alt={card.name}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
