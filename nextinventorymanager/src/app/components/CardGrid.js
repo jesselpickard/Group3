@@ -11,8 +11,11 @@ const colors = [
   '#DDA0DD', '#F0E68C', '#87CEEB', '#FFA07A',
 ];
 
-// total number of pages
-const TOTAL_PAGES = 20;
+//page data
+const CARDS_PER_PAGE = 81;
+const startIndex = (currentPage - 1) * CARDS_PER_PAGE;
+const visibleCards = cards.slice(startIndex, startIndex + CARDS_PER_PAGE);
+const TOTAL_PAGES = Math.ceil(cards.length / CARDS_PER_PAGE) || 1;
 
 // pagination bar component. at the top and bottom of the grid
 function PaginationBar({ currentPage, totalPages, onPageChange }) {
@@ -138,7 +141,7 @@ export default function CardGrid() {
           {/* 81 placeholder card rectangles in the current page color */}
           <div className="card-grid">
             {cards.length > 0 ? (
-              cards.map((card) => (
+              visibleCards.map((card) => (
                 <div key={card.id} className="card">
                   <img
                     src={
@@ -150,7 +153,7 @@ export default function CardGrid() {
                 </div>
               ))
             ) : (
-              Array.from({ length: 81 }).map((_, i) => (
+              Array.from({ length: CARDS_PER_PAGE }).map((_, i) => (
                 <div
                   key={i}
                   className="card-placeholder"
