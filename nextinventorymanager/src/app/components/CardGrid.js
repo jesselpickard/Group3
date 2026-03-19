@@ -106,25 +106,31 @@ export default function CardGrid({ totalPages = 20 }) {
   // picks a color based on the current page, cycling through the colors array
   const currentColor = colors[(currentPage - 1) % colors.length];
 
+  //page data
+  const CARDS_PER_PAGE = 81;
+  const startIndex = (currentPage - 1) * CARDS_PER_PAGE;
+  const visibleCards = cards.slice(startIndex, startIndex + CARDS_PER_PAGE);
+  const TOTAL_PAGES = Math.ceil(cards.length / CARDS_PER_PAGE) || 1;
+
   return (
     <div className="cardgrid-wrapper">
       {/* top bar with page indicator on the left and pagination on the right */}
       <div className="cardgrid-topbar">
-        <div className="page-indicator">Page {currentPage} of {totalPages}</div>
-        <PaginationBar currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+        <div className="page-indicator">Page {currentPage} of {TOTAL_PAGES}</div>
+        <PaginationBar currentPage={currentPage} totalPages={TOTAL_PAGES} onPageChange={setCurrentPage} />
       </div>
 
       <div className="main-layout">
-        {/* left sidebar with collapsible menu */}
+        {/* LEFT SIDEBAR */}
         <div className="sidebar-area">
           <Menu setCards={setCards} />
         </div>
-
-        {/* main card display area */}
+        {/* MAIN CONTENT */}          
         <div className="content-area">
+          {/* 81 placeholder card rectangles in the current page color */}
           <div className="card-grid">
             {cards.length > 0 ? (
-              cards.map((card) => (
+              visibleCards.map((card) => (
                 <div key={card.id} className="card">
                   <img
                     src={
@@ -136,7 +142,7 @@ export default function CardGrid({ totalPages = 20 }) {
                 </div>
               ))
             ) : (
-              Array.from({ length: 81 }).map((_, i) => (
+              Array.from({ length: CARDS_PER_PAGE }).map((_, i) => (
                 <div
                   key={i}
                   className="card-placeholder"
@@ -147,6 +153,10 @@ export default function CardGrid({ totalPages = 20 }) {
           </div>
         </div>
       </div>
+
+
+      {/* duplicate pagination bar at the bottom for convenience */}
+      <PaginationBar currentPage={currentPage} totalPages={TOTAL_PAGES} onPageChange={setCurrentPage} />
     </div>
   )
 }
