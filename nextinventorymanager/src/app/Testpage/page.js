@@ -84,6 +84,7 @@ function Row({itemA,itemB}){
 //Inventory will use a variant of this, once we get our database up
 function CardSearch() {//be careful taking away from this part, for use with cardGrid
   const [query, setQuery] = useState("");
+  const [cards, setCards] = useState([]);
 
   const searchCards = async () => {
     const data = await scryfallApi.search(query);//calls to the api
