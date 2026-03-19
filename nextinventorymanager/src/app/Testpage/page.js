@@ -81,7 +81,7 @@ function Row({itemA,itemB}){
   )
 }
 
-function CardSearch() {
+function CardSearch() {//be careful taking away from this part, for use with cardGrid
   const [query, setQuery] = useState("");
   const [cards, setCards] = useState([]);
 
@@ -90,13 +90,15 @@ function CardSearch() {
     setCards(data.data || []);
   };
 
+//the card search above should be easily converted for use with cardGrid, but ownership of the cards item must change 
+
   return (
     <div>
       <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search cards..."/>
       <button onClick={searchCards}>Search</button>
 
       <ul>
-        {cards.map((card) => (
+        {cards.map((card) => (//the mapping more or less lines up with the needs for cardGrid
           <li key={card.id}>
             {card.name}
             <br/>
