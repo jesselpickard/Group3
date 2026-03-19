@@ -11,11 +11,6 @@ const colors = [
   '#DDA0DD', '#F0E68C', '#87CEEB', '#FFA07A',
 ];
 
-//page data
-const CARDS_PER_PAGE = 81;
-const startIndex = (currentPage - 1) * CARDS_PER_PAGE;
-const visibleCards = cards.slice(startIndex, startIndex + CARDS_PER_PAGE);
-const TOTAL_PAGES = Math.ceil(cards.length / CARDS_PER_PAGE) || 1;
 
 // pagination bar component. at the top and bottom of the grid
 function PaginationBar({ currentPage, totalPages, onPageChange }) {
@@ -117,6 +112,12 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
 }
 
 export default function CardGrid() {
+
+  //page data
+  const CARDS_PER_PAGE = 81;
+  const startIndex = (currentPage - 1) * CARDS_PER_PAGE;
+  const visibleCards = cards.slice(startIndex, startIndex + CARDS_PER_PAGE);
+  const TOTAL_PAGES = Math.ceil(cards.length / CARDS_PER_PAGE) || 1;
   // tracks which page the user is currently on
   const [currentPage, setCurrentPage] = useState(1);
   const [cards, setCards] = useState([]);
