@@ -4,15 +4,22 @@ import Navbar from "../components/Navbar.js";
 import "./cardStyle.css";
 import { scryfallApi } from "../API/Scryfall";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState,Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
-export default function CardInfo() {
+export default function CardInfoPage() {
+  return (
+    <Suspense fallback={<div>Loading page...</div>}>
+      <CardInfo />
+    </Suspense>
+  );
+}
+
+function CardInfo() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
 
   const [card, setCard] = useState(null);
-
   useEffect(() => {
     if (!id) return;
 
