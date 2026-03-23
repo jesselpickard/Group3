@@ -1,7 +1,7 @@
 body {
     background-color: rgb(255, 255, 255);
     margin: 0;
-    color:black;
+    color: black;
 }
 
 .navbar {
@@ -30,15 +30,54 @@ body {
     background-color: rgb(203, 203, 203);
     height: 600px;
     min-width: 500px;
+    max-width: 500px;
     border-radius: 8px;
     font-family: 'Roboto', sans-serif;
     margin-top: 20px;
+    border-width: 1px;
+    border-color: black;
+    border-style: solid;
 }
-.card-name {
-font-family: 'Roboto', sans-serif;
-font-weight: 100;
-font-size: 25px;
 
+.card-info hr {
+    height: 3px;
+    margin: 0;
+    background-color: black;
+    width: calc(100% + 40px);
+    margin-left: -20px;
+}
+
+.card-name {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 100;
+    font-size: 25px;
+    padding-bottom: 15px;
+}
+
+.card-type {
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.card-text {
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.card-text p {
+    font-style: italic;
+    font-family: "MPlantin", Georgia, "Times New Roman", serif;
+    ;
+}
+
+.card-PT {
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.card-artist {
+    padding-bottom: 10px;
+    padding-top: 10px;
 }
 
 .card-legal {
@@ -53,7 +92,7 @@ font-size: 25px;
 }
 
 .legal.legal {
-    background-color: green;
+    background-color: rgb(30, 199, 30);
     border-width: 4 px;
     border-style: solid;
     border-radius: 8px;

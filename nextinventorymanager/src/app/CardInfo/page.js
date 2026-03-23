@@ -19,7 +19,34 @@ export default function CardInfo() {
     scryfallApi.getCardById(id).then(setCard);
   }, [id]);
 
-  if (!card) return <div>Loading...</div>;
+  function Loading() {
+    const [dots, setDots] = useState("");
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setDots((prev) => (prev.length < 5 ? prev + "." : ""));
+      }, 500);
+      return () => clearInterval(interval);
+    }, []);
+
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          fontSize: "2rem",
+          fontFamily: "Arial, sans-serif",
+          color: "#555",
+        }}
+      >
+        Fetching Card Info{dots}
+      </div>
+    );
+  }
+
+  if (!card) return <Loading />;
+  //if (!card) return <div>Loading...</div>;
 
   // const [card] = useState({
   //   id: "test",
@@ -34,12 +61,12 @@ export default function CardInfo() {
   // });
 
   function formatLegality(value) {
-  if (value === "legal") return "Legal";
-  if (value === "not_legal") return "Not Legal";
-  if (value === "banned") return "Banned";
-  if (value === "restricted") return "Restricted";
-  return value;
-}
+    if (value === "legal") return "Legal";
+    if (value === "not_legal") return "Not Legal";
+    if (value === "banned") return "Banned";
+    if (value === "restricted") return "Restricted";
+    return value;
+  }
 
   return (
     <div>
@@ -52,12 +79,28 @@ export default function CardInfo() {
           <div className="card-name">
             {card.name} {card.mana_cost}
           </div>
+          <hr></hr>
           <div className="card-type">{card.type_line}</div>
-          <div className="card-text">{card.oracle_text}</div>
-          <div className="card-PT">{card.power}/{card.toughness}</div>
+          <hr></hr>
+          <div className="card-text">
+            {card.oracle_text}
+            <br></br>
+            <br></br>
+            <p>{card.flavor_text}</p>
+          </div>
+          <hr></hr>
+          {card && card.type_line.includes("Creature") && (
+            <div>
+              <div className="card-PT">
+                {card.power}/{card.toughness}
+              </div>
+              <hr />
+            </div>
+          )}
           <div className="card-artist">
             <p>Illustrated by {card.artist}</p>
           </div>
+          <hr></hr>
           <div className="card-legal">
             <div className={`legal ${card.legalities.standard}`}>
               Standard: {formatLegality(card.legalities.standard)}
