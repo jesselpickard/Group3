@@ -1,15 +1,13 @@
 "use client";
 
-import Navbar from '../components/Navbar.js';
-import './cardStyle.css';
-import { scryfallApi } from '../API/Scryfall';
+import Navbar from "../components/Navbar.js";
+import "./cardStyle.css";
+import { scryfallApi } from "../API/Scryfall";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
-
 export default function CardInfo() {
-
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
 
@@ -35,35 +33,42 @@ export default function CardInfo() {
   //   }
   // });
 
+  function formatLegality(value) {
+  if (value === "legal") return "Legal";
+  if (value === "not_legal") return "Not Legal";
+  if (value === "banned") return "Banned";
+  if (value === "restricted") return "Restricted";
+  return value;
+}
 
   return (
     <div>
       <Navbar />
       <div className="info-area">
-     <div className="box image-box"> 
-     <img src={card?.image_uris?.large} />
-    
-     </div>
-     <div className="box card-info">
-     <div className="card-name">
-      {card.name} 
-     </div>
-     <div className="card-type">
-      {card.type_line}
-     </div>
-     <div className="card-text">
-      {card.oracle_text}
-     </div>
-     <div className="card-artist">
-      <p>Illustrated by {card.artist}</p>
-     </div>
-     <div className="card-legal">
-      {card.legal}
-     </div>
+        <div className="box image-box">
+          <img src={card?.image_uris?.large} />
+        </div>
+        <div className="box card-info">
+          <div className="card-name">
+            {card.name} {card.mana_cost}
+          </div>
+          <div className="card-type">{card.type_line}</div>
+          <div className="card-text">{card.oracle_text}</div>
+          <div className="card-PT">{card.power}/{card.toughness}</div>
+          <div className="card-artist">
+            <p>Illustrated by {card.artist}</p>
+          </div>
+          <div className="card-legal">
+            <div className={`legal ${card.legalities.standard}`}>
+              Standard: {formatLegality(card.legalities.standard)}
+            </div>
 
-     </div>
-     </div>
+            <div className={`legal ${card.legalities.commander}`}>
+              Commander: {formatLegality(card.legalities.commander)}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    
   );
 }

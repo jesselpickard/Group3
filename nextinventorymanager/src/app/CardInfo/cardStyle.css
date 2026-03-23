@@ -1,33 +1,89 @@
-body{
-    background-color: rgb(208, 208, 208);
-    margin:0;
+body {
+    background-color: rgb(255, 255, 255);
+    margin: 0;
+    color:black;
 }
 
-.navbar{
-    padding:5px 10px;
+.navbar {
+    padding: 5px 10px;
 }
 
-.info-area{
-    display:flex;
-    gap:20px;
-    justify-content:center;
-    align-items:flex-start;
-    margin-top:5px;
+.info-area {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 20px;
 }
 
-.box{
-    padding:20px;
+.box {
+    padding: 20px;
 }
 
-.image-box img{
-    height:600px;
-    width:auto;
-    border-radius:6%;
+.image-box img {
+    height: 600px;
+    width: auto;
+    border-radius: 6%;
 }
 
-.card-info{
-    background-color:grey;
-    height:600px;
-    min-width:500px;
+.card-info {
+    background-color: rgb(203, 203, 203);
+    height: 600px;
+    min-width: 500px;
     border-radius: 8px;
+    font-family: 'Roboto', sans-serif;
+    margin-top: 20px;
+}
+.card-name {
+font-family: 'Roboto', sans-serif;
+font-weight: 100;
+font-size: 25px;
+
+}
+
+.card-legal {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    font-size: 20px;
+    border-width: 8px;
+    border-color: black;
+    gap: 20px;
+    font-weight: 100;
+}
+
+.legal.legal {
+    background-color: green;
+    border-width: 4 px;
+    border-style: solid;
+    border-radius: 8px;
+    border-color: black;
+    padding: 8px;
+}
+
+.legal.not_legal {
+    background-color: rgb(187, 139, 139);
+    border-width: 4 px;
+    border-style: solid;
+    border-radius: 8px;
+    border-color: black;
+    padding: 8px;
+}
+
+.legal.banned {
+    background-color: rgb(255, 15, 15);
+    border-width: 4 px;
+    border-style: solid;
+    border-radius: 8px;
+    border-color: black;
+    padding: 8px;
+}
+
+.legal.restricted {
+    background-color: rgb(255, 166, 0);
+    border-width: 4 px;
+    border-style: solid;
+    border-radius: 8px;
+    border-color: black;
+    padding: 8px;
 }
