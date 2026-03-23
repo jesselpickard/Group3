@@ -23,5 +23,11 @@ export const scryfallApi = {
     return rateLimitedFetch(
       `https://api.scryfall.com/cards/search?q=${encodeURIComponent(query)}`
     ).then((res) => res.json());
+  },
+ getCardById(id) {
+    return rateLimitedFetch(
+      `https://api.scryfall.com/cards/${id}`
+    ).then((res) => res.json());
   }
+
 };

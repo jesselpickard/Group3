@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { scryfallApi } from '../API/Scryfall';
+import Link from "next/link";
 import "./MenuTest.css";
 
 export default function Home() {
@@ -102,12 +103,12 @@ function CardSearch() {//be careful taking away from this part, for use with car
           <li key={card.id}>
             {card.name}
             <br/>
-            <a href={card.scryfall_uri}>
+            <Link href={`/CardInfo?id=${card.id}`}>
               <img
                 src={card.image_uris?.small}//remember to return here to try displaying double faced cards
                 alt={card.name}
               />
-            </a>
+            </Link>
           </li>
         ))}
       </ul>
