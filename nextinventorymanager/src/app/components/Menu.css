@@ -114,3 +114,21 @@
     width: 100%;
   }
 }
+@media (prefers-color-scheme: dark) {
+  .menu {
+    background-color: #2d1040 !important;
+    color: #e0c0f0 !important;
+  }
+
+  .menu input[type="text"],
+  .menu input[type="number"],
+  .menu select {
+    background-color: #2d1040 !important;
+    color: #e0c0f0 !important;
+  }  
+
+  .toggleBtn {
+    background-color: #2d1040 !important;
+    color: #e0c0f0 !important;
+  }
+}
