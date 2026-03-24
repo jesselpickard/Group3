@@ -59,7 +59,7 @@ export default function CollapsibleMenu({ setCards }) {
             itemB={<SubtypeSearch value={subtype} onChange={setSubtype} />}
           />
 
-          <Row {/*need to fix the widths*/}
+          <Row /*need to fix the widths*/
             itemA={<NumberFilter label="Power" filter={power} setFilter={setPower} />}
             itemB={<NumberFilter label="Toughness" filter={toughness} setFilter={setToughness} />}
           />
