@@ -75,7 +75,6 @@ export default function CollapsibleMenu({ setCards }) {
             itemA={<NumberFilter label="Mana Value" filter={mana} setFilter={setMana} />}
             itemB={<div />} 
           />
-          <TypeSearch value={set} onChange={setSet} placeholder={"Set code..."}/>
         </div>
       )}
     </div>
