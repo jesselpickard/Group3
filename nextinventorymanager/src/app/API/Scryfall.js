@@ -28,6 +28,11 @@ export const scryfallApi = {
     return rateLimitedFetch(
       `https://api.scryfall.com/cards/${id}`
     ).then((res) => res.json());
-  }
+  },
+  getSymbols() {
+  return rateLimitedFetch(
+    "https://api.scryfall.com/symbology"
+  ).then(res => res.json());
+}
 
 };

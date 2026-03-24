@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar.js";
 import "./cardStyle.css";
 import { scryfallApi } from "../API/Scryfall";
 import { useParams } from "next/navigation";
-import { useEffect, useState,Suspense } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 export default function CardInfoPage() {
@@ -51,21 +51,38 @@ function CardInfo() {
       </div>
     );
   }
+  const [symbols, setSymbols] = useState([]);
+
+  useEffect(() => {
+    scryfallApi.getSymbols().then((data) => {
+      setSymbols(data.data);
+    });
+  }, []);
+
+  function renderTextWithSymbols(text, symbols) {
+    if (!text) return null;
+    const parts = text.split(/(\{.*?\})/g);
+    return parts.map((part, i) => {
+      const symbol = symbols.find((s) => s.symbol === part);
+      if (symbol) {
+        return <img key={i} src={symbol.svg_uri} style={{ width: "18px" }} />;
+      }
+      return part;
+    });
+  }
+
+  function renderText(text, symbols) {
+
+  if (!text) return null;
+
+  return text.split("\n").map((line, i) => (
+    <div key={i}>
+      {renderTextWithSymbols(line, symbols)}
+    </div>
+  ));
+}
 
   if (!card) return <Loading />;
-  //if (!card) return <div>Loading...</div>;
-
-  // const [card] = useState({
-  //   id: "test",
-  //   name: "Apprentice Wizard",
-  //   type_line: "Creature — Debug Wizard",
-  //   oracle_text: "This is a fake card used for testing.",
-  //   artist: "Dan Frazier",
-  //   legal:"legal",
-  //   image_uris: {
-  //     large: "https://cards.scryfall.io/large/front/f/e/fe75a1c1-e55e-4c49-9419-43bf5962142d.jpg"
-  //   }
-  // });
 
   function formatLegality(value) {
     if (value === "legal") return "Legal";
@@ -84,14 +101,13 @@ function CardInfo() {
         </div>
         <div className="box card-info">
           <div className="card-name">
-            {card.name} {card.mana_cost}
+            {card.name} {renderTextWithSymbols(card.mana_cost, symbols)}
           </div>
           <hr></hr>
           <div className="card-type">{card.type_line}</div>
           <hr></hr>
           <div className="card-text">
-            {card.oracle_text}
-            <br></br>
+            {renderText(card.oracle_text, symbols)}
             <br></br>
             <p>{card.flavor_text}</p>
           </div>
