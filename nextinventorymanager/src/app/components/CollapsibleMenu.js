@@ -12,6 +12,7 @@ export default function CollapsibleMenu({ setCards }) {
   const [power, setPower] = useState({ op: "=", value: "" });
   const [toughness, setToughness] = useState({ op: "=", value: "" });
   const [mana, setMana] = useState({ op: "=", value: "" });
+  const [set, setSet] = useState("");
   //add set and color
   //color should be made up of checkboxes
 
@@ -23,6 +24,7 @@ export default function CollapsibleMenu({ setCards }) {
     if (power.value) parts.push(`pow${power.op}${power.value}`);
     if (toughness.value) parts.push(`tou${toughness.op}${toughness.value}`);
     if (mana.value) parts.push(`cmc${mana.op}${mana.value}`);
+    if (set) parts.push(`set:${set}`)
     return parts.join(" ");
   };
 
@@ -61,21 +63,19 @@ export default function CollapsibleMenu({ setCards }) {
               }}
             />
           </div>
-
           <Row
             itemA={<CardTypeBox value={type} onChange={setType} />}
-            itemB={<SubtypeSearch value={subtype} onChange={setSubtype} />}
+            itemB={<TypeSearch value={subtype} onChange={setSubtype} placeholder={"Subtype..."}/>}
           />
-
           <Row /*need to fix the widths*/
             itemA={<NumberFilter label="Power" filter={power} setFilter={setPower} />}
             itemB={<NumberFilter label="Toughness" filter={toughness} setFilter={setToughness} />}
           />
-
           <Row
             itemA={<NumberFilter label="Mana Value" filter={mana} setFilter={setMana} />}
             itemB={<div />} 
           />
+          <TypeSearch value={set} onChange={setSet} placeholder={"Set code..."}/>
         </div>
       )}
     </div>
@@ -97,12 +97,12 @@ function CardTypeBox({ value, onChange }) {
     </select>
   );
 }
-
-function SubtypeSearch({ value, onChange }) {
+//use for any filter that takes text
+function TypeSearch({ value, onChange, placeholder }) {
   return (
     <input
       type="text"
-      placeholder="Subtype..."
+      placeholder={placeholder}
       value={value}
       onChange={(e) => onChange(e.target.value)}
     />
