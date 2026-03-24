@@ -17,7 +17,7 @@ export default function CollapsibleMenu({ setCards }) {
     const parts = [];
     if (query) parts.push(query);
     if (type) parts.push(`type:${type}`);
-    if (subtype) parts.push(`subtype:${subtype}`);
+    if (subtype) parts.push(`type:${subtype}`);
     if (power.value) parts.push(`pow${power.op}${power.value}`);
     if (toughness.value) parts.push(`tou${toughness.op}${toughness.value}`);
     if (mana.value) parts.push(`cmc${mana.op}${mana.value}`);
