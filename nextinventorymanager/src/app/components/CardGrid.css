@@ -213,7 +213,7 @@
     height: calc(100vh - 60px); /* adjusts for navbar */
     width: 100%;
     flex-direction: column;
-    align-content: flex-start;
+    align-items: center;
   }
 
   .sidebar-area {
