@@ -5,7 +5,7 @@ import "./cardStyle.css";
 import { scryfallApi } from "../../API/Scryfall.js";
 import { useParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
-//import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 export default function CardInfoPage() {
   return (
@@ -16,8 +16,6 @@ export default function CardInfoPage() {
 }
 
 function CardInfo() {
-  //const searchParams = useSearchParams();
-  //const id = searchParams.get("id");
 
   const { id } = useParams();
 
@@ -150,13 +148,13 @@ function CardInfo() {
         <hr></hr>
         <div className="prints-area">
           {prints.map((p) => (
-            <a key={p.id} href={`/CardInfo/${p.id}`}>{/*replaced ?id= with /*/}
+            <Link key={p.id} href={`/CardInfo/${p.id}`}>
               <img
                 src={p.image_uris?.small}
                 className="print-img"
                 alt={p.name}
               />
-            </a>
+            </Link>
           ))}
         </div>
       </div>
