@@ -72,15 +72,23 @@ function CardInfo() {
   }
 
   function renderText(text, symbols) {
+    if (!text) return null;
 
-  if (!text) return null;
+    return text
+      .split("\n")
+      .map((line, i) => (
+        <div key={i}>{renderTextWithSymbols(line, symbols)}</div>
+      ));
+  }
+  const [prints, setPrints] = useState([]);
 
-  return text.split("\n").map((line, i) => (
-    <div key={i}>
-      {renderTextWithSymbols(line, symbols)}
-    </div>
-  ));
-}
+  useEffect(() => {
+    if (!card) return;
+
+    scryfallApi.getPrints(card.prints_search_uri).then((data) => {
+      setPrints(data.data);
+    });
+  }, [card]);
 
   if (!card) return <Loading />;
 
@@ -133,6 +141,21 @@ function CardInfo() {
               Commander: {formatLegality(card.legalities.commander)}
             </div>
           </div>
+        </div>
+      </div>
+      <div className="print-body">
+        <div className="print-name">PRINTS</div>
+        <hr></hr>
+        <div className="prints-area">
+          {prints.map((p) => (
+            <a key={p.id} href={`/CardInfo?id=${p.id}`}>
+              <img
+                src={p.image_uris?.small}
+                className="print-img"
+                alt={p.name}
+              />
+            </a>
+          ))}
         </div>
       </div>
     </div>

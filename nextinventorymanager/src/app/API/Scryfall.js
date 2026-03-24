@@ -33,6 +33,9 @@ export const scryfallApi = {
   return rateLimitedFetch(
     "https://api.scryfall.com/symbology"
   ).then(res => res.json());
+},
+getPrints(url) {
+  return rateLimitedFetch(url).then(res => res.json());
 }
 
 };
