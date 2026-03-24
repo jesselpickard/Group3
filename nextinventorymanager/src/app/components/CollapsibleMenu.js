@@ -30,9 +30,15 @@ export default function CollapsibleMenu({ setCards }) {
     setCards(data.data || []);
   };
 
+  
+
   useEffect(() => {
-    CardSearch();
-  }, [type, subtype, power, toughness, mana]);
+    const timeout = setTimeout(() => {
+      CardSearch();
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [query, type, subtype, power, toughness, mana]);
 
   return (
     <div className="menu" style={{width: open ? "320px" : "50px", transition: "width 0.3s",}}>
