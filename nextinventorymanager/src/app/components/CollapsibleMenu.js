@@ -12,6 +12,8 @@ export default function CollapsibleMenu({ setCards }) {
   const [power, setPower] = useState({ op: "=", value: "" });
   const [toughness, setToughness] = useState({ op: "=", value: "" });
   const [mana, setMana] = useState({ op: "=", value: "" });
+  //add set and color
+  //color should be made up of checkboxes
 
   const buildQuery = () => {
     const parts = [];
