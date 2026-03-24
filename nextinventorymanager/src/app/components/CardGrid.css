@@ -216,7 +216,7 @@
   }
 
   .sidebar-area {
-    align-items: center;
+    justify-content: center;
     overflow-y: auto;
     transition: width 0.3s ease;
   }
