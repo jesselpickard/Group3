@@ -7,7 +7,7 @@ import "./Menu.css";
 export default function CollapsibleMenu({ setCards }) {
   const [open, setOpen] = useState(true);
   const [query, setQuery] = useState("");
-  const [type, setType] = useState("");
+  const [type, setType] = useState("wizard");
   const [subtype, setSubtype] = useState("");
   const [power, setPower] = useState({ op: "=", value: "" });
   const [toughness, setToughness] = useState({ op: "=", value: "" });
