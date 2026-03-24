@@ -1,6 +1,7 @@
 "use client";
 import { useState } from 'react';
 import './CardGrid.css';
+import Link from "next/link";
 import Menu from './CollapsibleMenu.js';
 
 // placeholder colors, one per page. cycles if there are more pages than colors
@@ -131,15 +132,17 @@ export default function CardGrid({ totalPages = 20 }) {
           <div className="card-grid">
             {cards.length > 0 ? (
               visibleCards.map((card) => (
-                <div key={card.id} className="card">
-                  <img
-                    src={
-                      card.image_uris?.small ||
-                      card.card_faces?.[0]?.image_uris?.small
-                    }
-                    alt={card.name}
-                  />
-                </div>
+                <Link key={card.id} href={`/CardInfo/${card.id}`}>
+                  <div key={card.id} className="card">
+                    <img
+                      src={
+                        card.image_uris?.small ||
+                        card.card_faces?.[0]?.image_uris?.small
+                      }
+                      alt={card.name}
+                    />
+                  </div>
+                </Link>
               ))
             ) : (
               Array.from({ length: CARDS_PER_PAGE }).map((_, i) => (

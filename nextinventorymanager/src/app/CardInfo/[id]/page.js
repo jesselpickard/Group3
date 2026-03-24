@@ -1,11 +1,11 @@
 "use client";
 
-import Navbar from "../components/Navbar.js";
+import Navbar from "../../components/Navbar.js";
 import "./cardStyle.css";
-import { scryfallApi } from "../API/Scryfall";
+import { scryfallApi } from "../../API/Scryfall.js";
 import { useParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+//import { useSearchParams } from "next/navigation";
 
 export default function CardInfoPage() {
   return (
@@ -16,8 +16,10 @@ export default function CardInfoPage() {
 }
 
 function CardInfo() {
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id");
+  //const searchParams = useSearchParams();
+  //const id = searchParams.get("id");
+
+  const { id } = useParams();
 
   const [card, setCard] = useState(null);
   useEffect(() => {
@@ -148,7 +150,7 @@ function CardInfo() {
         <hr></hr>
         <div className="prints-area">
           {prints.map((p) => (
-            <a key={p.id} href={`/CardInfo?id=${p.id}`}>
+            <a key={p.id} href={`/CardInfo/${p.id}`}>{/*replaced ?id= with /*/}
               <img
                 src={p.image_uris?.small}
                 className="print-img"
