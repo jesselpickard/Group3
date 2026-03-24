@@ -38,7 +38,7 @@ export default function CollapsibleMenu({ setCards }) {
     }, 300);
 
     return () => clearTimeout(timeout);
-  }, [query, type, subtype, power, toughness, mana]);
+  }, [type, subtype, power, toughness, mana]);
 
   return (
     <div className="menu" style={{width: open ? "320px" : "50px", transition: "width 0.3s",}}>
