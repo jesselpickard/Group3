@@ -26,7 +26,7 @@ body {
     width: 100%;
     max-width: auto;
     border-radius: 6%;
-    box-shadow: 1px 1px 8px
+    box-shadow: 1px 1px 8px;
 }
 
 .card-info {
@@ -291,4 +291,22 @@ body {
     width: 20px;
     height: 20px;
     background-color: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: rgb(0, 0, 0);
+    }
+
+    .image-box img {
+        box-shadow: 0 0 10px 1px rgba(132, 132, 132, 0.8);
+    }
+
+    .card-info {
+        box-shadow: 0 0 10px 1px rgba(255, 255, 255, 0.8);
+    }
+
+    .print-body {
+        box-shadow: 0 0 10px 1px rgba(255, 255, 255, 0.8);
+    }
 }
