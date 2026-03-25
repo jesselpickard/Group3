@@ -36,6 +36,8 @@ export const scryfallApi = {
 },
 getPrints(url) {
   return rateLimitedFetch(url).then(res => res.json());
+},
+getSet(url) {
+  return fetch(url).then(res => res.json());
 }
-
 };

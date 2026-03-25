@@ -16,7 +16,6 @@ export default function CardInfoPage() {
 }
 
 function CardInfo() {
-
   const { id } = useParams();
 
   const [card, setCard] = useState(null);
@@ -90,6 +89,28 @@ function CardInfo() {
     });
   }, [card]);
 
+  const [face, setFace] = useState(0);
+
+  function getImage(card, face = 0) {
+    if (!card) return "";
+
+    if (card.image_uris?.large) {
+      return card.image_uris.large;
+    }
+
+    if (card.card_faces?.[face]?.image_uris?.large) {
+      return card.card_faces[face].image_uris.large;
+    }
+
+    return "";
+  }
+  const [setData, setSetData] = useState(null);
+  useEffect(() => {
+    if (!card) return;
+
+    scryfallApi.getSet(card.set_uri).then(setSetData);
+  }, [card]);
+
   if (!card) return <Loading />;
 
   function formatLegality(value) {
@@ -100,36 +121,67 @@ function CardInfo() {
     return value;
   }
 
+  function doubleFaceCheck() {
+    if (card.object == "card_face" || card.layout == "modal_dfc") {
+      <img src={card?.image_uris?.large} />;
+    }
+  }
+  const currCard = card.card_faces?.[face] || card;
+
   return (
     <div>
       <Navbar />
       <div className="info-area">
         <div className="box image-box">
-          <img src={card?.image_uris?.large} />
+          <img src={getImage(card, face)} className="card-img" />
+
+          {card.card_faces && (
+            <button
+              className="flip-btn"
+              onClick={() => setFace(face === 0 ? 1 : 0)}
+            >
+              Flip
+            </button>
+          )}
         </div>
         <div className="box card-info">
           <div className="card-name">
-            {card.name} {renderTextWithSymbols(card.mana_cost, symbols)}
+            {currCard.name} {renderTextWithSymbols(currCard.mana_cost, symbols)}
           </div>
           <hr></hr>
-          <div className="card-type">{card.type_line}</div>
+          <div className="card-type">{currCard.type_line}</div>
           <hr></hr>
           <div className="card-text">
-            {renderText(card.oracle_text, symbols)}
-            <br></br>
-            <p>{card.flavor_text}</p>
+            {renderText(currCard.oracle_text, symbols)}
+            <p>{currCard.flavor_text}</p>
           </div>
           <hr></hr>
-          {card && card.type_line.includes("Creature") && (
+          {currCard && currCard.type_line.includes("Creature") && (
             <div>
               <div className="card-PT">
-                {card.power}/{card.toughness}
+                {currCard.power}/{currCard.toughness}
               </div>
               <hr />
             </div>
           )}
+          <div className="card-set">
+            <div className="set-row">
+              {setData && (
+                <img src={setData.icon_svg_uri} className="set-icon" />
+              )}
+
+              <span>
+                {card.set_name} ({card.set.toUpperCase()})
+              </span>
+            </div>
+
+            <div className="card-set-info">
+              #{card.collector_number} • {card.rarity} • {card.set_type}
+            </div>
+          </div>
+          <hr></hr>
           <div className="card-artist">
-            <p>Illustrated by {card.artist}</p>
+            <p>Illustrated by {currCard.artist}</p>
           </div>
           <hr></hr>
           <div className="card-legal">
@@ -139,6 +191,12 @@ function CardInfo() {
 
             <div className={`legal ${card.legalities.commander}`}>
               Commander: {formatLegality(card.legalities.commander)}
+            </div>
+            <div className={`legal ${card.legalities.modern}`}>
+              Modern: {formatLegality(card.legalities.modern)}
+            </div>
+            <div className={`legal ${card.legalities.pioneer}`}>
+              Pioneer: {formatLegality(card.legalities.pioneer)}
             </div>
           </div>
         </div>
@@ -150,9 +208,12 @@ function CardInfo() {
           {prints.map((p) => (
             <Link key={p.id} href={`/CardInfo/${p.id}`}>
               <img
-                src={p.image_uris?.small}
+                src={
+                  p.image_uris?.small ||
+                  p.card_faces?.[0]?.image_uris?.small ||
+                  ""
+                }
                 className="print-img"
-                alt={p.name}
               />
             </Link>
           ))}
