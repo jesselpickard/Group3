@@ -25,7 +25,7 @@ export default function CheckSpread({ children }) {
               background: bgColor,
               display: "flex",
               alignItems: "center",
-              borderRight: !isLast ? "1px solid #ccc" : "none"
+              borderRight: !isLast ? "1px solid #45144a" : "none"
             }}
           >
             {React.cloneElement(child, {
