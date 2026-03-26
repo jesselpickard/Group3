@@ -39,8 +39,8 @@ function Navbar() {
     <nav className="navbar">
       {/* app title on the top left */}
       <div className="logo">
-        <img src="../assets/spellbook-img.png" className="logo-img" alt="" />
-        <img src="../assets/spellbook-text.png" className="logo-text" alt="Spellbook" />
+        <img src="Assets/spellbook-img.png" className="logo-img" alt="" />
+        <img src="Assets/spellbook-text.png" className="logo-text" alt="Spellbook" />
       </div>
 
       {/* normal search bar. hidden on small screens */}
