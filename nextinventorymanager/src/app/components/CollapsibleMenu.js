@@ -59,7 +59,10 @@ export default function CollapsibleMenu({ setCards }) {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter") CardSearch();
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  CardSearch();
+                }
               }}
             />
           </div>
