@@ -2,6 +2,9 @@
 import { useState, useEffect } from "react";
 
 /**
+ *  FourBox({{ value, onChange, color='White' }})
+ *      -> The color prop is not utilized within this file, but instead within CheckSpread.js
+ *  
  *  This component is intended for use with the color filter block in collapsible menu.
  *  I intend to utilize four primary states, as well as a fifth for disabling.
  *      1: unmarked
@@ -17,6 +20,8 @@ import { useState, useEffect } from "react";
  * 
  *  ☐ ☒ 🆔 ☑ -> placeholder icons //'id' needs an icon of some sort that isnt this emoji
  *  (W|U|B|R|G) -> Should become the final row in the menu itself
+ * 
+ *  
  */
 
 const STATES = {
@@ -33,7 +38,7 @@ const ORDER = [
   STATES.EXCLUDE,
 ];
 
-export default function FourBox({ value, onChange, color='White' }){//color tag currently unused and may be removed
+export default function FourBox({ value, onChange, color='White' }){
     const [state, setState] = useState(STATES.UNMARKED);
 
     const cycleForward = () => {
