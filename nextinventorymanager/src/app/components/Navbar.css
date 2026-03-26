@@ -46,7 +46,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 0.4rem;
+  margin-top: 0.9rem;
 }
 
 /* search dropdown popup below the icon */
@@ -121,6 +121,7 @@
   flex: 2; /* fills available space elastically */
   min-width: 80px;
   max-width: 300px;
+  margin-left: 2.5rem;
   /*margin: 0 2rem; /* keeps spacing from logo and avatar */
 }
 
@@ -148,8 +149,8 @@
 
 /* magnifying glass icon inside the search box */
 .search-icon {
-  margin-right:0.75rem;
-  cursor:pointer;
+  margin-right: 0.75rem;
+  cursor: pointer;
 }
 
 /* the actual text input. borderless to blend into container */
