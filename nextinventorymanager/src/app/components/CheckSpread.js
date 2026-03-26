@@ -9,7 +9,7 @@ export default function CheckSpread({ children }) {
         display: "inline-flex",
         borderRadius: 999,
         overflow: "hidden",
-        border: "8px solid #45144a"
+        border: "3px solid #45144a"
       }}
     >
       {items.map((child, index) => {
