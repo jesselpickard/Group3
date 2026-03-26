@@ -134,13 +134,24 @@ export default function CardGrid({ totalPages = 20 }) {
               visibleCards.map((card) => (
                 <Link key={card.id} href={`/CardInfo/${card.id}`}>
                   <div key={card.id} className="card">
-                    <img
-                      src={
-                        card.image_uris?.small ||
-                        card.card_faces?.[0]?.image_uris?.small
-                      }
-                      alt={card.name}
-                    />
+                    <picture>
+                      {/*Higher res images on mobile*/}
+                      <source
+                        media="(max-width: 800px)"
+                        srcSet={
+                          card.image_uris?.large ||
+                          card.card_faces?.[0]?.image_uris?.large
+                        }
+                      />
+                      {/*small image res on desktop*/}
+                      <img
+                        src={
+                          card.image_uris?.small ||
+                          card.card_faces?.[0]?.image_uris?.small
+                        }
+                        alt={card.name}
+                      />
+                    </picture>
                   </div>
                 </Link>
               ))

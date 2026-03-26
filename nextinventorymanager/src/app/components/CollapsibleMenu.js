@@ -53,15 +53,18 @@ export default function CollapsibleMenu({ setCards }) {
       {open && (
         <div className="content">
           <div className="searchContainer">
-            <input
-              type="text"
-              placeholder="Search cards..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") CardSearch();
-              }}
-            />
+            <form
+              onSubmit={(e) => {
+                e.preventDefault(); // prevent page reload
+                CardSearch();       // call your search function
+              }}>
+              <input
+                type="text"
+                placeholder="Search cards..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+            </form>
           </div>
           <Row
             itemA={<CardTypeBox value={type} onChange={setType} />}

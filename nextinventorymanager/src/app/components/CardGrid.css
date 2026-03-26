@@ -185,6 +185,13 @@
   }
 }
 
+.card img {
+  border-radius: 5%;
+  height: 100%;
+  width: 100%;
+  object-fit: cover; /* keeps aspect ratio while filling the cell */
+  display: block;    /* removes extra bottom space from inline img */
+}
 
 
 /* ---Adjustments to include collapsable menu--- */
