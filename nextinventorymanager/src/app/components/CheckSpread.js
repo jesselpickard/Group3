@@ -9,7 +9,7 @@ export default function CheckSpread({ children }) {
         display: "inline-flex",
         borderRadius: 999,
         overflow: "hidden",
-        border: "1px solid #ccc"
+        border: "8px solid #45144a"
       }}
     >
       {items.map((child, index) => {
@@ -25,7 +25,7 @@ export default function CheckSpread({ children }) {
               background: bgColor,
               display: "flex",
               alignItems: "center",
-              borderRight: !isLast ? "1px solid #45144a" : "none"
+              borderRight: !isLast ? "2px solid #45144a" : "none"
             }}
           >
             {React.cloneElement(child, {
