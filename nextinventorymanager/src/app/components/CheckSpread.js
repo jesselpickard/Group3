@@ -18,7 +18,6 @@ export default function CheckSpread({children}) {
         display: "inline-flex",
         borderRadius: 999,
         height: 32,
-        width: 20,
         overflow: "hidden",
         border: "3px solid #45144a"
       }}
@@ -35,6 +34,7 @@ export default function CheckSpread({children}) {
             style={{
               background: bgColor,
               display: "flex",
+              width: 30,
               alignItems: "center",
               borderRight: !isLast ? "2px solid #45144a" : "none"
             }}
