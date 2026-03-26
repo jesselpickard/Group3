@@ -1,7 +1,16 @@
 import React from "react";
 
-export default function CheckSpread({ children }) {
-  const items = React.Children.toArray(children);
+/**
+ *  This component takes any number of other items and arranges them as a horizontal
+ *  pill shaped object. Each item is separate from the others and if a given item has a color
+ *  prop CheckSpread makes the background of its space said color.
+ * 
+ *  The original intent is to take FourBox items but it will work for any sort.
+ * 
+ */
+
+export default function CheckSpread({ inputs }) {
+  const items = React.Children.toArray(inputs);
 
   return (
     <div

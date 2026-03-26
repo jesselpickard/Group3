@@ -131,6 +131,7 @@ function TestSpread() {
       <FourBox value={0} color="black" onChange={() => {}} />
       <FourBox value={0} color="red" onChange={() => {}} />
       <FourBox value={0} color="green" onChange={() => {}} />
+      <Button>'helloWorld'</Button>
     </CheckSpread>
   );
 }
