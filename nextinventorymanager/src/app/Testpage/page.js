@@ -19,8 +19,8 @@ export default function Home() {
       </head>
       <CollapsibleMenu/>
       <FourBox value={test} onChange={setTest}/>
+      <TestSpread/>
       <CardSearch/>
-      <app/>
     </div>
   );
 }
@@ -123,7 +123,7 @@ function CardSearch() {//be careful taking away from this part, for use with car
   );
 }
 
-function App() {
+function TestSpread() {
   const [values, setValues] = useState([0, 1, 2, 3, 0]);
 
   const handleChange = (index, newValue) => {
