@@ -9,8 +9,8 @@ import React from "react";
  * 
  */
 
-export default function CheckSpread({ inputs }) {
-  const items = React.Children.toArray(inputs);
+export default function CheckSpread({children}) {
+  const items = React.Children.toArray(children);
 
   return (
     <div
