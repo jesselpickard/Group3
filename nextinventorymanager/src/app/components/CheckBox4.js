@@ -78,7 +78,7 @@ export default function FourBox({ value, onChange }){
       onContextMenu={handleClick}
       style={{
         cursor: "pointer",
-        fontSize: "24px",
+        fontSize: "20px",
         userSelect: "none",
       }}
     >
