@@ -89,15 +89,28 @@
   }
 }
 
-/* app title on the left */
+/* app logo on the left */
 .logo {
-  color: white;
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-top: 0.4rem;
-  padding-bottom: 0.5rem;
-  flex: 1;
-  flex-shrink: 0; /* locks logo size */
+  display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    flex-shrink: 0;
+    padding-bottom: 0.5rem;
+}
+
+/* logo image (book) sized to fit navbar height */
+.logo-img {
+  height: 65px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* logo text ("Spellbook") sized to fit navbar height */
+.logo-text {
+  height: 45px;
+  width: auto;
+  object-fit: contain;
 }
 
 /* stretches to fill space between logo and avatar
@@ -173,6 +186,7 @@
   color: white;
   text-decoration: none;
   font-size: 0.95rem;
+  margin-left: 0.9rem;
 }
 
 /* underline on hover */

@@ -38,7 +38,10 @@ function Navbar() {
     <>
     <nav className="navbar">
       {/* app title on the top left */}
-      <div className="logo">MTG Inventory Manager</div>
+      <div className="logo">
+        <img src="/spellbook-img.png" className="logo-img" alt="" />
+        <img src="/spellbook-text.png" className="logo-text" alt="Spellbook" />
+      </div>
 
       {/* normal search bar. hidden on small screens */}
       <div className="search-wrapper">
