@@ -69,7 +69,7 @@ export default function FourBox({ value, onChange, color='White' }){
       case STATES.INCLUDE:
         return "☑";
       case STATES.ID:
-        return "🆔"; // placeholder
+        return "Id"; // placeholder
       case STATES.EXCLUDE:
         return "☒";
       default:
