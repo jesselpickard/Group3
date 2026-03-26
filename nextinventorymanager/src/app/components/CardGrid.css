@@ -186,8 +186,6 @@
 }
 
 .card img {
-  width: 100%;
-  height: 100%;
   object-fit: cover; /* keeps aspect ratio while filling the cell */
   display: block;    /* removes extra bottom space from inline img */
 }
