@@ -15,7 +15,7 @@ import { useState, useEffect } from "react";
  *  pass at the edge of the states it will loop. Mobile users will not be able to go down the
  *  list and must instead cycle.
  * 
- *  ☐ ☒ id ☑ -> placeholder icons //'id' needs an icon of some sort
+ *  ☐ ☒ 🆔 ☑ -> placeholder icons //'id' needs an icon of some sort that isnt this emoji
  *  (W|U|B|R|G) -> Should become the final row in the menu itself
  */
 
@@ -25,50 +25,66 @@ const STATES = {
     ID: 'ID',
     EXCLUDE: 'Excluded',
     DISABLED: 'Disabled'
-}
+};
+const ORDER = [
+  STATES.UNMARKED,
+  STATES.INCLUDE,
+  STATES.ID,
+  STATES.EXCLUDE,
+];
 
-export default function box(){
-    const [state, setState] = usestate(UNMARKED);
+export default function FourBox({ value, onChange }){
+    const [state, setState] = useState(STATES.UNMARKED);
+
+    const cycleForward = () => {
+        const index = ORDER.indexOf(state);
+        const nextIndex = (index + 1) % ORDER.length;
+        setState(ORDER[nextIndex]);
+    };
+
+    const cycleBackward = () => {
+        const index = ORDER.indexOf(state);
+        const prevIndex = (index - 1 + ORDER.length) % ORDER.length;
+        setState(ORDER[prevIndex]);
+    };
 
     const handleClick = (e) => {
-        if(e.type==='click'){//left click
-            switch(state){
-                case state.UNMARKED:
-                    state.setState.INCLUDE;
-                    break;
-                case state.INCLUDE:
-                    state.setState.ID;
-                    break;
-                case state.ID:
-                    state.setState.EXCLUDE;
-                    break;
-                case state.EXCLUDE:
-                    state.setState.UNMARKED;
-                    break;
-                default: 
-                    state.setState.UNMARKED;
-            }
-        } else if(e.type==='contextmenu'){//right click - must make sure to prevent system default
-            switch(state){
-                case state.UNMARKED:
-                    state.setState.EXCLUDE;
-                    break;
-                case state.INCLUDE:
-                    state.setState.UNMARKED;
-                    break;
-                case state.ID:
-                    state.setState.INCLUDE;
-                    break;
-                case state.EXCLUDE:
-                    state.setState.ID;
-                    break;
-                default:
-                    state.setState.UNMARKED;
-            }
+        if (e.type === "click") {
+            cycleForward();
+        } else if (e.type === "contextmenu") {
+            e.preventDefault();
+            cycleBackward();
         }
+    };
+
+    const renderIcon = () => {
+    switch (state) {
+      case STATES.UNMARKED:
+        return "☐";
+      case STATES.INCLUDE:
+        return "☑";
+      case STATES.ID:
+        return "🆔"; // placeholder
+      case STATES.EXCLUDE:
+        return "☒";
+      default:
+        return "☐";
     }
+  };
+
+  return (
+    <div
+      onClick={handleClick}
+      onContextMenu={handleClick}
+      style={{
+        cursor: "pointer",
+        fontSize: "24px",
+        userSelect: "none",
+      }}
+    >
+      {renderIcon()}
+    </div>
+  );
+
 }
 
-function getState() {
-    
-}

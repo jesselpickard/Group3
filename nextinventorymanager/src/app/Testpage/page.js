@@ -4,15 +4,20 @@ import { useState } from 'react';
 import { scryfallApi } from '../API/Scryfall';
 import Link from "next/link";
 import "./MenuTest.css";
+import FourBox from '../components/CheckBox4';
 
 export default function Home() {
   //this page exists to test pieces without implementing it into another page
+
+  const [test, setTest] = useState("Unmarked");//test for the 4 state checkbox
+
   return (
     <div>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <CollapsibleMenu/>
+      <FourBox value={test} onChange={setTest}/>
       <CardSearch/>
     </div>
   );
