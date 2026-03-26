@@ -124,26 +124,13 @@ function CardSearch() {//be careful taking away from this part, for use with car
 }
 
 function TestSpread() {
-  const [values, setValues] = useState([0, 1, 2, 3, 0]);
-
-  const handleChange = (index, newValue) => {
-    const updated = [...values];
-    updated[index] = newValue;
-    setValues(updated);
-  };
-
   return (
-    <div style={{ padding: 20 }}>
-      <CheckSpread>
-        {values.map((val, i) => (
-          <FourBox
-            key={i}
-            value={val}
-            color="lightgray"
-            onChange={(newVal) => handleChange(i, newVal)}
-          />
-        ))}
-      </CheckSpread>
-    </div>
+    <CheckSpread>
+      <FourBox value={0} color="white" onChange={() => {}} />
+      <FourBox value={0} color="blue" onChange={() => {}} />
+      <FourBox value={0} color="black" onChange={() => {}} />
+      <FourBox value={0} color="red" onChange={() => {}} />
+      <FourBox value={0} color="green" onChange={() => {}} />
+    </CheckSpread>
   );
 }

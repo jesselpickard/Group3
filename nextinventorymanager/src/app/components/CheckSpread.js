@@ -16,10 +16,13 @@ export default function CheckSpread({ children }) {
         const isFirst = index === 0;
         const isLast = index === items.length - 1;
 
+        const bgColor = child.props.color || "white";
+
         return (
           <div
             key={index}
             style={{
+              background: bgColor,
               display: "flex",
               alignItems: "center",
               borderRight: !isLast ? "1px solid #ccc" : "none"
