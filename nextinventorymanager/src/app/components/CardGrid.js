@@ -136,8 +136,8 @@ export default function CardGrid({ totalPages = 20 }) {
                   <div key={card.id} className="card">
                     <img
                       src={
-                        card.image_uris?.small ||
-                        card.card_faces?.[0]?.image_uris?.small
+                        card.image_uris?.large ||
+                        card.card_faces?.[0]?.image_uris?.large
                       }
                       alt={card.name}
                     />
