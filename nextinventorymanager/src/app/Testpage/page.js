@@ -20,6 +20,7 @@ export default function Home() {
       <CollapsibleMenu/>
       <FourBox value={test} onChange={setTest}/>
       <CardSearch/>
+      <app/>
     </div>
   );
 }
