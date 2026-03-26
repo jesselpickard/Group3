@@ -5,6 +5,7 @@ import { scryfallApi } from '../API/Scryfall';
 import Link from "next/link";
 import "./MenuTest.css";
 import FourBox from '../components/CheckBox4';
+import CheckSpread from '../components/CheckSpread';
 
 export default function Home() {
   //this page exists to test pieces without implementing it into another page
@@ -117,6 +118,31 @@ function CardSearch() {//be careful taking away from this part, for use with car
           </li>
         ))}
       </ul>
+    </div>
+  );
+}
+
+function App() {
+  const [values, setValues] = useState([0, 1, 2, 3, 0]);
+
+  const handleChange = (index, newValue) => {
+    const updated = [...values];
+    updated[index] = newValue;
+    setValues(updated);
+  };
+
+  return (
+    <div style={{ padding: 20 }}>
+      <CheckSpread>
+        {values.map((val, i) => (
+          <FourBox
+            key={i}
+            value={val}
+            color="lightgray"
+            onChange={(newVal) => handleChange(i, newVal)}
+          />
+        ))}
+      </CheckSpread>
     </div>
   );
 }

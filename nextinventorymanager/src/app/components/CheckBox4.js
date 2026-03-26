@@ -33,7 +33,7 @@ const ORDER = [
   STATES.EXCLUDE,
 ];
 
-export default function FourBox({ value, onChange }){
+export default function FourBox({ value, onChange, color='White' }){//color tag currently unused and may be removed
     const [state, setState] = useState(STATES.UNMARKED);
 
     const cycleForward = () => {
