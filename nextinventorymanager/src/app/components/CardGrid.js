@@ -135,23 +135,23 @@ export default function CardGrid({ totalPages = 20 }) {
                 <Link key={card.id} href={`/CardInfo/${card.id}`}>
                   <div key={card.id} className="card">
                     <picture>
-  {/* Large image for mobile (max-width: 768px) */}
-  <source
-    media="(max-width: 768px)"
-    srcSet={
-      card.image_uris?.large ||
-      card.card_faces?.[0]?.image_uris?.large
-    }
-  />
-  {/* Small image for desktop */}
-  <img
-    src={
-      card.image_uris?.small ||
-      card.card_faces?.[0]?.image_uris?.small
-    }
-    alt={card.name}
-  />
-</picture>
+                      {/*Higher res images on mobile*/}
+                      <source
+                        media="(max-width: 800px)"
+                        srcSet={
+                          card.image_uris?.large ||
+                          card.card_faces?.[0]?.image_uris?.large
+                        }
+                      />
+                      {/*small image res on desktop*/}
+                      <img
+                        src={
+                          card.image_uris?.small ||
+                          card.card_faces?.[0]?.image_uris?.small
+                        }
+                        alt={card.name}
+                      />
+                    </picture>
                   </div>
                 </Link>
               ))

@@ -186,6 +186,7 @@
 }
 
 .card img {
+  border-radius: 6%;
   height: 100%;
   width: 100%;
   object-fit: cover; /* keeps aspect ratio while filling the cell */
