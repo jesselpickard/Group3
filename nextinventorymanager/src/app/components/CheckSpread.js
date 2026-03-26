@@ -17,6 +17,8 @@ export default function CheckSpread({children}) {
       style={{
         display: "inline-flex",
         borderRadius: 999,
+        height: 32,
+        width: 20,
         overflow: "hidden",
         border: "3px solid #45144a"
       }}
