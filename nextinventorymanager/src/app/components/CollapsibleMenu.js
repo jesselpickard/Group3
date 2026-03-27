@@ -76,7 +76,7 @@ export default function CollapsibleMenu({ setCards }) {
           />
           <Row
             itemA={<NumberFilter label="Mana Value" filter={mana} setFilter={setMana} />}
-            itemB={<div />} 
+            itemB={<input type="text" placeholder="Set code..." value={set} onChange={(e)=>setSet(e.target.value)}/>} 
           />
         </div>
       )}
