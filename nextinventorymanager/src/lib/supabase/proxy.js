@@ -26,8 +26,6 @@ export async function updateSession(request) {
     },
   });
 
-  // Refresh/validate session cookies for SSR.
   await supabase.auth.getUser();
-
   return response;
 }
