@@ -78,12 +78,6 @@ export default function CollapsibleMenu({ setCards }) {
             itemA={<NumberFilter label="Mana Value" filter={mana} setFilter={setMana} />}
             itemB={<div/>} 
           />
-          <Row itemA={<div/>} itemB={<div/>}/>
-          <Row itemA={<div/>} itemB={<div/>}/>
-          <Row itemA={<div/>} itemB={<div/>}/>
-          <Row itemA={<div/>} itemB={<div/>}/>
-          <Row itemA={<div/>} itemB={<div/>}/>
-          <Row itemA={<div/>} itemB={<div/>}/>
         </div>
       )}
     </div>
