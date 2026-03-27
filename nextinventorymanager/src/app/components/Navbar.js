@@ -1,15 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import "./Navbar.css";
 import AvatarPicker from "./AvatarPicker";
 import { createClient } from "@/lib/supabase/client";
 
 function Navbar() {
-  const supabase = useMemo(() => createClient(), []);
   const pathname = usePathname();
 
+  const supabaseRef = useRef(null);
   const [user, setUser] = useState(null);
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -19,7 +19,22 @@ function Navbar() {
   const menuRef = useRef(null);
   const searchRef = useRef(null);
 
+  function getSupabaseSafely() {
+    if (supabaseRef.current) return supabaseRef.current;
+
+    try {
+      supabaseRef.current = createClient();
+      return supabaseRef.current;
+    } catch {
+      // If env vars aren't present, just behave as logged-out (no crash).
+      return null;
+    }
+  }
+
   useEffect(() => {
+    const supabase = getSupabaseSafely();
+    if (!supabase) return;
+
     let mounted = true;
 
     supabase.auth.getUser().then(({ data }) => {
@@ -36,7 +51,7 @@ function Navbar() {
       mounted = false;
       subscription.unsubscribe();
     };
-  }, [supabase]);
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -50,6 +65,9 @@ function Navbar() {
 
   async function loginWithGoogle(e) {
     e.preventDefault();
+
+    const supabase = getSupabaseSafely();
+    if (!supabase) return;
 
     const next = pathname || "/";
     const safeNext = next.startsWith("/") ? next : "/";
@@ -66,6 +84,10 @@ function Navbar() {
 
   async function logout(e) {
     e.preventDefault();
+
+    const supabase = getSupabaseSafely();
+    if (!supabase) return;
+
     await supabase.auth.signOut();
     setMenuOpen(false);
   }
@@ -120,7 +142,7 @@ function Navbar() {
               )}
             </div>
           ) : (
-            // Keeps the same layout/styling (login-btn), but triggers Google OAuth
+            // Same layout/class as before; click triggers Google OAuth directly.
             <a className="login-btn" href="#" onClick={loginWithGoogle}>
               Login
             </a>
