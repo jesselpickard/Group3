@@ -1,28 +1,35 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+export const dynamic = "force-dynamic";
+
+import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
+function getSafeNextFromUrl() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const next = params.get("next") || "/";
+    return next.startsWith("/") ? next : "/";
+  } catch {
+    return "/";
+  }
+}
+
 export default function LoginPage() {
-  const supabase = useMemo(() => createClient(), []);
-  const searchParams = useSearchParams();
-
-  const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
-
-  const next = searchParams.get("next") || "/";
-  const safeNext = next.startsWith("/") ? next : "/";
+  const [status, setStatus] = useState("");
 
   async function signInWithGoogle() {
     setBusy(true);
     setStatus("");
 
     try {
+      const safeNext = getSafeNextFromUrl();
       const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(
         safeNext
       )}`;
 
+      const supabase = createClient();
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: { redirectTo },
