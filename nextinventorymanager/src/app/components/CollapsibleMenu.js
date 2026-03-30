@@ -148,3 +148,12 @@ export function Row({ itemA, itemB }) {
     </div>
   );
 }
+
+
+/**
+ * This function will take utilize the FourBox and CheckSpread components to provide an inteface
+ * for filtering colors. 
+ */
+function ColorSearch() {
+
+}
