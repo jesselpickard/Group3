@@ -63,10 +63,12 @@
 
 /* page indicator text on the left (i.e., page 1 of 20) */
 .page-indicator {
-  align-self:flex-end;
+  align-self: flex-end;
   color: #71179C;
   font-weight: bold;
   font-size: 0.9rem;
+  min-width: 30px;
+  white-space: nowrap;
 }
 
 /* invisible placeholder - same size as a button to keep pagination width fixed */

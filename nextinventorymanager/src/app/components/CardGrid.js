@@ -41,6 +41,10 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
     return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
   };
 
+  if (totalPages <= 1) {
+    return null;
+  }
+
   return (
     <div className="pagination-bar">
       <div className="pagination">
@@ -167,10 +171,6 @@ export default function CardGrid({ totalPages = 20 }) {
           </div>
         </div>
       </div>
-
-
-      {/* duplicate pagination bar at the bottom for convenience */}
-      <PaginationBar currentPage={currentPage} totalPages={TOTAL_PAGES} onPageChange={setCurrentPage} />
     </div>
   )
 }
