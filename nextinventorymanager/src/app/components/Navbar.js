@@ -13,7 +13,7 @@ function Navbar() {
   const [user, setUser] = useState(null);
 
   const [menuOpen, setMenuOpen] = useState(false);
-  const [selectedAvatar, setSelectedAvatar] = useState("");
+  const [selectedAvatar, setSelectedAvatar] = useState("🎮");
   const [searchOpen, setSearchOpen] = useState(false);
 
   const menuRef = useRef(null);
