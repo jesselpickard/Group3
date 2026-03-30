@@ -55,8 +55,8 @@ export default function CollapsibleMenu({ setCards }) {
           <div className="searchContainer">
             <form
               onSubmit={(e) => {
-                e.preventDefault(); // prevent page reload
-                CardSearch();       // call your search function
+                e.preventDefault();
+                CardSearch();
               }}>
               <input
                 type="text"
