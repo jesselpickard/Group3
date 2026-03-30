@@ -2,8 +2,8 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { getSupabaseEnv } from "./env";
 
-export function createClient() {
-  const cookieStore = cookies();
+export async function createClient() {
+  const cookieStore = await cookies();
   const { url, key } = getSupabaseEnv();
 
   return createServerClient(url, key, {
@@ -17,7 +17,7 @@ export function createClient() {
             cookieStore.set(name, value, options)
           );
         } catch {
-          // Server Components may not allow setting cookies; middleware refresh handles sessions.
+          // Server Components can throw here; middleware/session refresh still works.
         }
       },
     },
