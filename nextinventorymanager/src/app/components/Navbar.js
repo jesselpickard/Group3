@@ -98,13 +98,13 @@ function Navbar() {
     <>
       <nav className="navbar">
         <div className="logo">
-          <img src="Assets/spellbook-img.png" className="logo-img" alt="" />
-          <img src="Assets/spellbook-text.png" className="logo-text" alt="Spellbook" />
+          <img src="/Assets/spellbook-img.png" className="logo-img" alt="" />
+          <img src="/Assets/spellbook-text.png" className="logo-text" alt="Spellbook" />
         </div>
 
         <div className="search-wrapper">
           <div className="search-container">
-            <span className="search-icon"></span>
+            <span className="search-icon">🔍</span>
             <input className="search-bar" type="text" placeholder="Search..." />
           </div>
         </div>
@@ -114,7 +114,7 @@ function Navbar() {
             <button
               className="search-toggle-btn"
               onClick={() => setSearchOpen(!searchOpen)}
-            ></button>
+            >🔍</button>
 
             {searchOpen && (
               <div className="search-popup">

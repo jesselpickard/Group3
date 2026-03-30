@@ -169,6 +169,15 @@
   cursor: pointer;
   margin-top: 0.75rem;
   flex-shrink: 0; /* locks button size */
+  border: 2px solid white; /* adds the outline back */
+  border-radius: 6px;
+  color: white; /* makes text visible */
+  text-decoration: none; /* removes underline from <a> tag */
+  font-weight: bold;
+}
+
+.login-btn:hover {
+  background-color: rgba(255,255,255,0.1); /* subtle hover effect */
 }
 
 /* ---- NavLinks ---- */
@@ -276,6 +285,11 @@
 
   /* placeholder text color */
   .search-bar::placeholder {
+    color: #9b6bb5;
+  }
+  
+  .login-btn {
+    border-color: #9b6bb5;
     color: #9b6bb5;
   }
 }
