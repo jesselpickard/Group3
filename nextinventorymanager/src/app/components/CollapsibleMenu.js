@@ -12,7 +12,7 @@ export default function CollapsibleMenu({ setCards }) {
   const [power, setPower] = useState({ op: "=", value: "" });
   const [toughness, setToughness] = useState({ op: "=", value: "" });
   const [mana, setMana] = useState({ op: "=", value: "" });
-  const [set, setSet] = useState("");
+  const [setCode, setSetCode] = useState("");
   //add set and color
   //color should be made up of checkboxes
 
@@ -24,7 +24,7 @@ export default function CollapsibleMenu({ setCards }) {
     if (power.value) parts.push(`pow${power.op}${power.value}`);
     if (toughness.value) parts.push(`tou${toughness.op}${toughness.value}`);
     if (mana.value) parts.push(`cmc${mana.op}${mana.value}`);
-    if (set) parts.push(`set:${set}`)
+    if (setCode) parts.push(`set:${setCode}`)
     return parts.join(" ");
   };
 
@@ -42,7 +42,7 @@ export default function CollapsibleMenu({ setCards }) {
     }, 300);
 
     return () => clearTimeout(timeout);
-  }, [type, subtype, power, toughness, mana]);
+  }, [type, subtype, power, toughness, mana, setCode]);
 
   return (
     <div className="menu" style={{width: open ? "320px" : "50px", transition: "width 0.3s",}}>
@@ -77,6 +77,10 @@ export default function CollapsibleMenu({ setCards }) {
           <Row
             itemA={<NumberFilter label="Mana Value" filter={mana} setFilter={setMana} />}
             itemB={<div/>} 
+          />
+          <Row
+            itemA={<TypeSearch value={setCode} onChange={setSetCode}placeholder={"Set code (e.g. khm, neo)..."}/>}
+            itemB={<div />}
           />
         </div>
       )}
