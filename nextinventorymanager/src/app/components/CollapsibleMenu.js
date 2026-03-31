@@ -64,6 +64,7 @@ export default function CollapsibleMenu({ setCards }) {
       switch (state) {
         case STATES.INCLUDE:
           included.push(code);
+          ids.push(code);
           break;
         case STATES.ID:
           ids.push(code);
