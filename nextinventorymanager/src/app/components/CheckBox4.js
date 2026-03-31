@@ -24,7 +24,7 @@ import { useState, useEffect } from "react";
  *  
  */
 
-const STATES = {
+export const STATES = {
     UNMARKED: 'Unmarked',
     INCLUDE: 'Included',
     ID: 'ID',
@@ -44,13 +44,17 @@ export default function FourBox({ value, onChange, color='White' }){
     const cycleForward = () => {
         const index = ORDER.indexOf(state);
         const nextIndex = (index + 1) % ORDER.length;
-        setState(ORDER[nextIndex]);
+        const newState = ORDER[nextIndex];
+        setState(newState);
+        onChange?.(newState);//notifies the parent of the change
     };
 
     const cycleBackward = () => {
         const index = ORDER.indexOf(state);
         const prevIndex = (index - 1 + ORDER.length) % ORDER.length;
-        setState(ORDER[prevIndex]);
+        const newState = ORDER[prevIndex];
+        setState(newState);
+        onChange?.(newState);
     };
 
     const handleClick = (e) => {

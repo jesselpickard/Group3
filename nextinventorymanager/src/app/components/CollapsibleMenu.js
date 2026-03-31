@@ -3,6 +3,13 @@
 import { useState, useEffect } from "react";
 import { scryfallApi } from "../API/Scryfall";
 import "./Menu.css";
+import FourBox from "./CheckBox4";
+import { STATES } from './CheckBox4';
+import CheckSpread from "./CheckSpread";
+
+//I need to adjust the colors for the color search
+
+
 
 export default function CollapsibleMenu({ setCards }) {
   const [open, setOpen] = useState(true);
@@ -13,8 +20,25 @@ export default function CollapsibleMenu({ setCards }) {
   const [toughness, setToughness] = useState({ op: "=", value: "" });
   const [mana, setMana] = useState({ op: "=", value: "" });
   const [setCode, setSetCode] = useState("");
-  //add set and color
-  //color should be made up of checkboxes
+
+  const [colors, setColors] = useState({//tracks the states of the color boxes
+    white: STATES.UNMARKED,
+    blue: STATES.UNMARKED,
+    black: STATES.UNMARKED,
+    red: STATES.UNMARKED,
+    green: STATES.UNMARKED,
+  });
+  const COLOR_CODES = {//converts the colorname into a one letter code
+    white: "w",
+    blue: "u",
+    black: "b",
+    red: "r",
+    green: "g",
+  };
+
+  const handleColorChange = (colorName, newState) => {
+    setColors(prev => ({ ...prev, [colorName]: newState }));
+  };
 
   const buildQuery = () => {
     const parts = [];
@@ -24,7 +48,39 @@ export default function CollapsibleMenu({ setCards }) {
     if (power.value) parts.push(`pow${power.op}${power.value}`);
     if (toughness.value) parts.push(`tou${toughness.op}${toughness.value}`);
     if (mana.value) parts.push(`cmc${mana.op}${mana.value}`);
-    if (setCode) parts.push(`set:${setCode}`)
+    if (setCode) parts.push(`set:${setCode}`);
+
+
+    //Groups colors by state, id needs to be worked a bit
+      //all included colors should be within the id as well
+    const included = [];
+    const ids = [];
+    const excluded = [];
+
+    Object.entries(colors).forEach(([colorName, state]) => {//handles the color boxes
+      const code = COLOR_CODES[colorName];
+      if (!code) return;
+
+      switch (state) {
+        case STATES.INCLUDE:
+          included.push(code);
+          break;
+        case STATES.ID:
+          ids.push(code);
+          break;
+        case STATES.EXCLUDE:
+          excluded.push(code);
+          break;
+        default:
+          break; // UNMARKED / DISABLED
+      }
+    });
+
+    //builds the strings for the color boxes
+    if (included.length) parts.push(`c:${included.join("")}`);
+    if (ids.length) parts.push(`id:${ids.join("")}`);
+    if (excluded.length) parts.push(`-c:${excluded.join("")}`);
+
     return parts.join(" ");
   };
 
@@ -34,7 +90,6 @@ export default function CollapsibleMenu({ setCards }) {
     setCards(data.data || []);
   };
 
-  
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -42,49 +97,81 @@ export default function CollapsibleMenu({ setCards }) {
     }, 300);
 
     return () => clearTimeout(timeout);
-  }, [type, subtype, power, toughness, mana, setCode]);
+  }, [type, subtype, power, toughness, mana, setCode, colors]);
 
   return (
-    <div className="menu" style={{width: open ? "320px" : "50px", transition: "width 0.3s",}}>
-      <button className="toggleBtn" onClick={() => setOpen(!open)}>
-        {open ? "–" : "+"}
-      </button>
+    <div
+      className="menu"
+      style={{
+        width: open ? "320px" : "50px",
+        padding: open ? "10px" : "4px",
+        transition: "width 0.3s, padding 0.3s",
+      }}
+    >
 
-      {open && (
-        <div className="content">
-          <div className="searchContainer">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                CardSearch();
-              }}>
-              <input
-                type="text"
-                placeholder="Search cards..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-            </form>
-          </div>
-          <Row
-            itemA={<CardTypeBox value={type} onChange={setType} />}
-            itemB={<TypeSearch value={subtype} onChange={setSubtype} placeholder={"Subtype..."}/>}
-          />
-          <Row /*need to fix the widths*/
-            itemA={<NumberFilter label="Power" filter={power} setFilter={setPower} />}
-            itemB={<NumberFilter label="Toughness" filter={toughness} setFilter={setToughness} />}
-          />
-          <Row
-            itemA={<NumberFilter label="Mana Value" filter={mana} setFilter={setMana} />}
-            itemB={<div/>} 
-          />
-          <Row
-            itemA={<TypeSearch value={setCode} onChange={setSetCode}placeholder={"Set code (e.g. khm, neo)..."}/>}
-            itemB={<div />}
-          />
+  {/* Toggle */}
+  <button className="toggleBtn" onClick={() => setOpen(!open)}>
+    {open ? "–" : "+"}
+  </button>
+
+  {open && (
+    <div className="content">
+
+      {/* Search */}
+      <div className="row full-width">
+        <input
+          type="text"
+          placeholder="Search cards..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && CardSearch()}
+        />
+      </div>
+
+      {/* Type / Subtype */}
+      <div className="row">
+        <div className="itemA">
+          <CardTypeBox value={type} onChange={setType} />
         </div>
-      )}
+        <div className="itemB">
+          <TypeSearch value={subtype} onChange={setSubtype} placeholder="Subtype..." />
+        </div>
+      </div>
+
+      {/* Power / Toughness / Mana Value Row */}
+      <div className="row">
+        <div className="itemA">
+          <NumberFilter label="Power" filter={power} setFilter={setPower} />
+        </div>
+        <div className="itemB">
+          <NumberFilter label="Toughness" filter={toughness} setFilter={setToughness} />
+        </div>
+        <div className="itemC">
+          <NumberFilter label="Mana Value" filter={mana} setFilter={setMana} />
+        </div>
+      </div>
+      {/* Set Code + Color Filters */}
+      <Row
+        itemA={
+          <TypeSearch
+            value={setCode}
+            onChange={setSetCode}
+            placeholder="Set code..."
+          />
+        }
+        itemB={ 
+          <CheckSpread>
+            <FourBox color="White" onChange={(v) => handleColorChange("white", v)} />
+            <FourBox color="Blue" onChange={(v) => handleColorChange("blue", v)} />
+            <FourBox color="Black" onChange={(v) => handleColorChange("black", v)} />
+            <FourBox color="Red" onChange={(v) => handleColorChange("red", v)} />
+            <FourBox color="Green" onChange={(v) => handleColorChange("green", v)} />
+          </CheckSpread>
+        }
+      />
     </div>
+  )}
+</div>
   );
 }
 
@@ -120,10 +207,11 @@ function NumberFilter({ label, filter, setFilter }) {
   return (
     <div className="numberFilter">
       <label>{label}</label>
-      <div style={{ display: "flex", gap: "5px" }}>
+      <div className="numberFilterRow">
         <select
           value={filter.op}
           onChange={(e) => setFilter({ ...filter, op: e.target.value })}
+          className="operatorSelect"
         >
           <option value="=">=</option>
           <option value=">">&gt;</option>
@@ -136,6 +224,7 @@ function NumberFilter({ label, filter, setFilter }) {
           min="0"
           value={filter.value}
           onChange={(e) => setFilter({ ...filter, value: e.target.value })}
+          className="numberInput"
         />
       </div>
     </div>
@@ -143,7 +232,6 @@ function NumberFilter({ label, filter, setFilter }) {
 }
 
 //use to nest menu items side by side
-  //need to implement changes for P/T to be equal widths
 export function Row({ itemA, itemB }) {
   return (
     <div className="row">
@@ -151,13 +239,4 @@ export function Row({ itemA, itemB }) {
       <div className="itemB">{itemB}</div>
     </div>
   );
-}
-
-
-/**
- * This function will take utilize the FourBox and CheckSpread components to provide an inteface
- * for filtering colors. 
- */
-function ColorSearch() {
-
 }

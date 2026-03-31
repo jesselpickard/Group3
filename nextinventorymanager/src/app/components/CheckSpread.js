@@ -37,6 +37,7 @@ export default function CheckSpread({children}) {
               width: '28px',
               alignItems: "center",
               justifyContent: "center",
+              color: "black",
               borderRight: !isLast ? "2px solid #45144a" : "none"
             }}
           >
