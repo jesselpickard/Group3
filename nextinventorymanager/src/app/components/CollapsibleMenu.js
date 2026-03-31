@@ -72,13 +72,13 @@ export default function CollapsibleMenu({ setCards }) {
         case STATES.EXCLUDE:
           excluded.push(code);
           break;
-        default:
-          break; // UNMARKED / DISABLED
+        default:// UNMARKED / DISABLED
+          break;
       }
     });
 
     //builds the strings for the color boxes
-    if (included.length) parts.push(`c:${included.join("")}`);
+    if (included.length) parts.push(`c=${included.join("")}`);
     if (ids.length) parts.push(`id:${ids.join("")}`);
     if (excluded.length) parts.push(`-c:${excluded.join("")}`);
 
