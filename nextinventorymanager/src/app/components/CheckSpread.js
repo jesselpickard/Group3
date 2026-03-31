@@ -20,7 +20,7 @@ export default function CheckSpread({children}) {
         borderRadius: 999,
         height: '32px',
         overflow: "hidden",
-        border: "3px solid #6e6e6e"
+        border: "3px solid #f36eff"
       }}
     >
       {items.map((child, index) => {

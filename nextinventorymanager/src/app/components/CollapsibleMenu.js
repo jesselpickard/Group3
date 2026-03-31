@@ -161,7 +161,7 @@ export default function CollapsibleMenu({ setCards }) {
         }
         itemB={ 
           <CheckSpread>
-            <FourBox color="#dcc05c" onChange={(v) => handleColorChange("white", v)} />
+            <FourBox color="#f6e280" onChange={(v) => handleColorChange("white", v)} />
             <FourBox color="#4268ba" onChange={(v) => handleColorChange("blue", v)} />
             <FourBox color="rgb(102, 0, 102)" onChange={(v) => handleColorChange("black", v)} />
             <FourBox color="#ff1919" onChange={(v) => handleColorChange("red", v)} />
