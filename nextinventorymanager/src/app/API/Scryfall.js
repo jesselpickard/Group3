@@ -1,6 +1,8 @@
 let queue = Promise.resolve();
 let lastRequestTime = 0;
 
+const MAX_CARDS = 500;//caps any search
+
 function rateLimitedFetch(url) {//ensures we do not exceed the rate limit requested by scryfall, should be universal
   queue = queue.then(async () => {
     const now = Date.now();
@@ -19,10 +21,20 @@ function rateLimitedFetch(url) {//ensures we do not exceed the rate limit reques
 }
 
 export const scryfallApi = {
-  search(query) {//use this from other pages to query scryfall
-    return rateLimitedFetch(
-      `https://api.scryfall.com/cards/search?q=${encodeURIComponent(query)}`
-    ).then((res) => res.json());
+  async search(query) {
+    let allCards = [];
+    let url = `https://api.scryfall.com/cards/search?q=${encodeURIComponent(query)}`;
+
+    while (url && allCards.length < MAX_CARDS) {
+      const res = await rateLimitedFetch(url);
+      const data = await res.json();
+
+      allCards = [...allCards, ...(data.data || [])];
+
+      url = data.has_more ? data.next_page : null;
+    }
+
+    return { data: allCards };
   },
  getCardById(id) {
     return rateLimitedFetch(
