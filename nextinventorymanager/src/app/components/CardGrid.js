@@ -124,7 +124,7 @@ export default function CardGrid({ totalPages = 20 }) {
       <div className="main-layout">
         {/* LEFT SIDEBAR */}
         <div className="sidebar-area">
-          <Menu setCards={setCards} />
+          <Menu setCards={setCards} setCurrentPage={setCurrentPage}/>
         </div>
         {/* MAIN CONTENT */}          
         <div className="content-area">

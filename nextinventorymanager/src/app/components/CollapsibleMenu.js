@@ -11,7 +11,7 @@ import CheckSpread from "./CheckSpread";
 
 
 
-export default function CollapsibleMenu({ setCards }) {
+export default function CollapsibleMenu({ setCards, setCurrentPage }) {
   const [open, setOpen] = useState(true);
   const [query, setQuery] = useState("");
   const [type, setType] = useState("");
@@ -89,6 +89,7 @@ export default function CollapsibleMenu({ setCards }) {
     const searchQuery = buildQuery();
     const data = await scryfallApi.search(searchQuery);
     setCards(data.data || []);
+    setCurrentPage(1);//resets the selected page when a search is triggered
   };
 
 
@@ -98,7 +99,7 @@ export default function CollapsibleMenu({ setCards }) {
     }, 300);
 
     return () => clearTimeout(timeout);
-  }, [type, subtype, power, toughness, mana, setCode, colors]);
+  }, [query, type, subtype, power, toughness, mana, setCode, colors]);
 
   return (
     <div
