@@ -41,10 +41,6 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
     return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
   };
 
-  if (totalPages <= 1) {
-    return null;
-  }
-
   return (
     <div className="pagination-bar">
       <div className="pagination">
