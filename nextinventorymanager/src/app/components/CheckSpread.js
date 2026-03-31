@@ -6,7 +6,8 @@ import React from "react";
  *  prop CheckSpread makes the background of its space said color.
  * 
  *  The original intent is to take FourBox items but it will work for any sort.
- * 
+ *  
+ *  #45144a Reminder
  */
 
 export default function CheckSpread({children}) {
@@ -19,7 +20,7 @@ export default function CheckSpread({children}) {
         borderRadius: 999,
         height: '32px',
         overflow: "hidden",
-        border: "3px solid #45144a"
+        border: "3px solid #6e6e6e"
       }}
     >
       {items.map((child, index) => {
