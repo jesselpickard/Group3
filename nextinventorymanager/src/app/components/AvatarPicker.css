@@ -50,3 +50,9 @@
   background-color: #e0c0f0;
   border-color: #71179C;
 }
+
+@media (prefers-color-scheme: dark) {
+  .avatar {
+    border-color: #9b6bb5;
+  }
+}

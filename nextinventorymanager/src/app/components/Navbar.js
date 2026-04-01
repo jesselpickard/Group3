@@ -92,6 +92,22 @@ function Navbar() {
     setMenuOpen(false);
   }
 
+  // Load avatar from Supabase user metadata whenever the user object updates
+  useEffect(() => {
+    if (user?.user_metadata?.avatar) {
+      setSelectedAvatar(user.user_metadata.avatar);
+    }
+  }, [user]);
+
+  // Saves the picked avatar to Supabase so it survives refresh.
+  async function handleAvatarSelect(emoji) {
+    setSelectedAvatar(emoji);
+    const supabase = getSupabaseSafely();
+    if (supabase) {
+      await supabase.auth.updateUser({ data: { avatar: emoji } });
+    }
+  }
+
   const isLoggedIn = !!user;
 
   return (
@@ -133,7 +149,7 @@ function Navbar() {
                 <div className="submenu">
                   <div className="submenu-email">{user?.email}</div>
                   <hr className="submenu-divider" />
-                  <AvatarPicker selected={selectedAvatar} onSelect={setSelectedAvatar} />
+                  <AvatarPicker selected={selectedAvatar} onSelect={handleAvatarSelect} />
                   <hr className="submenu-divider" />
                   <a href="#" onClick={logout}>
                     Logout

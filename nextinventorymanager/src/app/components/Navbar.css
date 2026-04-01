@@ -51,6 +51,9 @@
 
 /* search dropdown popup below the icon */
 .search-popup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
