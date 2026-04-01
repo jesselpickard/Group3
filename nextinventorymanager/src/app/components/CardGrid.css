@@ -78,6 +78,17 @@
     /* hug the buttons tightly on mobile */
     flex: unset;
   }
+
+  .page-btn {
+    padding: 4px 6px;
+    font-size: 11px;
+    min-width: unset; /* remove any minimum width forcing them wider */
+  }
+
+  .pagination {
+    gap: 3px; /* tighten the gap between buttons */
+    flex-wrap: wrap;
+  }
 }
 
 /* outer wrapper for pagination row and go-to-page input */
