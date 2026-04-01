@@ -18,6 +18,20 @@
   width: 100%;
 }
 
+@media (max-width: 600px) {
+  /* allows the page numbers go below the page indicator on small screens */
+  .cardgrid-topbar {
+    flex-wrap: wrap; 
+  }
+
+  /* gives a bit of space between page numbers and indicator after the wrap
+    as well as removing the centering fix for bigger screens */
+  .page-indicator-top {
+    padding-bottom: 0.5rem;
+    padding-top: none;
+  }
+}
+
 /* ---- CARD GRID ---- */
 /* responsive grid - auto fills columns based on screen width */
 .card-grid {
@@ -90,8 +104,10 @@
   font-size: 0.9rem;
   min-width: 30px;
   white-space: nowrap;
+  padding-top: 0.55rem;
 }
 
+/* similar to the top, except the indicator is on the right */ 
 .page-indicator-bottom {
   align-self: flex-end;
   color: #71179C;

@@ -117,9 +117,10 @@ export default function CardGrid({ totalPages = 20 }) {
   return (
     <div className="cardgrid-wrapper">
       {/* top bar with page indicator on the left and pagination on the right */}
-      <div className="page-indicator-top">Page {currentPage} of {TOTAL_PAGES}</div>
-      <PaginationBar currentPage={currentPage} totalPages={TOTAL_PAGES} onPageChange={setCurrentPage} />
-
+      <div className="cardgrid-topbar">
+        <div className="page-indicator-top">Page {currentPage} of {TOTAL_PAGES}</div>
+        <PaginationBar currentPage={currentPage} totalPages={TOTAL_PAGES} onPageChange={setCurrentPage} />
+      </div>
       <div className="main-layout">
         {/* LEFT SIDEBAR */}
         <div className="sidebar-area">
