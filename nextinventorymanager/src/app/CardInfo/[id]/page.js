@@ -1,5 +1,6 @@
-"use client";
+"use client"; // Required for Next.js client-side rendering
 
+// Import components, styles, API helper, and React tools
 import Navbar from "../../components/Navbar.js";
 import "./cardStyle.css";
 import { scryfallApi } from "../../API/Scryfall.js";
@@ -7,6 +8,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 
+// Wrapper component that enables loading fallback with Suspense
 export default function CardInfoPage() {
   return (
     <Suspense fallback={<div>Loading page...</div>}>
@@ -16,103 +18,151 @@ export default function CardInfoPage() {
 }
 
 function CardInfo() {
+
+  // Get the card ID from the URL (ex: /CardInfo/123)
   const { id } = useParams();
 
+  // Store the main card data
   const [card, setCard] = useState(null);
+
+  // Fetch card data when ID is available
   useEffect(() => {
     if (!id) return;
 
     scryfallApi.getCardById(id).then(setCard);
   }, [id]);
 
+  // =======================
+  // LOADING ANIMATION
+  // =======================
   function Loading() {
+
+    // Controls the animated dots (....)
     const [dots, setDots] = useState("");
+
     useEffect(() => {
       const interval = setInterval(() => {
         setDots((prev) => (prev.length < 5 ? prev + "." : ""));
       }, 500);
+
+      // Cleanup interval when component unmounts
       return () => clearInterval(interval);
     }, []);
 
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          fontSize: "2rem",
-          fontFamily: "Arial, sans-serif",
-          color: "#555",
-        }}
-      >
+      <div style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        fontSize: "2rem",
+        fontFamily: "Arial, sans-serif",
+        color: "#555",
+      }}>
         Fetching Card Info{dots}
       </div>
     );
   }
+
+  // =======================
+  // SYMBOL DATA (mana icons)
+  // =======================
   const [symbols, setSymbols] = useState([]);
 
+  // Fetch mana symbols from API
   useEffect(() => {
     scryfallApi.getSymbols().then((data) => {
       setSymbols(data.data);
     });
   }, []);
 
+  // Replace {G}, {R}, etc. with actual images
   function renderTextWithSymbols(text, symbols) {
     if (!text) return null;
+
+    // Split text into parts like "{G}" and normal text
     const parts = text.split(/(\{.*?\})/g);
+
     return parts.map((part, i) => {
       const symbol = symbols.find((s) => s.symbol === part);
+
+      // If it's a symbol, render image
       if (symbol) {
         return <img key={i} src={symbol.svg_uri} style={{ width: "18px" }} />;
       }
+
+      // Otherwise return plain text
       return part;
     });
   }
 
+  // Handles multi-line card text (splits by line breaks)
   function renderText(text, symbols) {
     if (!text) return null;
 
-    return text
-      .split("\n")
-      .map((line, i) => (
-        <div key={i}>{renderTextWithSymbols(line, symbols)}</div>
-      ));
+    return text.split("\n").map((line, i) => (
+      <div key={i}>
+        {renderTextWithSymbols(line, symbols)}
+      </div>
+    ));
   }
+
+  // =======================
+  // PRINTS (other versions of the card)
+  // =======================
   const [prints, setPrints] = useState([]);
 
   useEffect(() => {
     if (!card) return;
 
+    // Fetch all print versions of this card
     scryfallApi.getPrints(card.prints_search_uri).then((data) => {
       setPrints(data.data);
     });
   }, [card]);
 
-  const [face, setFace] = useState(0);
+  // =======================
+  // DOUBLE-FACED CARD HANDLING
+  // =======================
+  const [face, setFace] = useState(0); // 0 = front, 1 = back
 
+  // Get correct image depending on card type
   function getImage(card, face = 0) {
     if (!card) return "";
 
+    // Normal cards
     if (card.image_uris?.large) {
       return card.image_uris.large;
     }
 
+    // Double-faced cards
     if (card.card_faces?.[face]?.image_uris?.large) {
       return card.card_faces[face].image_uris.large;
     }
 
     return "";
   }
+
+  // =======================
+  // SET DATA (icon, etc.)
+  // =======================
   const [setData, setSetData] = useState(null);
+
   useEffect(() => {
     if (!card) return;
 
+    // Fetch set info (icon, metadata)
     scryfallApi.getSet(card.set_uri).then(setSetData);
   }, [card]);
 
+  // Show loading screen if card hasn't loaded yet
   if (!card) return <Loading />;
 
+  // =======================
+  // FORMATTING HELPERS
+  // =======================
+
+  // Converts API legality values into readable text
   function formatLegality(value) {
     if (value === "legal") return "Legal";
     if (value === "not_legal") return "Not Legal";
@@ -121,20 +171,30 @@ function CardInfo() {
     return value;
   }
 
+  // (Unused function - looks like a work in progress)
   function doubleFaceCheck() {
     if (card.object == "card_face" || card.layout == "modal_dfc") {
       <img src={card?.image_uris?.large} />;
     }
   }
+
+  // Use correct face if it's a double-faced card
   const currCard = card.card_faces?.[face] || card;
 
+  // =======================
+  // RENDER UI
+  // =======================
   return (
     <div>
       <Navbar />
+
       <div className="info-area">
+
+        {/* CARD IMAGE */}
         <div className="box image-box">
           <img src={getImage(card, face)} className="card-img" />
 
+          {/* Flip button only shows for double-faced cards */}
           {card.card_faces && (
             <button
               className="flip-btn"
@@ -144,18 +204,31 @@ function CardInfo() {
             </button>
           )}
         </div>
+
+        {/* CARD DETAILS */}
         <div className="box card-info">
+
+          {/* Name + mana cost */}
           <div className="card-name">
-            {currCard.name} {renderTextWithSymbols(currCard.mana_cost, symbols)}
+            {currCard.name}
+            {renderTextWithSymbols(currCard.mana_cost, symbols)}
           </div>
-          <hr></hr>
+
+          <hr />
+
           <div className="card-type">{currCard.type_line}</div>
-          <hr></hr>
+
+          <hr />
+
+          {/* Rules text + flavor text */}
           <div className="card-text">
             {renderText(currCard.oracle_text, symbols)}
             <p>{currCard.flavor_text}</p>
           </div>
-          <hr></hr>
+
+          <hr />
+
+          {/* Power / Toughness (only for creatures) */}
           {currCard && currCard.type_line.includes("Creature") && (
             <div>
               <div className="card-PT">
@@ -164,8 +237,12 @@ function CardInfo() {
               <hr />
             </div>
           )}
+
+          {/* SET INFO */}
           <div className="card-set">
             <div className="set-row">
+
+              {/* Set icon */}
               {setData && (
                 <img src={setData.icon_svg_uri} className="set-icon" />
               )}
@@ -179,12 +256,19 @@ function CardInfo() {
               #{card.collector_number} • {card.rarity} • {card.set_type}
             </div>
           </div>
-          <hr></hr>
+
+          <hr />
+
+          {/* Artist */}
           <div className="card-artist">
             <p>Illustrated by {currCard.artist}</p>
           </div>
-          <hr></hr>
+
+          <hr />
+
+          {/* LEGALITY INFO */}
           <div className="card-legal">
+
             <div className={`legal ${card.legalities.standard}`}>
               Standard: {formatLegality(card.legalities.standard)}
             </div>
@@ -192,19 +276,27 @@ function CardInfo() {
             <div className={`legal ${card.legalities.commander}`}>
               Commander: {formatLegality(card.legalities.commander)}
             </div>
+
             <div className={`legal ${card.legalities.modern}`}>
               Modern: {formatLegality(card.legalities.modern)}
             </div>
+
             <div className={`legal ${card.legalities.pioneer}`}>
               Pioneer: {formatLegality(card.legalities.pioneer)}
             </div>
+
           </div>
         </div>
       </div>
+
+      {/* PRINTS SECTION */}
       <div className="print-body">
         <div className="print-name">PRINTS</div>
-        <hr></hr>
+        <hr />
+
         <div className="prints-area">
+
+          {/* Loop through all prints and show clickable images */}
           {prints.map((p) => (
             <Link key={p.id} href={`/CardInfo/${p.id}`}>
               <img
@@ -217,6 +309,7 @@ function CardInfo() {
               />
             </Link>
           ))}
+
         </div>
       </div>
     </div>
