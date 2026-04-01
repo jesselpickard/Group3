@@ -27,17 +27,16 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
     }
   };
 
-  // always returns exactly 7 slots, using null for empty placeholders
   const getPageNumbers = () => {
     if (totalPages <= 7) {
-      return Array.from({ length: 7 }, (_, i) => i < totalPages ? i + 1 : null);
+      // build the actual page number buttons
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
-    if (currentPage <= 4) {
-      return [1, 2, 3, 4, 5, '...', totalPages];
-    }
-    if (currentPage >= totalPages - 3) {
-      return [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
-    }
+    // near the start: show first 5, ellipsis, last
+    if (currentPage <= 4) return [1, 2, 3, 4, 5, '...', totalPages];
+    // near the end: show first, ellipsis, last 5
+    if (currentPage >= totalPages - 3) return [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    // middle: show first, ellipsis, current neighbors, ellipsis, last
     return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
   };
 
@@ -53,23 +52,25 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
           ← Prev
         </button>
 
-        {/* render each page number, dot, or empty placeholder */}
-        {getPageNumbers().map((page, i) =>
-          page === null ? (
-            // invisible placeholder keeps pagination width consistent
-            <span key={`empty-${i}`} className="page-placeholder" />
-          ) : page === '...' ? (
-            <span key={`dots-${i}`} className="page-dots">...</span>
-          ) : (
-            <button
-              key={page}
-              className={`page-btn ${currentPage === page ? 'active' : ''}`}
-              onClick={() => onPageChange(page)}
-            >
-              {page}
-            </button>
-          )
-        )}
+        <div className="page-numbers">
+          {/* render each page number, dot, or empty placeholder */}
+          {getPageNumbers().map((page, i) =>
+            page === null ? (
+              // invisible placeholder keeps pagination width consistent
+              <span key={`empty-${i}`} className="page-placeholder" />
+            ) : page === '...' ? (
+              <span key={`dots-${i}`} className="page-dots">...</span>
+            ) : (
+              <button
+                key={page}
+                className={`page-btn ${currentPage === page ? 'active' : ''}`}
+                onClick={() => onPageChange(page)}
+              >
+                {page}
+              </button>
+            )
+          )}
+        </div>
 
         {/* next button. disabled on last page */}
         <button
@@ -116,10 +117,8 @@ export default function CardGrid({ totalPages = 20 }) {
   return (
     <div className="cardgrid-wrapper">
       {/* top bar with page indicator on the left and pagination on the right */}
-      <div className="cardgrid-topbar">
-        <div className="page-indicator">Page {currentPage} of {TOTAL_PAGES}</div>
-        <PaginationBar currentPage={currentPage} totalPages={TOTAL_PAGES} onPageChange={setCurrentPage} />
-      </div>
+      <div className="page-indicator-top">Page {currentPage} of {TOTAL_PAGES}</div>
+      <PaginationBar currentPage={currentPage} totalPages={TOTAL_PAGES} onPageChange={setCurrentPage} />
 
       <div className="main-layout">
         {/* LEFT SIDEBAR */}
@@ -167,6 +166,8 @@ export default function CardGrid({ totalPages = 20 }) {
           </div>
         </div>
       </div>
+      <PaginationBar currentPage={currentPage} totalPages={TOTAL_PAGES} onPageChange={setCurrentPage} />
+      <div className="page-indicator-bottom">Page {currentPage} of {TOTAL_PAGES}</div>
     </div>
   )
 }

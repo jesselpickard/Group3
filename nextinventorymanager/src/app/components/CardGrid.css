@@ -47,8 +47,23 @@
   gap: 0.5rem;
   align-items: center;
   width: 520px;
-  flex-wrap: wrap; /* wraps page buttons to next line */
   justify-content: center;
+}
+
+.page-numbers {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  /* grow to fill space between Prev and Next, centering numbers within */
+  flex: 1;
+  justify-content: center;
+}
+
+@media (max-width: 600px) {
+  .page-numbers {
+    /* hug the buttons tightly on mobile */
+    flex: unset;
+  }
 }
 
 /* outer wrapper for pagination row and go-to-page input */
@@ -60,9 +75,24 @@
   justify-content: center; /* centers everything when wrapped */
   width: 100%;
 }
+ @media (max-width: 600px) {
+  /* hide the static placeholders */
+  .page-placeholder {
+    display: none;
+  }
+ }
 
 /* page indicator text on the left (i.e., page 1 of 20) */
-.page-indicator {
+.page-indicator-top {
+  align-self: flex-start;
+  color: #71179C;
+  font-weight: bold;
+  font-size: 0.9rem;
+  min-width: 30px;
+  white-space: nowrap;
+}
+
+.page-indicator-bottom {
   align-self: flex-end;
   color: #71179C;
   font-weight: bold;

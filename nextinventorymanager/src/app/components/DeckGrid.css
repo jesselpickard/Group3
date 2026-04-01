@@ -174,6 +174,31 @@
   right: calc(100% + 0.75rem);
 }
 
+@media (max-width: 600px) {
+  /* override both left and right popup positioning */
+  .deck-popup,
+  .deck-popup.popup-left {
+    /* reset any left/right/top positioning from desktop */
+    left: 50%;
+    right: unset;
+    top: unset;
+    /* appear below the tile, centered */
+    bottom: auto;
+    transform: translateX(-50%);
+    margin-top: 8px;
+    position: absolute;
+    top: 100%;
+  }
+
+  .deck-popup.popup-above {
+    /* appear above the tile instead of below */
+    top: unset;
+    bottom: 100%;
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+}
+
 .popup-divider {
   border: none;
   border-top: 1px solid #eee;

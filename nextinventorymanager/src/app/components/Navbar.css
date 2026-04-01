@@ -75,6 +75,15 @@
   padding: 0.25rem;
 }
 
+.search-clear-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #666;
+  padding: 2px 4px;
+}
+
 /* on small screens - hide normal search, show icon button */
 @media (max-width: 600px) {
   .search-wrapper {

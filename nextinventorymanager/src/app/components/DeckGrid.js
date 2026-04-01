@@ -28,10 +28,14 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
 
   const getPageNumbers = () => {
     if (totalPages <= 7) {
-      return Array.from({ length: 7 }, (_, i) => i < totalPages ? i + 1 : null);
+      // build the actual page number buttons
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
+    // near the start: show first 5, ellipsis, last
     if (currentPage <= 4) return [1, 2, 3, 4, 5, '...', totalPages];
+    // near the end: show first, ellipsis, last 5
     if (currentPage >= totalPages - 3) return [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    // middle: show first, ellipsis, current neighbors, ellipsis, last
     return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
   };
 
@@ -55,13 +59,43 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
   return (
     <div className="pagination-bar">
       <div className="pagination">
-        <button className="page-btn" onClick={() => onPageChange(Math.max(1, currentPage - 1))} disabled={currentPage === 1}>← Prev</button>
-        {getPageNumbers().map((page, i) =>
-          page === null ? <span key={`empty-${i}`} className="page-placeholder" /> :
-          page === '...' ? <span key={`dots-${i}`} className="page-dots">...</span> :
-          <button key={page} className={`page-btn ${currentPage === page ? 'active' : ''}`} onClick={() => onPageChange(page)}>{page}</button>
-        )}
-        <button className="page-btn" onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))} disabled={currentPage === totalPages}>Next →</button>
+        {/* prev button. disabled on first page */}
+        <button
+          className="page-btn"
+          onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+          disabled={currentPage === 1}
+        >
+          ← Prev
+        </button>
+
+        <div className="page-numbers">
+          {/* render each page number, dot, or empty placeholder */}
+          {getPageNumbers().map((page, i) =>
+            page === null ? (
+              // invisible placeholder keeps pagination width consistent
+              <span key={`empty-${i}`} className="page-placeholder" />
+            ) : page === '...' ? (
+              <span key={`dots-${i}`} className="page-dots">...</span>
+            ) : (
+              <button
+                key={page}
+                className={`page-btn ${currentPage === page ? 'active' : ''}`}
+                onClick={() => onPageChange(page)}
+              >
+                {page}
+              </button>
+            )
+          )}
+        </div>
+
+        {/* next button. disabled on last page */}
+        <button
+          className="page-btn"
+          onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
+          disabled={currentPage === totalPages}
+        >
+          Next →
+        </button>
       </div>
       <div className="page-jump">
         <span>Go to page:</span>
@@ -76,6 +110,7 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
 function DeckTile({ deck }) {
   const [hovered, setHovered] = useState(false);
   const [popupLeft, setPopupLeft] = useState(false);
+  const [popupAbove, setPopupAbove] = useState(false);
   const tileRef = useRef(null);
   const isComplete = deck.cardCount === deck.totalCards;
   const fanColors = ['#9370DB', '#7B52AB', '#6A3D9A'];
@@ -85,6 +120,12 @@ function DeckTile({ deck }) {
     if (tileRef.current) {
       const rect = tileRef.current.getBoundingClientRect();
       setPopupLeft(rect.right > window.innerWidth / 2);
+    }
+    if (tileRef.current) {
+      const rect = tileRef.current.getBoundingClientRect();
+      setPopupLeft(rect.right > window.innerWidth / 2);
+      // ADD: if tile is in the bottom half of the screen, show popup above instead
+      setPopupAbove(rect.bottom > window.innerHeight / 2);
     }
     setHovered(true);
   };
@@ -114,8 +155,7 @@ function DeckTile({ deck }) {
 
       {/* hover popup - flips left if near right edge */}
       {hovered && (
-        <div className={`deck-popup ${popupLeft ? 'popup-left' : ''}`}>
-          <strong>{deck.name}</strong>
+        <div className={`deck-popup ${popupLeft ? 'popup-left' : ''} ${popupAbove ? 'popup-above' : ''}`}>          <strong>{deck.name}</strong>
           <hr className="popup-divider" />
           {isComplete ? (
             <p className="popup-complete">Deck is complete!</p>

@@ -15,6 +15,7 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState("🎮");
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
 
   const menuRef = useRef(null);
   const searchRef = useRef(null);
@@ -121,7 +122,21 @@ function Navbar() {
         <div className="search-wrapper">
           <div className="search-container">
             <span className="search-icon">🔍</span>
-            <input className="search-bar" type="text" placeholder="Search..." />
+              <input 
+                  className="search-bar" 
+                  type="text" 
+                  placeholder="Search..."
+                  value={searchValue}
+                  onChange={e => setSearchValue(e.target.value)}
+                  />
+                  {/* ADD: X button clears the value but keeps popup open */}
+                  <button
+                    className="search-clear-btn"
+                    onClick={() => setSearchValue('')}
+                    aria-label="Clear search"
+                  >
+                    ✕
+                  </button>
           </div>
         </div>
 
@@ -134,7 +149,22 @@ function Navbar() {
 
             {searchOpen && (
               <div className="search-popup">
-                <input className="search-bar" type="text" placeholder="Search..." autoFocus />
+                <input 
+                  className="search-bar" 
+                  type="text" 
+                  placeholder="Search..." 
+                  autoFocus 
+                  value={searchValue}
+                  onChange={e => setSearchValue(e.target.value)}
+                  />
+                  {/* ADD: X button clears the value but keeps popup open */}
+                  <button
+                    className="search-clear-btn"
+                    onClick={() => setSearchValue('')}
+                    aria-label="Clear search"
+                  >
+                    ✕
+                  </button>
               </div>
             )}
           </div>
