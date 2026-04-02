@@ -1,9 +1,13 @@
 "use client";
 import { useState, useRef } from 'react';
 import './DeckGrid.css';
+<<<<<<< HEAD
 import NewDeckButton from "./NewDeckButton";
+=======
+import './NewDeckButton.js';
+>>>>>>> parent of ddb3611 (removal of failed component)
 
-
+//New-Deck-Button is being replaced by a component, its relating space in deckgrid.css will become obsolete
 
 // placeholder decks for testing. will be replaced with real data later
 const placeholderDecks = [
@@ -197,7 +201,7 @@ export default function DeckGrid({ totalPages = 1, decks = null }) {
         {totalPages > 1 && (
           <div className="page-indicator">Page {currentPage} of {totalPages}</div>
         )}
-        <button className="new-deck-btn">＋ New deck</button>
+        <NewDeckButton/>
       </div>
 
       {/* empty state when no decks exist */}
