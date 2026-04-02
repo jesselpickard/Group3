@@ -7,8 +7,9 @@ import { useEffect, useState } from 'react'
 import './NewDeckButton.css'
 
 export default function NewDeckButton() {
-  const router = useRouter()
-  const [user, setUser] = useState(null)
+  const router = useRouter();
+  const [user, setUser] = useState(null);
+  const supabaseRef = useRef(null);
 
   function getSupabaseSafely() {
       if (supabaseRef.current) return supabaseRef.current;
@@ -27,7 +28,7 @@ export default function NewDeckButton() {
     const supabase = getSupabaseSafely();
     if (!supabase) return;
 
-    
+
     const getUser = async () => {
       const { data, error } = await supabase.auth.getUser()
 
