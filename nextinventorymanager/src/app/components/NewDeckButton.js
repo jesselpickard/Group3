@@ -3,7 +3,7 @@
 
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import './NewDeckButton.css'
 
 export default function NewDeckButton() {
