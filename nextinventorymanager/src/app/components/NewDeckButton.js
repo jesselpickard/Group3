@@ -50,7 +50,7 @@ export default function NewDeckButton() {
     const deckName = prompt('Enter deck name') || 'New Deck';
 
     const { data, error } = await supabase
-      .from('Decks')
+      .from('decks')
       .insert({ user_id: user.id, name: deckName })
       .select();
 
