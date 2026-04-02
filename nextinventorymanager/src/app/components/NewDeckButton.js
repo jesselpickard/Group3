@@ -44,9 +44,10 @@ export default function NewDeckButton() {
   }, [])
 
   const handleCreateDeck = async () => {
-    if (!user) {
-      alert('You must be logged in to create a deck');
-      return;
+    const supabase = getSupabaseSafely();
+    if (!user || !supabase) {
+        alert('You must be logged in to create a deck');
+        return;
     }
 
     const deckName = prompt('Enter deck name') || 'New Deck'
