@@ -8,7 +8,7 @@ import './NewDeckButton.css'
 export default function NewDeckButton() {
   const router = useRouter();
   const [user, setUser] = useState(null);
-  const supabaseRef = useRef(null); // ✅ must be defined
+  const supabaseRef = useRef(null);
 
   // create/reuse supabase client safely
   function getSupabaseSafely() {
@@ -41,7 +41,7 @@ export default function NewDeckButton() {
 
   // handle deck creation
   const handleCreateDeck = async () => {
-    const supabase = getSupabaseSafely(); // ✅ make sure we get the client every time
+    const supabase = getSupabaseSafely();
     if (!user || !supabase) {
       alert('You must be logged in to create a deck');
       return;
@@ -56,7 +56,7 @@ export default function NewDeckButton() {
 
     if (error) {
       console.error(error);
-      alert('Failed to create deck');
+      alert(`Failed to create deck: ${error.message}`);
       return;
     }
 
