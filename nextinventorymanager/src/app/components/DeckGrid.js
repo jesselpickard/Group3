@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef } from 'react';
 import './DeckGrid.css';
-import './NewDeckButton.js';
+import NewDeckButton from "./NewDeckButton";
 
 //New-Deck-Button is being replaced by a component, its relating space in deckgrid.css will become obsolete
 
