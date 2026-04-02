@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef } from 'react';
 import './DeckGrid.css';
+import NewDeckButton from "./NewDeckButton";
 
 
 
