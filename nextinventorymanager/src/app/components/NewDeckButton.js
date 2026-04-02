@@ -1,7 +1,7 @@
 
 'use client'
 
-import { supabase } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase/client.js'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import './NewDeckButton.css'
