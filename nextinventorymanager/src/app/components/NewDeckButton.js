@@ -1,7 +1,7 @@
 
 'use client'
 
-import { supabase } from '@/lib/supabase/client.js'
+import { createClient } from "@/lib/supabase/client";
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import './NewDeckButton.css'
@@ -10,7 +10,24 @@ export default function NewDeckButton() {
   const router = useRouter()
   const [user, setUser] = useState(null)
 
-  useEffect(() => {//gets the current user
+  function getSupabaseSafely() {
+      if (supabaseRef.current) return supabaseRef.current;
+  
+      try {
+        supabaseRef.current = createClient();
+        return supabaseRef.current;
+      } catch {
+        // If env vars aren't present, just behave as logged-out (no crash).
+        return null;
+      }
+    }
+
+  useEffect(() => {//gets the the user
+
+    const supabase = getSupabaseSafely();
+    if (!supabase) return;
+
+    
     const getUser = async () => {
       const { data, error } = await supabase.auth.getUser()
 
