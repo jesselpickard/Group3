@@ -1,4 +1,3 @@
-
 'use client'
 
 import { createClient } from "@/lib/supabase/client";
@@ -9,66 +8,60 @@ import './NewDeckButton.css'
 export default function NewDeckButton() {
   const router = useRouter();
   const [user, setUser] = useState(null);
-  const supabaseRef = useRef(null);
+  const supabaseRef = useRef(null); // ✅ must be defined
 
+  // create/reuse supabase client safely
   function getSupabaseSafely() {
-      if (supabaseRef.current) return supabaseRef.current;
-  
-      try {
-        supabaseRef.current = createClient();
-        return supabaseRef.current;
-      } catch {
-        // If env vars aren't present, just behave as logged-out (no crash).
-        return null;
-      }
+    if (supabaseRef.current) return supabaseRef.current;
+
+    try {
+      supabaseRef.current = createClient();
+      return supabaseRef.current;
+    } catch {
+      return null;
     }
+  }
 
-  useEffect(() => {//gets the the user
-
+  // fetch user on mount
+  useEffect(() => {
     const supabase = getSupabaseSafely();
     if (!supabase) return;
 
-
-    const getUser = async () => {
-      const { data, error } = await supabase.auth.getUser()
-
+    const fetchUser = async () => {
+      const { data, error } = await supabase.auth.getUser();
       if (error) {
         console.error('Error fetching user:', error);
         return;
       }
-
-      setUser(data.user)
+      setUser(data.user);
     }
 
-    getUser()
+    fetchUser();
   }, [])
 
+  // handle deck creation
   const handleCreateDeck = async () => {
-    const supabase = getSupabaseSafely();
+    const supabase = getSupabaseSafely(); // ✅ make sure we get the client every time
     if (!user || !supabase) {
-        alert('You must be logged in to create a deck');
-        return;
+      alert('You must be logged in to create a deck');
+      return;
     }
 
-    const deckName = prompt('Enter deck name') || 'New Deck'
+    const deckName = prompt('Enter deck name') || 'New Deck';
 
     const { data, error } = await supabase
       .from('Decks')
-      .insert({
-        user_id: user.id,
-        name: deckName,
-      })
-      .select();//this returns the inserted row
+      .insert({ user_id: user.id, name: deckName })
+      .select();
 
     if (error) {
-      console.error(error)
-      alert('Failed to create deck')
-      return
+      console.error(error);
+      alert('Failed to create deck');
+      return;
     }
 
     const newDeckId = data[0].deck_id;
-
-    router.push(`/decks/${newDeckId}`);//redirects to the new deck upon creation
+    router.push(`/decks/${newDeckId}`);
   }
 
   return (
@@ -77,4 +70,3 @@ export default function NewDeckButton() {
     </button>
   )
 }
-
