@@ -43,7 +43,7 @@ export default async function DeckPage({ params }) {//rudimentary form; should j
 
       <ul>
         {cards.map((card) => (
-          <li key={card.card_id}>
+          <li key={card.cards.card_id}>
             Card: {card.cards ? card.cards.name : 'Missing card'} — Qty: {card.quantity}
           </li>
         ))}
