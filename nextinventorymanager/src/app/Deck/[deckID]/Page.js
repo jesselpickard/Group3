@@ -3,6 +3,7 @@
 //import { useState, useEffect } from "react";
 //import { scryfallApi } from "../../API/Scryfall";
 import Navbar from "@/app/components/Navbar";
+import { createClient } from "@/lib/supabase/server";
 
 /**
  *  This page is meant to lay out the contents of a deck to its viewer. It will allow
@@ -18,7 +19,8 @@ import Navbar from "@/app/components/Navbar";
  * 
  */
 
-async function getDeckCards(deckId) {//attempts to access the contents of the deck and return them
+async function getDeckCards(deckId) {//attempts to access the contents of the deck and return 
+  const supabase = createClient();
   const { data, error } = await supabase
     .from('deck_cards')
     .select('quantity, cards(card_id,name)')
