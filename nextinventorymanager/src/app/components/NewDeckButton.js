@@ -61,7 +61,7 @@ export default function NewDeckButton() {
     }
 
     const newDeckId = data[0].deck_id;
-    router.push(`/deck/${newDeckId}`);
+    router.push(`/Deck/${newDeckId}`);
   }
 
   return (
