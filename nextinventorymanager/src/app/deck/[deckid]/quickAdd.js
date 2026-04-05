@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { scryfallApi } from "@/lib/scryfall/Scryfall";
 
-export default function QuickAdd({ deckId }) {
+export default function QuickAdd({ deckid }) {
   const [query, setQuery] = useState("")
   const [suggestions, setSuggestions] = useState([])
   const [loading, setLoading] = useState(false)
@@ -27,7 +27,7 @@ export default function QuickAdd({ deckId }) {
       setLoading(true)
       try {
         const { data } = await scryfallApi.autocomplete(q)
-        setSuggestions(data.slice(0, 10)) // top 10 suggestions
+        setSuggestions(data.slice(0, 10)) //top 10 suggestions
       } catch (err) {
         console.error(err)
         setSuggestions([])
@@ -44,7 +44,7 @@ export default function QuickAdd({ deckId }) {
       if (!card) return
 
       //Send to server API to insert into deck_cards
-      await fetch(`/deck/${deckId}/api/add-card`, {
+      await fetch(`/deck/${deckid}/api/add-card`, {
         method: "POST",
         body: JSON.stringify({ cardId: card.id }),
       })
