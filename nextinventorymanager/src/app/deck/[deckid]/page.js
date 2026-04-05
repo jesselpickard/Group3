@@ -29,12 +29,13 @@ async function getDeckCards(deckId) {//attempts to access the contents of the de
 }
 
 export default async function DeckPage({ params }) {
-  const deckId = params?.deckid
+  const deckId = params?.deckid;
+  console.log("params:", params);
 
   let cards = []
 
   if (deckId) {
-    cards = await getDeckCards(deckId)
+    cards = await getDeckCards(deckId);
   }
 
   return (
