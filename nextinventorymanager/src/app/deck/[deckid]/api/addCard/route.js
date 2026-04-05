@@ -1,40 +1,42 @@
-import { createClient } from "@/lib/supabase/server"
+import { createClient } from "@/lib/supabase/server";
 
-export async function POST(req) {
-  const { deckId, cardId } = await req.json()
-  const supabase = await createClient()
+export async function POST(req, { params }) {
+  const deckId = params.deckid;
+  const { cardId } = await req.json();
 
-  //Checks if the deck contains the card already
+  const supabase = await createClient();
+
+  //Check if the card is already in the deck
   const { data: existing, error: fetchError } = await supabase
     .from("deck_cards")
-    .select("quantity") // only need quantity
+    .select("quantity")
     .eq("deck_id", deckId)
     .eq("card_id", cardId)
-    .single()
+    .single();
 
-  if (fetchError && fetchError.code !== "PGRST116") { 
-    return Response.json({ success: false, error: fetchError.message }, { status: 500 })
+  if (fetchError && fetchError.code !== "PGRST116") {
+    return new Response(JSON.stringify({ success: false, error: fetchError.message }), { status: 500 });
   }
 
-  if (existing) {//incremements the card
+  if (existing) {//incremements if the card is already there
     const { error: updateError } = await supabase
       .from("deck_cards")
       .update({ quantity: existing.quantity + 1 })
       .eq("deck_id", deckId)
-      .eq("card_id", cardId)
+      .eq("card_id", cardId);
 
     if (updateError) {
-      return Response.json({ success: false, error: updateError.message }, { status: 500 })
+      return new Response(JSON.stringify({ success: false, error: updateError.message }), { status: 500 });
     }
-  } else {//add the card to the deck 
+  } else {//adds the card to deck
     const { error: insertError } = await supabase
       .from("deck_cards")
-      .insert({ deck_id: deckId, card_id: cardId, quantity: 1 })
+      .insert({ deck_id: deckId, card_id: cardId, quantity: 1 });
 
     if (insertError) {
-      return Response.json({ success: false, error: insertError.message }, { status: 500 })
+      return new Response(JSON.stringify({ success: false, error: insertError.message }), { status: 500 });
     }
   }
 
-  return Response.json({ success: true })
+  return new Response(JSON.stringify({ success: true }));
 }
