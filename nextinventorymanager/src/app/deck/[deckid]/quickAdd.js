@@ -46,6 +46,9 @@ export default function QuickAdd({ deckid }) {
       //Send to server API to insert into deck_cards
       await fetch(`/deck/${deckid}/api/add-card`, {
         method: "POST",
+         headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ cardId: card.id }),
       })
 
