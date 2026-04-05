@@ -1,6 +1,6 @@
-//import Navbar from "@/app/components/Navbar";
+import Navbar from "@/app/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
-//import QuickAdd from "./quickAdd.js";
+import QuickAdd from "./quickAdd.js";
 
 /**
  *  This page is meant to lay out the contents of a deck to its viewer. It will allow
@@ -29,5 +29,31 @@ async function getDeckCards(deckId) {//attempts to access the contents of the de
 }
 
 export default async function DeckPage({ params }) {
-return <h1>Deck ID: {params.deckId}</h1>
+  const deckId = params?.deckId
+
+  let cards = []
+
+  if (deckId) {
+    cards = await getDeckCards(deckId)
+  }
+
+  return (
+    <div>
+      <Navbar />
+      <h1>Deck: {deckId ?? "No deck selected"}</h1> {/* protects the page from an invalid id */}
+
+      {deckId ? (
+        <ul>
+          {cards.map((card, i) => (
+            <li key={card.cards?.card_id ?? i}>
+              Card: {card.cards ? card.cards.name : 'Missing card'} — Qty: {card.quantity}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>Please select a deck.</p>
+      )}
+      <QuickAdd deckId={deckId} />
+    </div>
+  )
 }

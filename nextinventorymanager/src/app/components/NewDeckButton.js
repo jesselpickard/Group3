@@ -60,8 +60,8 @@ export default function NewDeckButton() {
       return;
     }
 
-    const newDeckId = data[0].deck_id;
-    router.push(`/deck/${newDeckId}`);
+    const deckId = data[0].deck_id;
+    router.push(`/deck/${deckId}`);
   }
 
   return (
