@@ -29,7 +29,7 @@ async function getDeckCards(deckId) {//attempts to access the contents of the de
 }
 
 export default async function DeckPage({ params }) {
-  const deckId = params?.deckId
+  const deckId = params?.deckid
 
   let cards = []
 
@@ -40,7 +40,7 @@ export default async function DeckPage({ params }) {
   return (
     <div>
       <Navbar />
-      <h1>Deck: {deckId ?? "No deck selected"}</h1> {/* protects the page from an invalid id */}
+      <h1>Deck: {deckId ?? "No deck selected"}</h1> {/* protects the page from an invalid id*/}
 
       {deckId ? (
         <ul>

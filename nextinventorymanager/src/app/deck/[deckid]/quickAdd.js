@@ -9,14 +9,12 @@ export default function QuickAdd({ deckId }) {
   const [loading, setLoading] = useState(false)
   const [adding, setAdding] = useState(false)
 
-  // Debounce helper (simple)
   let debounceTimeout
   function debounce(fn, delay = 250) {
     clearTimeout(debounceTimeout)
     debounceTimeout = setTimeout(fn, delay)
   }
 
-  // Handle input changes and autocomplete
   function handleChange(q) {
     setQuery(q)
 
@@ -38,22 +36,20 @@ export default function QuickAdd({ deckId }) {
     }, 250)
   }
 
-  // Handle selecting a card from suggestions
   async function handleSelect(name) {
     setAdding(true)
-    try {
-      // Fetch full card by exact name
+    try {//Fetch full card by exact name
       const { data: cards } = await scryfallApi.search(`!"${name}"`)
       const card = cards[0]
       if (!card) return
 
-      // Send to server API to insert into deck_cards
+      //Send to server API to insert into deck_cards
       await fetch(`/deck/${deckId}/api/add-card`, {
         method: "POST",
         body: JSON.stringify({ cardId: card.id }),
       })
 
-      // Clear suggestions and input
+      //Clear suggestions and input
       setQuery("")
       setSuggestions([])
     } catch (err) {

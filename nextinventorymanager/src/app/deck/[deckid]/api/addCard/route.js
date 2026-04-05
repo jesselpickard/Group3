@@ -4,7 +4,7 @@ export async function POST(req) {
   const { deckId, cardId } = await req.json()
   const supabase = await createClient()
 
-  // Check if the card already exists in the deck
+  //Checks if the deck contains the card already
   const { data: existing, error: fetchError } = await supabase
     .from("deck_cards")
     .select("quantity") // only need quantity
@@ -13,12 +13,10 @@ export async function POST(req) {
     .single()
 
   if (fetchError && fetchError.code !== "PGRST116") { 
-    // PGRST116 = no rows found; we ignore that
     return Response.json({ success: false, error: fetchError.message }, { status: 500 })
   }
 
-  if (existing) {
-    // Increment the existing quantity
+  if (existing) {//incremements the card
     const { error: updateError } = await supabase
       .from("deck_cards")
       .update({ quantity: existing.quantity + 1 })
@@ -28,8 +26,7 @@ export async function POST(req) {
     if (updateError) {
       return Response.json({ success: false, error: updateError.message }, { status: 500 })
     }
-  } else {
-    // Insert a new card with quantity = 1
+  } else {//add the card to the deck 
     const { error: insertError } = await supabase
       .from("deck_cards")
       .insert({ deck_id: deckId, card_id: cardId, quantity: 1 })
