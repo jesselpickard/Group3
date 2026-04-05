@@ -1,7 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 
 export async function POST(req, { params }) {
-  const deckId = params.deckid;
+  const awaitParams = await params;
+  const deckId = awaitParams?.deckid;
   const { cardId } = await req.json();
 
   const supabase = await createClient();
