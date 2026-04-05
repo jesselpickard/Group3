@@ -20,6 +20,7 @@ function rateLimitedFetch(url) {//ensures we do not exceed the rate limit reques
   return queue;
 }
 
+
 export const scryfallApi = {
   async search(query) {
     let allCards = [];
@@ -35,6 +36,15 @@ export const scryfallApi = {
     }
 
     return { data: allCards };
+  },
+  async autocomplete(query) {
+    if (!query || query.length < 2) return { data: [] }
+
+    const res = await rateLimitedFetch(
+      `https://api.scryfall.com/cards/autocomplete?q=${encodeURIComponent(query)}`
+    )
+    const data = await res.json()
+    return { data: data.data || [] } // array of card names
   },
  getCardById(id) {
     return rateLimitedFetch(

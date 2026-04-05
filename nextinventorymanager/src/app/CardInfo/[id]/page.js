@@ -3,7 +3,7 @@
 // Import components, styles, API helper, and React tools
 import Navbar from "../../components/Navbar.js";
 import "./cardStyle.css";
-import { scryfallApi } from "../../API/Scryfall.js";
+import { scryfallApi } from "../../../lib/scryfall/Scryfall.js";
 import { useParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";

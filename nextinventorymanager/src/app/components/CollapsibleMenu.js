@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { scryfallApi } from "../API/Scryfall";
+import { scryfallApi } from "../../lib/scryfall/Scryfall";
 import "./Menu.css";
 import FourBox from "./CheckBox4";
 import { STATES } from './CheckBox4';
