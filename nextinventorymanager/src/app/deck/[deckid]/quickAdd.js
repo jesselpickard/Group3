@@ -44,7 +44,7 @@ export default function QuickAdd({ deckid }) {
       if (!card) return
 
       //Send to server API to insert into deck_cards
-      await fetch(`/deck/${deckid}/api/add-card`, {
+      await fetch(`/deck/${deckid}/api/addCard`, {
         method: "POST",
          headers: {
           "Content-Type": "application/json",
