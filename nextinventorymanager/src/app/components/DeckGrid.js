@@ -6,15 +6,55 @@ import NewDeckButton from "./NewDeckButton";
 //New-Deck-Button is being replaced by a component, its relating space in deckgrid.css will become obsolete
 
 // placeholder decks for testing. will be replaced with real data later
+const SF = (name) =>
+  `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}&format=image&version=normal`;
+
 const placeholderDecks = [
-  { id: 1, name: "Red Aggro", cardCount: 58, totalCards: 60, missing: ["Lightning Bolt x2"] },
-  { id: 2, name: "Blue Control", cardCount: 60, totalCards: 60, missing: [] },
-  { id: 3, name: "Green Ramp", cardCount: 45, totalCards: 60, missing: ["Forest x8", "Llanowar Elves x4", "Cultivate x3"] },
-  { id: 4, name: "Black Midrange", cardCount: 60, totalCards: 60, missing: [] },
-  { id: 5, name: "Angel Ascent", cardCount: 55, totalCards: 60, missing: ["Plains x3", "Serra Angel x2"] },  { id: 6, name: "Izzet Phoenix", cardCount: 60, totalCards: 60, missing: [] },
-  { id: 7, name: "Golgari Midrange", cardCount: 38, totalCards: 60, missing: ["Thoughtseize x4", "Grim Flayer x4", "Liliana x2", "Overgrown Tomb x4" ] },
-  { id: 8, name: "Azorius Spirits", cardCount: 60, totalCards: 60, missing: [] },
-  { id: 9, name: "Temur Cascade", cardCount: 23, totalCards: 60, missing: ["Shardless Agent x4", "Bloodbraid Elf x4", "Violent Outburst x4", "Crashing Footfalls x4", "Force of Negation x3", "Rhinos Token x4", "Ketria Triome x3", "Spirebluff Canal x2", "Steam Vents x2"] },
+  {
+    id: 1, name: "Red Aggro", cardCount: 58, totalCards: 60,
+    missing: ["Lightning Bolt x2"],
+    fanCards: [SF("Goblin Guide"), SF("Zurgo Bellstriker"), SF("Eidolon of the Great Revel")],        // Red Aggro - Lightning Bolt center
+  },
+  {
+    id: 2, name: "Blue Control", cardCount: 60, totalCards: 60,
+    missing: [],
+    fanCards: [SF("Counterspell"), SF("Teferi, Hero of Dominaria"), SF("Snapcaster Mage")],         // Blue Control - Teferi center
+  },
+  {
+    id: 3, name: "Green Ramp", cardCount: 45, totalCards: 60,
+    missing: ["Forest x8", "Llanowar Elves x4", "Cultivate x3"],
+    fanCards: [SF("Llanowar Elves"), SF("Primeval Titan"), SF("Cultivate")],                        // Green Ramp - Primeval Titan center
+  },
+  {
+    id: 4, name: "Black Midrange", cardCount: 60, totalCards: 60,
+    missing: [],
+    fanCards: [SF("Thoughtseize"), SF("Sheoldred, the Apocalypse"), SF("Liliana of the Veil")],     // Black Midrange - Sheoldred center
+  },
+  {
+    id: 5, name: "Angel Ascent", cardCount: 55, totalCards: 60,
+    missing: ["Plains x3", "Serra Angel x2"],
+    fanCards: [SF("Serra Angel"), SF("Avacyn, Angel of Hope"), SF("Lyra Dawnbringer")],             // Angel Ascent - Avacyn center
+  },
+  {
+    id: 6, name: "Izzet Phoenix", cardCount: 60, totalCards: 60,
+    missing: [],
+    fanCards: [SF("Faithless Looting"), SF("Arclight Phoenix"), SF("Thought Scour")],               // Izzet Phoenix - Phoenix center
+  },
+  {
+    id: 7, name: "Golgari Midrange", cardCount: 38, totalCards: 60,
+    missing: ["Thoughtseize x4", "Grim Flayer x4", "Liliana x2", "Overgrown Tomb x4"],
+    fanCards: [SF("Grim Flayer"), SF("Liliana of the Veil"), SF("Assassin's Trophy")],              // Golgari Midrange - Liliana center
+  },
+  {
+    id: 8, name: "Azorius Spirits", cardCount: 60, totalCards: 60,
+    missing: [],
+    fanCards: [SF("Rattlechains"), SF("Supreme Phantom"), SF("Mausoleum Wanderer")],                // Azorius Spirits - Supreme Phantom center
+  },
+  {
+    id: 9, name: "Temur Cascade", cardCount: 23, totalCards: 60,
+    missing: ["Shardless Agent x4", "Bloodbraid Elf x4", "Violent Outburst x4", "Crashing Footfalls x4", "Force of Negation x3", "Rhinos Token x4", "Ketria Triome x3", "Spirebluff Canal x2", "Steam Vents x2"],
+    fanCards: [SF("Violent Outburst"), SF("Bloodbraid Elf"), SF("Force of Negation")],             // Temur Cascade - Bloodbraid center
+  },
 ];
 
 // pagination bar - reused from CardGrid logic
@@ -116,18 +156,18 @@ function DeckTile({ deck }) {
   const [popupAbove, setPopupAbove] = useState(false);
   const tileRef = useRef(null);
   const isComplete = deck.cardCount === deck.totalCards;
-  const fanColors = ['#9370DB', '#7B52AB', '#6A3D9A'];
+  //const fanColors = ['#9370DB', '#7B52AB', '#6A3D9A'];
 
   const handleMouseEnter = () => {
     // checks if tile is in the right half of the screen
+    /*if (tileRef.current) {
+      const rect = tileRef.current.getBoundingClientRect();
+      setPopupLeft(rect.right > window.innerWidth / 2);
+    }*/
     if (tileRef.current) {
       const rect = tileRef.current.getBoundingClientRect();
       setPopupLeft(rect.right > window.innerWidth / 2);
-    }
-    if (tileRef.current) {
-      const rect = tileRef.current.getBoundingClientRect();
-      setPopupLeft(rect.right > window.innerWidth / 2);
-      // ADD: if tile is in the bottom half of the screen, show popup above instead
+      // if tile is in the bottom half of the screen, show popup above instead
       setPopupAbove(rect.bottom > window.innerHeight / 2);
     }
     setHovered(true);
@@ -142,9 +182,15 @@ function DeckTile({ deck }) {
     >
       {/* fanned card visuals */}
       <div className="deck-fan">
-        <div className="fan-card fan-left" style={{ backgroundColor: fanColors[0] }} />
-        <div className="fan-card fan-middle" style={{ backgroundColor: fanColors[1] }} />
-        <div className="fan-card fan-right" style={{ backgroundColor: fanColors[2] }} />
+        <div className="fan-card fan-left">
+          <img src={deck.fanCards[0]} alt=/*{{ backgroundColor: fanColors[0] }}*/'' />
+        </div>
+        <div className="fan-card fan-middle">
+          <img src={deck.fanCards[1]} alt=/*{{ backgroundColor: fanColors[1] }}*/'' />
+        </div>
+        <div className="fan-card fan-right">
+          <img src={deck.fanCards[2]} alt=/*{{ backgroundColor: fanColors[2] }}*/'' />
+        </div>
       </div>
 
       {/* deck info below the fan */}
