@@ -183,6 +183,7 @@ body {
     border-color: black;
     gap: 20px;
     font-weight: 100;
+    padding-bottom: 8px;
 }
 
 /* Base legality box */
@@ -228,6 +229,52 @@ body {
     border-radius: 8px;
     border-color: black;
     padding: 8px;
+}
+.cardAmount{
+    margin-top: 10px;
+    font-size: 20px;
+    font-family: 'Roboto', sans-serif;
+
+}
+.inventoryInput {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8px;
+}
+.inventoryInput button{
+    font-size:20px;
+    padding: 5px;
+    border-radius: 8px;
+    border: 2px solid black;
+    width: 100%;
+    margin-right:40px;
+    margin-top:5px;
+}
+.addButtons button{
+background-color: #71179C;
+display: flex;
+gap:8px;
+}
+.addButtons button:hover{
+    background-color: #5a1080;
+}
+.addButtons p{
+    color:rgb(88, 255, 88);
+    font-size:20px;
+}
+.removeButtons button{
+    background-color: #71179C;
+    display: flex;
+    gap:8px;
+}
+.removeButtons p{
+    color:red;
+    font-size:20px;
+}
+.removeButtons button:hover{
+    background-color: #5a1080;
 }
 
 /* =======================

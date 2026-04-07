@@ -18,7 +18,6 @@ export default function CardInfoPage() {
 }
 
 function CardInfo() {
-
   // Get the card ID from the URL (ex: /CardInfo/123)
   const { id } = useParams();
 
@@ -36,7 +35,6 @@ function CardInfo() {
   // LOADING ANIMATION
   // =======================
   function Loading() {
-
     // Controls the animated dots (....)
     const [dots, setDots] = useState("");
 
@@ -50,15 +48,17 @@ function CardInfo() {
     }, []);
 
     return (
-      <div style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        fontSize: "2rem",
-        fontFamily: "Arial, sans-serif",
-        color: "#555",
-      }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          fontSize: "2rem",
+          fontFamily: "Arial, sans-serif",
+          color: "#555",
+        }}
+      >
         Fetching Card Info{dots}
       </div>
     );
@@ -100,11 +100,11 @@ function CardInfo() {
   function renderText(text, symbols) {
     if (!text) return null;
 
-    return text.split("\n").map((line, i) => (
-      <div key={i}>
-        {renderTextWithSymbols(line, symbols)}
-      </div>
-    ));
+    return text
+      .split("\n")
+      .map((line, i) => (
+        <div key={i}>{renderTextWithSymbols(line, symbols)}</div>
+      ));
   }
 
   // =======================
@@ -181,6 +181,13 @@ function CardInfo() {
   // Use correct face if it's a double-faced card
   const currCard = card.card_faces?.[face] || card;
 
+  function addToInventory(){
+    
+  }
+  function removeFromInventory(){
+
+  }
+
   // =======================
   // RENDER UI
   // =======================
@@ -189,7 +196,6 @@ function CardInfo() {
       <Navbar />
 
       <div className="info-area">
-
         {/* CARD IMAGE */}
         <div className="box image-box">
           <img src={getImage(card, face)} className="card-img" />
@@ -207,7 +213,6 @@ function CardInfo() {
 
         {/* CARD DETAILS */}
         <div className="box card-info">
-
           {/* Name + mana cost */}
           <div className="card-name">
             {currCard.name}
@@ -241,7 +246,6 @@ function CardInfo() {
           {/* SET INFO */}
           <div className="card-set">
             <div className="set-row">
-
               {/* Set icon */}
               {setData && (
                 <img src={setData.icon_svg_uri} className="set-icon" />
@@ -268,7 +272,6 @@ function CardInfo() {
 
           {/* LEGALITY INFO */}
           <div className="card-legal">
-
             <div className={`legal ${card.legalities.standard}`}>
               Standard: {formatLegality(card.legalities.standard)}
             </div>
@@ -284,7 +287,23 @@ function CardInfo() {
             <div className={`legal ${card.legalities.pioneer}`}>
               Pioneer: {formatLegality(card.legalities.pioneer)}
             </div>
-
+          </div>
+          <hr />
+          {/*ADDING CARD TO INVENTORY */}
+          <div className="addInventory">
+            <div className="cardAmount">Amount Owned:</div>
+            <div className="inventoryInput">
+            <div className="addButtons">
+              <button onClick={addToInventory}>
+              Add to Inventory <p>+</p>
+              </button>
+            </div>
+            <div className="removeButtons">
+              <button onClick={removeFromInventory}>
+                Remove from Inventory <p>-</p>
+              </button>
+            </div>
+            </div>
           </div>
         </div>
       </div>
@@ -295,7 +314,6 @@ function CardInfo() {
         <hr />
 
         <div className="prints-area">
-
           {/* Loop through all prints and show clickable images */}
           {prints.map((p) => (
             <Link key={p.id} href={`/CardInfo/${p.id}`}>
@@ -309,7 +327,6 @@ function CardInfo() {
               />
             </Link>
           ))}
-
         </div>
       </div>
     </div>
