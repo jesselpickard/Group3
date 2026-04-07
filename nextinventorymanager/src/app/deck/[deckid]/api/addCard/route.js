@@ -2,7 +2,7 @@ import { ensureCardExists } from "@/lib/cards/checkCards";
 import { createClient } from "@/lib/supabase/server";
 
 export async function POST(req, { params }) {
-  const { deckId } = await parmas;
+  const { deckId } = params;
   const { cardId } = await req.json();
 
   try{
