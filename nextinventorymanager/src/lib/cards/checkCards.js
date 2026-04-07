@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/server";
 import { scryfallApi } from "@/lib/scryfall/Scryfall";
 
 /**
@@ -7,19 +7,8 @@ import { scryfallApi } from "@/lib/scryfall/Scryfall";
  * 
  */
 
-function getSupabaseSafely() {
-    if (supabaseRef.current) return supabaseRef.current;
-
-    try {
-      supabaseRef.current = createClient();
-      return supabaseRef.current;
-    } catch {
-      return null;
-    }
-  }
-
 export async function ensureCardExists(cardId) {
-  const supabase = await getSupabaseSafely();
+  const supabase = await createClient();
 
   //Check is in our database
   const { data: existingCard, error: fetchError } = await supabase
