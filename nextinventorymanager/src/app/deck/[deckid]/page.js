@@ -23,7 +23,6 @@ async function getDeckCards(deckId) {//attempts to access the contents of the de
     .from('deck_cards')
     .select('quantity, cards(card_id,name)')
     .eq('deck_id', deckId)
-
   if (error) throw new Error(error.message)
 
   return data
@@ -35,6 +34,7 @@ export default async function DeckPage({ params }) {
 
 
   let cards = []
+  alert("deckId is: " + deckId);
 
   if (deckId) {
     cards = await getDeckCards(deckId);
