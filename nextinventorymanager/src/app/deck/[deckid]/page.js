@@ -1,5 +1,5 @@
 import Navbar from "@/app/components/Navbar";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/client";
 import QuickAdd from "./quickAdd.js";
 
 /**
