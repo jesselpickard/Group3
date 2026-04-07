@@ -1,64 +1,78 @@
-"use client"
+"use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { scryfallApi } from "@/lib/scryfall/Scryfall";
 
-export default function QuickAdd({ deckid }) {
-  const [query, setQuery] = useState("")
-  const [suggestions, setSuggestions] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [adding, setAdding] = useState(false)
+export default function QuickAdd({ deckId }) {
+  const router = useRouter();
+  const [query, setQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [adding, setAdding] = useState(false);
 
-  let debounceTimeout
+  let debounceTimeout;
+
   function debounce(fn, delay = 250) {
-    clearTimeout(debounceTimeout)
-    debounceTimeout = setTimeout(fn, delay)
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(fn, delay);
   }
 
   function handleChange(q) {
-    setQuery(q)
+    setQuery(q);
 
     if (q.length < 2) {
-      setSuggestions([])
-      return
+      setSuggestions([]);
+      return;
     }
 
     debounce(async () => {
-      setLoading(true)
+      setLoading(true);
       try {
-        const { data } = await scryfallApi.autocomplete(q)
-        setSuggestions(data.slice(0, 10)) //top 10 suggestions
+        const { data } = await scryfallApi.autocomplete(q);
+        setSuggestions(data.slice(0, 10));
       } catch (err) {
-        console.error(err)
-        setSuggestions([])
+        console.error(err);
+        setSuggestions([]);
       }
-      setLoading(false)
-    }, 250)
+      setLoading(false);
+    }, 250);
   }
 
   async function handleSelect(name) {
-    setAdding(true)
-    try {//Fetch full card by exact name
-      const { data: cards } = await scryfallApi.search(`!"${name}"`)
-      const card = cards[0]
-      if (!card) return
+    setAdding(true);
 
-      //Send to server API to insert into deck_cards
-      await fetch(`/deck/${deckid}/api/addCard`, {
+    try {
+      const { data: cards } = await scryfallApi.search(`!"${name}"`);
+      const card = cards[0];
+      if (!card) return;
+
+      console.log("quickAdd deckId is:", deckId);
+      console.log("card id is:", card.id);
+
+      const res = await fetch(`/deck/${deckId}/api/addCard`, {
         method: "POST",
-         headers: {
+        headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ cardId: card.id }),
-      })
+      });
 
-      //Clear suggestions and input
-      setQuery("")
-      setSuggestions([])
+      const result = await res.json();
+      console.log("addCard result:", result);
+
+      if (!res.ok) {
+        throw new Error(result.error || "Failed to add card");
+      }
+
+      setQuery("");
+      setSuggestions([]);
+      router.refresh();
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
-    setAdding(false)
+
+    setAdding(false);
   }
 
   return (
@@ -96,5 +110,5 @@ export default function QuickAdd({ deckid }) {
         ))}
       </ul>
     </div>
-  )
+  );
 }
