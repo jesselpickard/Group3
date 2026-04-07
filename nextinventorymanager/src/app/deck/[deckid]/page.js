@@ -55,7 +55,7 @@ export default async function DeckPage({ params }) {
       ) : (
         <p>Please select a deck.</p>
       )}
-      <QuickAdd deckId={deckId} />
+      <QuickAdd deckid={deckId} />
     </div>
   )
 }
