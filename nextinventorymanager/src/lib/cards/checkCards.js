@@ -36,7 +36,7 @@ export async function ensureCardExists(cardId) {
   const cardData = {
     card_id: card.id,
     name: card.name,
-    colors: card.colors.join(","),  // store as CSV
+    colors: card.colors,  // store as CSV
     cost: card.mana_cost,
     type: card.type_line,
   };
