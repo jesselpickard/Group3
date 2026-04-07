@@ -1,5 +1,5 @@
 import { ensureCardExists } from "@/lib/cards/checkCards";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/client";
 
 export async function POST(req, { params }) {
   const awaitParams = await params;
