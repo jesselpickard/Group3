@@ -1,6 +1,17 @@
 import { ensureCardExists } from "@/lib/cards/checkCards";
 import { createClient } from "@/lib/supabase/client";
 
+function getSupabaseSafely() {
+    if (supabaseRef.current) return supabaseRef.current;
+
+    try {
+      supabaseRef.current = createClient();
+      return supabaseRef.current;
+    } catch {
+      return null;
+    }
+  }
+
 export async function POST(req, { params }) {
   const awaitParams = await params;
   const deckId = awaitParams?.deckid;
@@ -9,7 +20,7 @@ export async function POST(req, { params }) {
   try{
 
     await ensureCardExists(cardId);//makes sure the card is actually in the cards table before adding to deck_cards
-    const supabase = await createClient();
+    const supabase = await getSupabaseSafely();
 
     //Check if the card is already in the deck
     const { data: existing, error: fetchError } = await supabase

@@ -16,8 +16,19 @@ import QuickAdd from "./quickAdd.js";
  * 
  */
 
+function getSupabaseSafely() {
+    if (supabaseRef.current) return supabaseRef.current;
+
+    try {
+      supabaseRef.current = createClient();
+      return supabaseRef.current;
+    } catch {
+      return null;
+    }
+  }
+
 async function getDeckCards(deckId) {//attempts to access the contents of the deck and return 
-  const supabase = await createClient();
+  const supabase = await getSupabaseSafely();
   const { data, error } = await supabase
     .from('deck_cards')
     .select('quantity, cards(card_id,name)')
