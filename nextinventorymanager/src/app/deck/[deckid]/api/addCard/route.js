@@ -2,7 +2,7 @@ import { ensureCardExists } from "@/lib/cards/checkCards";
 import { createClient } from "@/lib/supabase/server";
 
 export async function POST(req, { params }) {
-  const { deckId } = params.deckid;
+  const deckId = params.deckid;
   const { cardId } = await req.json();
   console.log("route deckId is:", deckId);
   try{
