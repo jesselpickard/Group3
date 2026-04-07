@@ -31,8 +31,9 @@ export default async function DeckPage({ params }) {
   const awaitParams = await params;
   const deckId = awaitParams?.deckid;
 
-  let cards = []
 
+  let cards = []
+  console.log("deckId is:", deckId);
 
   if (deckId) {
     cards = await getDeckCards(deckId);
