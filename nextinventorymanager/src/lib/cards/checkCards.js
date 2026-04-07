@@ -35,10 +35,11 @@ export async function ensureCardExists(cardId) {
   //Prepares card data
   const cardData = {
     card_id: card.id,
-    name: card.name,
-    colors: card.colors,  // store as CSV
-    cost: card.mana_cost,
-    type: card.type_line,
+    name: card.name || "Unknown",
+    colors: card.colors || [],
+    cost: card.mana_cost || null,
+    type: card.type_line || null,
+    extra: card,
   };
 
   //Adds into cards table
