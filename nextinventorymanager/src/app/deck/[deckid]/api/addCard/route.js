@@ -1,3 +1,4 @@
+import { ensureCardExists } from "@/lib/cards/checkCards";
 import { createClient } from "@/lib/supabase/server";
 
 export async function POST(req, { params }) {
@@ -5,39 +6,46 @@ export async function POST(req, { params }) {
   const deckId = awaitParams?.deckid;
   const { cardId } = await req.json();
 
-  const supabase = await createClient();
+  try{
 
-  //Check if the card is already in the deck
-  const { data: existing, error: fetchError } = await supabase
-    .from("deck_cards")
-    .select("quantity")
-    .eq("deck_id", deckId)
-    .eq("card_id", cardId)
-    .single();
+    await ensureCardExists(cardId);//makes sure the card is actually in the cards table before adding to deck_cards
+    const supabase = await createClient();
 
-  if (fetchError && fetchError.code !== "PGRST116") {
-    return new Response(JSON.stringify({ success: false, error: fetchError.message }), { status: 500 });
-  }
-
-  if (existing) {//incremements if the card is already there
-    const { error: updateError } = await supabase
+    //Check if the card is already in the deck
+    const { data: existing, error: fetchError } = await supabase
       .from("deck_cards")
-      .update({ quantity: existing.quantity + 1 })
+      .select("quantity")
       .eq("deck_id", deckId)
-      .eq("card_id", cardId);
+      .eq("card_id", cardId)
+      .single();
 
-    if (updateError) {
-      return new Response(JSON.stringify({ success: false, error: updateError.message }), { status: 500 });
+    if (fetchError && fetchError.code !== "PGRST116") {
+      return new Response(JSON.stringify({ success: false, error: fetchError.message }), { status: 500 });
     }
-  } else {//adds the card to deck
-    const { error: insertError } = await supabase
-      .from("deck_cards")
-      .insert({ deck_id: deckId, card_id: cardId, quantity: 1 });
 
-    if (insertError) {
-      return new Response(JSON.stringify({ success: false, error: insertError.message }), { status: 500 });
+    if (existing) {//incremements if the card is already there
+      const { error: updateError } = await supabase
+        .from("deck_cards")
+        .update({ quantity: existing.quantity + 1 })
+        .eq("deck_id", deckId)
+        .eq("card_id", cardId);
+
+      if (updateError) {
+        return new Response(JSON.stringify({ success: false, error: updateError.message }), { status: 500 });
+      }
+    } else {//adds the card to deck
+      const { error: insertError } = await supabase
+        .from("deck_cards")
+        .insert({ deck_id: deckId, card_id: cardId, quantity: 1 });
+
+      if (insertError) {
+        return new Response(JSON.stringify({ success: false, error: insertError.message }), { status: 500 });
+      }
     }
+
+    return new Response(JSON.stringify({ success: true }));
+  } catch (err) {
+    return new Response(JSON.stringify({ success: false, error: err.message }), { status: 500 });
   }
 
-  return new Response(JSON.stringify({ success: true }));
 }
