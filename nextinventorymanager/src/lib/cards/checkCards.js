@@ -8,6 +8,7 @@ import { scryfallApi } from "@/lib/scryfall/Scryfall";
  */
 
 export async function ensureCardExists(cardId) {
+    console.log("card id is:",cardId);
   const supabase = await createClient();
 
   //Check is in our database

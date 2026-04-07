@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 export async function POST(req, { params }) {
   const { deckId } = params;
   const { cardId } = await req.json();
-
+  console.log("route deckId is:", deckId);
   try{
 
     await ensureCardExists(cardId);//makes sure the card is actually in the cards table before adding to deck_cards
