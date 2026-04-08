@@ -16,18 +16,26 @@ import QuickAdd from "./quickAdd.js";
  * 
  */
 
-async function getDeckCards(deckId) {//attempts to access the contents of the deck and return 
+async function getDeckCards(deckId){//attempts to access the contents of the deck and return 
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('deck_cards')
     .select('quantity, cards(card_id,name)')
     .eq('deck_id', deckId)
   if (error) throw new Error(error.message)
-
   return data
 }
+async function getDeckName(deckId){
+  const supabase = await createClient();
+  const {data, error} = await supabase
+    .from('decks')
+    .select('name')
+    .eq('deck_id', deckId)
+  if(error) throw new Error(error.message);
+  return data;
+}
 
-export default async function DeckPage({ params }) {
+export default async function DeckPage({ params }){
   const awaitParams = await params;
   const deckId = awaitParams?.deckid;
 
@@ -37,12 +45,13 @@ export default async function DeckPage({ params }) {
 
   if (deckId) {
     cards = await getDeckCards(deckId);
+    deckName = await getDeckName(deckId);
   }
 
   return (
     <div>
       <Navbar />
-      <h1>Deck: {deckId ?? "No deck selected"}</h1> {/* protects the page from an invalid id*/}
+      <h1>Deck: {deckName ?? "No deck selected"}</h1> {/* protects the page from an invalid id*/}
 
       {deckId ? (
         <ul>
