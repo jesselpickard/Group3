@@ -4,6 +4,8 @@ import { createClient } from "@/lib/supabase/server";
  * This file takes all the items within the deck in order to summarize its data. 
  * This includes the quantity of cards, format legality, as well as insights into the mana spread
  * of the deck.
+ * 
+ * I need to grab the info of the cards within the deck_cards table, from the cards table 
  */
 
 export async function getDeckCards(deckId){//attempts to access the contents of the deck and return 
@@ -13,5 +15,13 @@ export async function getDeckCards(deckId){//attempts to access the contents of 
     .select('quantity, cards(card_id,name)')
     .eq('deck_id', deckId)
   if (error) throw new Error(error.message)
-  return data
+  return data;
+}
+
+export default async function summary(deckId){
+    let cards = []
+
+    if (deckId) {
+        cards = await getDeckCards(deckId);
+    }
 }
