@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { scryfallApi } from "@/lib/scryfall/Scryfall";
 
@@ -11,17 +11,22 @@ export default function QuickAdd({ deckId }) {
   const [loading, setLoading] = useState(false);
   const [adding, setAdding] = useState(false);
 
-  let debounceTimeout;
+  // refs for debounce + preventing stale updates
+  const debounceRef = useRef(null);
+  const ignoreResultsRef = useRef(false);
 
-  // simple debounce so we do not spam autocomplete requests
+  // debounce helper
   function debounce(fn, delay = 250) {
-    clearTimeout(debounceTimeout);
-    debounceTimeout = setTimeout(fn, delay);
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+    debounceRef.current = setTimeout(fn, delay);
   }
 
-  // handles typing in the search box and updates suggestions
+  // handle typing
   function handleChange(q) {
     setQuery(q);
+    ignoreResultsRef.current = false; // allow new results
 
     if (q.length < 2) {
       setSuggestions([]);
@@ -32,7 +37,11 @@ export default function QuickAdd({ deckId }) {
       setLoading(true);
       try {
         const { data } = await scryfallApi.autocomplete(q);
-        setSuggestions(data.slice(0, 10)); // top 10 suggestions
+
+        // ignore stale results if user already selected something
+        if (ignoreResultsRef.current) return;
+
+        setSuggestions(data.slice(0, 10));
       } catch (err) {
         console.error("autocomplete error:", err);
         setSuggestions([]);
@@ -41,15 +50,22 @@ export default function QuickAdd({ deckId }) {
     }, 250);
   }
 
-  // when a user clicks a card suggestion, send the CARD NAME to the route
-  // the route will look for the card in Supabase first before using Scryfall
+  // handle selecting a suggestion
   async function handleSelect(name) {
     setAdding(true);
 
-    try {
-      console.log("quickAdd deckId:", deckId);
-      console.log("quickAdd cardName:", name);
+    // stop any pending autocomplete + future updates
+    ignoreResultsRef.current = true;
 
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    // clear UI immediately
+    setSuggestions([]);
+    setQuery("");
+
+    try {
       const res = await fetch(`/deck/${deckId}/api/addCard`, {
         method: "POST",
         headers: {
@@ -65,11 +81,6 @@ export default function QuickAdd({ deckId }) {
         throw new Error(result.error || "Failed to add card");
       }
 
-      // clear input after successful add
-      setQuery("");
-      setSuggestions([]);
-
-      // refresh page data so the added card shows up
       router.refresh();
     } catch (err) {
       console.error("handleSelect error:", err);
@@ -86,6 +97,7 @@ export default function QuickAdd({ deckId }) {
         value={query}
         onChange={(e) => handleChange(e.target.value)}
         style={{ width: "100%", padding: "0.5rem" }}
+        disabled={adding}
       />
 
       {loading && <p>Searching...</p>}
