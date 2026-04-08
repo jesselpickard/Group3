@@ -31,6 +31,7 @@ async function getDeckName(deckId){
     .from('decks')
     .select('name')
     .eq('deck_id', deckId)
+    .single()
   if(error) throw new Error(error.message);
   return data;
 }
