@@ -1,6 +1,7 @@
 import Navbar from "@/app/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
 import QuickAdd from "./quickAdd.js";
+import { getDeckCards } from "./deckSummary.js"; 
 
 /**
  *  This page is meant to lay out the contents of a deck to its viewer. It will allow
@@ -16,15 +17,6 @@ import QuickAdd from "./quickAdd.js";
  * 
  */
 
-async function getDeckCards(deckId){//attempts to access the contents of the deck and return 
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from('deck_cards')
-    .select('quantity, cards(card_id,name)')
-    .eq('deck_id', deckId)
-  if (error) throw new Error(error.message)
-  return data
-}
 async function getDeckName(deckId){
   const supabase = await createClient();
   const {data, error} = await supabase
