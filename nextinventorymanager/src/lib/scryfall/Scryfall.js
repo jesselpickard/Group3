@@ -1,9 +1,10 @@
 let queue = Promise.resolve();
 let lastRequestTime = 0;
 
-const MAX_CARDS = 500;//caps any search
+const MAX_CARDS = 500; // caps any search
 
-function rateLimitedFetch(url) {//ensures we do not exceed the rate limit requested by scryfall, should be universal
+function rateLimitedFetch(url) {
+  // ensures we do not exceed the rate limit requested by scryfall
   queue = queue.then(async () => {
     const now = Date.now();
     const elapsed = now - lastRequestTime;
@@ -20,7 +21,6 @@ function rateLimitedFetch(url) {//ensures we do not exceed the rate limit reques
   return queue;
 }
 
-
 export const scryfallApi = {
   async search(query) {
     let allCards = [];
@@ -31,35 +31,49 @@ export const scryfallApi = {
       const data = await res.json();
 
       allCards = [...allCards, ...(data.data || [])];
-
       url = data.has_more ? data.next_page : null;
     }
 
     return { data: allCards };
   },
+
   async autocomplete(query) {
-    if (!query || query.length < 2) return { data: [] }
+    if (!query || query.length < 2) return { data: [] };
 
     const res = await rateLimitedFetch(
       `https://api.scryfall.com/cards/autocomplete?q=${encodeURIComponent(query)}`
-    )
-    const data = await res.json()
-    return { data: data.data || [] } // array of card names
+    );
+    const data = await res.json();
+    return { data: data.data || [] }; // array of card names
   },
- getCardById(id) {
-    return rateLimitedFetch(
-      `https://api.scryfall.com/cards/${id}`
-    ).then((res) => res.json());
+
+  // fetch an exact card by name
+  async namedExact(name) {
+    const res = await rateLimitedFetch(
+      `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}`
+    );
+    return res.json();
   },
+
+  // fetch a card by scryfall id
+  async getCardById(id) {
+    const res = await rateLimitedFetch(
+      `https://api.scryfall.com/cards/${encodeURIComponent(id)}`
+    );
+    return res.json();
+  },
+
   getSymbols() {
-  return rateLimitedFetch(
-    "https://api.scryfall.com/symbology"
-  ).then(res => res.json());
-},
-getPrints(url) {
-  return rateLimitedFetch(url).then(res => res.json());
-},
-getSet(url) {
-  return fetch(url).then(res => res.json());
-}
+    return rateLimitedFetch("https://api.scryfall.com/symbology").then((res) =>
+      res.json()
+    );
+  },
+
+  getPrints(url) {
+    return rateLimitedFetch(url).then((res) => res.json());
+  },
+
+  getSet(url) {
+    return fetch(url).then((res) => res.json());
+  },
 };

@@ -13,11 +13,13 @@ export default function QuickAdd({ deckId }) {
 
   let debounceTimeout;
 
+  // simple debounce so we do not spam autocomplete requests
   function debounce(fn, delay = 250) {
     clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(fn, delay);
   }
 
+  // handles typing in the search box and updates suggestions
   function handleChange(q) {
     setQuery(q);
 
@@ -30,32 +32,30 @@ export default function QuickAdd({ deckId }) {
       setLoading(true);
       try {
         const { data } = await scryfallApi.autocomplete(q);
-        setSuggestions(data.slice(0, 10));
+        setSuggestions(data.slice(0, 10)); // top 10 suggestions
       } catch (err) {
-        console.error(err);
+        console.error("autocomplete error:", err);
         setSuggestions([]);
       }
       setLoading(false);
     }, 250);
   }
 
+  // when a user clicks a card suggestion, send the CARD NAME to the route
+  // the route will look for the card in Supabase first before using Scryfall
   async function handleSelect(name) {
     setAdding(true);
 
     try {
-      const { data: cards } = await scryfallApi.search(`!"${name}"`);
-      const card = cards[0];
-      if (!card) return;
-
-      console.log("quickAdd deckId is:", deckId);
-      console.log("card id is:", card.id);
+      console.log("quickAdd deckId:", deckId);
+      console.log("quickAdd cardName:", name);
 
       const res = await fetch(`/deck/${deckId}/api/addCard`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ cardId: card.id }),
+        body: JSON.stringify({ cardName: name }),
       });
 
       const result = await res.json();
@@ -65,11 +65,14 @@ export default function QuickAdd({ deckId }) {
         throw new Error(result.error || "Failed to add card");
       }
 
+      // clear input after successful add
       setQuery("");
       setSuggestions([]);
+
+      // refresh page data so the added card shows up
       router.refresh();
     } catch (err) {
-      console.error(err);
+      console.error("handleSelect error:", err);
     }
 
     setAdding(false);
