@@ -51,7 +51,7 @@ export default async function DeckPage({ params }){
   return (
     <div>
       <Navbar />
-      <h1>Deck: {deckName ?? "No deck selected"}</h1> {/* protects the page from an invalid id*/}
+      <h1>Deck: {deckName.name ?? "No deck selected"}</h1> {/* protects the page from an invalid id*/}
 
       {deckId ? (
         <ul>
