@@ -43,6 +43,7 @@ export default async function DeckPage({ params }){
 
   let cards = []
   console.log("deckId is:", deckId);
+  let deckName = null;
 
   if (deckId) {
     cards = await getDeckCards(deckId);
