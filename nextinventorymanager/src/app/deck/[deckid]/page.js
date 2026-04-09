@@ -2,7 +2,7 @@ import Navbar from "@/app/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
 import QuickAdd from "./quickAdd.js";
 import { getDeckCards } from "./deckSummary.js"; 
-import SummaryDisplay  from "./deckSummary.js";
+//import SummaryDisplay  from "./deckSummary.js";
 
 /**
  *  This page is meant to lay out the contents of a deck to its viewer. It will allow
@@ -60,7 +60,7 @@ export default async function DeckPage({ params }){
         <p>Please select a deck.</p>
       )}
       <QuickAdd deckId={deckId} />
-      <SummaryDisplay deckId={deckID}/>
+      {/*<SummaryDisplay deckId={deckID}/>*/}
     </div>
   )
 }

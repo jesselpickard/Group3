@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
  * This includes the quantity of cards, format legality, as well as insights into the mana spread
  * of the deck.
  * 
- * I need to grab the info of the cards within the deck_cards table, from the cards table 
+ * seperate the summaryDisplay into a client component.
  */
 
 export async function getDeckCards(deckId){//attempts to access the contents of the deck and return 
@@ -105,8 +105,44 @@ export default async function SummaryDisplay({ deckId }) {//crude display for te
 
   return (
     <div>
+      <h2>Deck Summary</h2>
+
       <p><strong>Total Cards:</strong> {data.totalCards}</p>
       <p><strong>Total Mana:</strong> {data.totalMana}</p>
+
+      <h3>Color Pips</h3>
+      <ul>
+        {Object.entries(data.totalPips).map(([color, count]) => (
+          <li key={color}>{color}: {count}</li>
+        ))}
+      </ul>
+
+      <h3>Mana Curve</h3>
+      <table border="1" cellPadding="5">
+        <thead>
+          <tr>
+            <th>CMC</th>
+            <th>Number of Cards</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Object.entries(data.manaCurve).map(([cmc, count]) => (
+            <tr key={cmc}>
+              <td>{cmc}</td>
+              <td>{count}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <h3>Cards in Deck</h3>
+      <ul>
+        {data.cards.map(card => (
+          <li key={card.card_id}>
+            {card.name} (Qty: {card.quantity}, CMC: {card.cmc})
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
