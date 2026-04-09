@@ -75,7 +75,8 @@ export async function summary(deckId){
         totalCards: flat.reduce((sum, card) => sum + card.quantity, 0),
         totalMana: mana.totalMana,
         totalPips: mana.colorPips,
-        manaCurve: manaCurve(flat)
+        manaCurve: manaCurve(flat),
+        cards: flat
     }
 }
 
