@@ -90,7 +90,7 @@ function manaCurve(flat) {//gathers the mana curve of the deck
 
   return curve;
 }
-export async function SummaryDisplay({ deckId }) {
+export async function SummaryDisplay({ deckId }) {//crude display for testing
   if (!deckId) {
     return <p>Invalid DeckId, cannot summarize data</p>;
   }
