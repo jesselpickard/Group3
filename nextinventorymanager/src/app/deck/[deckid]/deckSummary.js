@@ -14,7 +14,7 @@ export async function getDeckCards(deckId){//attempts to access the contents of 
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('deck_cards')
-    .select('quantity, cards(card_id,name')
+    .select('quantity, cards(card_id,name,colors,cost,type,cmc)')
     .eq('deck_id', deckId)
   if (error) throw new Error(error.message)
   return data;
