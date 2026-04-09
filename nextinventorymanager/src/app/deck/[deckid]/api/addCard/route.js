@@ -99,6 +99,7 @@ export async function POST(req, { params }) {
         colors: card.colors || [],
         cost: card.mana_cost || null,
         type: card.type_line || null,
+        cmc: card.cmc || null,
         extra: card,
       };
 
