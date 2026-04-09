@@ -5,8 +5,6 @@ import { createClient } from "@/lib/supabase/server";
  * This includes the quantity of cards, format legality, as well as insights into the mana spread
  * of the deck.
  * 
- * <SummaryDisplay deckId={deckID}/> ,colors,cost,type,cmc
- * 
  * I need to grab the info of the cards within the deck_cards table, from the cards table 
  */
 
