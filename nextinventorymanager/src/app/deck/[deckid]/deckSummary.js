@@ -5,6 +5,8 @@ import { createClient } from "@/lib/supabase/server";
  * This includes the quantity of cards, format legality, as well as insights into the mana spread
  * of the deck.
  * 
+ * <SummaryDisplay deckId={deckID}/> ,colors,cost,type,cmc
+ * 
  * I need to grab the info of the cards within the deck_cards table, from the cards table 
  */
 
@@ -12,7 +14,7 @@ export async function getDeckCards(deckId){//attempts to access the contents of 
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('deck_cards')
-    .select('quantity, cards(card_id,name,colors,cost,type,cmc')
+    .select('quantity, cards(card_id,name')
     .eq('deck_id', deckId)
   if (error) throw new Error(error.message)
   return data;
