@@ -187,6 +187,7 @@ function CardTypeBox({ value, onChange }) {
       <option value="enchantment">Enchantment</option>
       <option value="instant">Instant</option>
       <option value="kindred">Kindred</option>
+      <option value="land">Land</option>
       <option value="planeswalker">Planeswalker</option>
       <option value="sorcery">Sorcery</option>
     </select>
