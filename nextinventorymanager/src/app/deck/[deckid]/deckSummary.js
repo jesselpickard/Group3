@@ -75,6 +75,7 @@ export async function summary(deckId){
         totalCards: flat.reduce((sum, card) => sum + card.quantity, 0),
         totalMana: mana.totalMana,
         totalPips: mana.colorPips,
+        manaCurve: manaCurve(flat),
         cards: flat
     }
 }
@@ -104,36 +105,8 @@ export default async function SummaryDisplay({ deckId }) {//crude display for te
 
   return (
     <div>
-      <h2>Deck Summary</h2>
-
       <p><strong>Total Cards:</strong> {data.totalCards}</p>
       <p><strong>Total Mana:</strong> {data.totalMana}</p>
-
-      <h3>Color Pips</h3>
-      <ul>
-        {Object.entries(data.totalPips).map(([color, count]) => (
-          <li key={color}>{color}: {count}</li>
-        ))}
-      </ul>
-
-      <h3>Mana Curve</h3>
-      <table border="1" cellPadding="5">
-        <thead>
-          <tr>
-            <th>CMC</th>
-            <th>Number of Cards</th>
-          </tr>
-        </thead>
-      </table>
-
-      <h3>Cards in Deck</h3>
-      <ul>
-        {data.cards.map(card => (
-          <li key={card.card_id}>
-            {card.name} (Qty: {card.quantity}, CMC: {card.cmc})
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
