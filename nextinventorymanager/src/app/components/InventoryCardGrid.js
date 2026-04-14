@@ -179,8 +179,8 @@ export default function InventoryCardGrid({ initialCards = [] }) {
                       }}
                     >
                       <picture>
-                        <source media="(max-width: 800px)" srcSet={image.card.image_uris?.normal} />
-                        <img src={image.card.image_uris?.small} alt={card.name ?? "Card"} />
+                        <source media="(max-width: 800px)" srcSet={image} />
+                        <img src={image} alt={card.name ?? "Card"} />
                       </picture>
 
                       <div
