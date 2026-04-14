@@ -7,11 +7,8 @@ import FourBox from "./CheckBox4";
 import { STATES } from './CheckBox4';
 import CheckSpread from "./CheckSpread";
 
-//I need to adjust the colors for the color search
 
-
-
-export default function CollapsibleMenu({ setCards, setCurrentPage }) {
+export default function CollapsibleMenu({ setCards, setCurrentPage}) {
   const [open, setOpen] = useState(true);
   const [query, setQuery] = useState("");
   const [type, setType] = useState("");
