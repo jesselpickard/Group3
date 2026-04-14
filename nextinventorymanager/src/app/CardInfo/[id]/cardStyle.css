@@ -262,8 +262,8 @@ body {
     background-color: #5a1080;
 }
 .addButtons p{
-    color:rgb(43, 176, 43);
-    font-size:20px;
+    color: rgb(43, 176, 43);
+    font-size: 20px;
 }
 .removeButtons button{
     color: #d09feb;
@@ -431,7 +431,7 @@ body {
     }
 
     .image-box img {
-        box-shadow: 0 0 10px 1px rgba(132, 132, 132, 0.8);
+        box-shadow: 0 0 15px 1px rgba(242, 230, 230, 0.8);
     }
 
     .card-info {
