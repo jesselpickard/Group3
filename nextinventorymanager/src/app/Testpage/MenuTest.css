@@ -57,3 +57,8 @@
   border-radius: 3%;
   margin-left: 6px;
 }
+.wiz img{
+  height:auto;
+  width:200px;
+  box-shadow: 100px white;
+}

@@ -50,6 +50,9 @@ function CollapsibleMenu(){
       <div className="content">
         <p>Hello world! 2</p>
       </div>
+      <div className="wiz">
+        <img src="https://cards.scryfall.io/large/front/c/9/c9ef569e-91e7-45f5-83b0-5a820242c628.jpg?1559604221"></img>
+      </div>
     </div>
   );
 }
