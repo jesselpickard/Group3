@@ -158,10 +158,12 @@ export default function InventoryCardGrid({ initialCards = [] }) {
             {initialCards.length > 0 ? (
               visibleCards.map((card, index) => {
                 // Support both standard cards and double-faced cards.
-                const image =
+                const smallImage =
                   card.image_uris?.small ||
-                  card.image_uris?.normal ||
                   card.card_faces?.[0]?.image_uris?.small ||
+                  "";
+                const normalImage =
+                  card.image_uris?.normal ||
                   card.card_faces?.[0]?.image_uris?.normal ||
                   "";
 
@@ -179,8 +181,8 @@ export default function InventoryCardGrid({ initialCards = [] }) {
                       }}
                     >
                       <picture>
-                        <source media="(max-width: 800px)" srcSet={image} />
-                        <img src={image} alt={card.name ?? "Card"} />
+                        <source media="(max-width: 800px)" srcSet={smallImage} />
+                        <img src={normalImage} alt={card.name ?? "Card"} />
                       </picture>
 
                       <div
