@@ -252,6 +252,10 @@
   display: block;    /* removes extra bottom space from inline img */
 }
 
+.card:hover {
+  transform: scale(1.05);
+}
+
 
 /* ---Adjustments to include collapsable menu--- */
 

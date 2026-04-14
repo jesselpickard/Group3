@@ -253,18 +253,20 @@ body {
     margin-top:5px;
 }
 .addButtons button{
-background-color: #71179C;
-display: flex;
-gap:8px;
+    color: #d09feb;
+    background-color: #71179C;
+    display: flex;
+    gap:8px;
 }
 .addButtons button:hover{
     background-color: #5a1080;
 }
 .addButtons p{
-    color:rgb(88, 255, 88);
-    font-size:20px;
+    color: rgb(43, 176, 43);
+    font-size: 20px;
 }
 .removeButtons button{
+    color: #d09feb;
     background-color: #71179C;
     display: flex;
     gap:8px;
@@ -429,7 +431,7 @@ gap:8px;
     }
 
     .image-box img {
-        box-shadow: 0 0 10px 1px rgba(132, 132, 132, 0.8);
+        box-shadow: 0 0 15px 1px rgba(242, 230, 230, 0.8);
     }
 
     .card-info {
