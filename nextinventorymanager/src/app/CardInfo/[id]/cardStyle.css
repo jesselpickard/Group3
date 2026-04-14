@@ -253,18 +253,20 @@ body {
     margin-top:5px;
 }
 .addButtons button{
-background-color: #71179C;
-display: flex;
-gap:8px;
+    color: #d09feb;
+    background-color: #71179C;
+    display: flex;
+    gap:8px;
 }
 .addButtons button:hover{
     background-color: #5a1080;
 }
 .addButtons p{
-    color:rgb(88, 255, 88);
+    color:rgb(43, 176, 43);
     font-size:20px;
 }
 .removeButtons button{
+    color: #d09feb;
     background-color: #71179C;
     display: flex;
     gap:8px;
