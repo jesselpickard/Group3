@@ -1,11 +1,42 @@
 let queue = Promise.resolve();
 let lastRequestTime = 0;
 
-const MAX_CARDS = 500; // caps any search
+const MAX_CARDS = 500; //caps any search
 
-function rateLimitedFetch(url) {
-  // ensures we do not exceed the rate limit requested by scryfall
+//cache
+const cache = new Map();
+const CACHE_TTL = 1000 * 60 * 20; //20 minutes
+
+function getCached(url) {
+  const entry = cache.get(url);
+  if (!entry) return null;
+
+  const isExpired = Date.now() - entry.timestamp > CACHE_TTL;
+  if (isExpired) {
+    cache.delete(url);
+    return null;
+  }
+
+  return entry.data;
+}
+
+function setCache(url, data) {
+  cache.set(url, {
+    data,
+    timestamp: Date.now(),
+  });
+}
+
+function rateLimitedFetch(url) {//ensures we do not exceed the rate limit requested by scryfall
   queue = queue.then(async () => {
+    //check cache before making request
+    const cached = getCached(url);
+    if (cached) {
+      return {
+        json: async () => cached,
+      };
+    }
+
     const now = Date.now();
     const elapsed = now - lastRequestTime;
 
@@ -15,7 +46,15 @@ function rateLimitedFetch(url) {
     }
 
     lastRequestTime = Date.now();
-    return fetch(url);
+    const response = await fetch(url);
+    const data = await response.json();
+
+    //store in cache
+    setCache(url, data);
+
+    return {
+      json: async () => data,
+    };
   });
 
   return queue;
@@ -47,7 +86,7 @@ export const scryfallApi = {
     return { data: data.data || [] }; // array of card names
   },
 
-  // fetch an exact card by name
+  //fetch an exact card by name
   async namedExact(name) {
     const res = await rateLimitedFetch(
       `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}`
@@ -55,7 +94,7 @@ export const scryfallApi = {
     return res.json();
   },
 
-  // fetch a card by scryfall id
+  //fetch a card by scryfall id
   async getCardById(id) {
     const res = await rateLimitedFetch(
       `https://api.scryfall.com/cards/${encodeURIComponent(id)}`
