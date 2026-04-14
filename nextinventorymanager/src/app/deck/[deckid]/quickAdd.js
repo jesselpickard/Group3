@@ -110,15 +110,6 @@ export default function QuickAdd({ deckId }) {
               onClick={() => handleSelect(name)}
               disabled={adding}
               className='popul'
-              style={{
-                cursor: "pointer",
-                width: "100%",
-                textAlign: "left",
-                padding: "0.25rem 0.5rem",
-                border: "1px solid #ccc",
-                borderRadius: "4px",
-                background: "#f9f9f9",
-              }}
             >
               {name}
             </button>
