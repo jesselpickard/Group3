@@ -1,6 +1,7 @@
+// src/app/components/InventoryCardGrid.js
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Menu from "./CollapsibleMenu";
 import "./CardGrid.css";
@@ -50,7 +51,15 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
     }
 
     if (currentPage >= totalPages - 3) {
-      return [1, "...", totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+      return [
+        1,
+        "...",
+        totalPages - 4,
+        totalPages - 3,
+        totalPages - 2,
+        totalPages - 1,
+        totalPages,
+      ];
     }
 
     return [1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages];
@@ -76,7 +85,7 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
             ) : (
               <button
                 key={page}
-                className={`page-btn ${currentPage === page ? "active" : ""}`}
+                className={`page-btn ${page === currentPage ? "active" : ""}`}
                 onClick={() => onPageChange(page)}
               >
                 {page}
@@ -97,9 +106,6 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
       <div className="page-jump">
         <span>Go to page:</span>
         <input
-          type="number"
-          min="1"
-          max={totalPages}
           value={jumpValue}
           onChange={(e) => setJumpValue(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleJump()}
@@ -112,129 +118,122 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
   );
 }
 
+function mergeInventoryData(searchCard, inventoryCard) {
+  return {
+    ...searchCard,
+    quantity: inventoryCard.quantity ?? 1,
+    inventory_created_at: inventoryCard.inventory_created_at,
+    inventory_updated_at: inventoryCard.inventory_updated_at,
+  };
+}
+
 export default function InventoryCardGrid({ initialCards = [] }) {
-  // The inventory page always starts with the cards already loaded from the user's inventory table.
   const [currentPage, setCurrentPage] = useState(1);
+  const [displayedCards, setDisplayedCards] = useState(initialCards);
+  const [hasSearched, setHasSearched] = useState(false);
 
   const CARDS_PER_PAGE = 81;
   const currentColor = colors[(currentPage - 1) % colors.length];
 
-  // Paginate the inventory cards while keeping the same grid behavior as the search page.
+  useEffect(() => {
+    setDisplayedCards(initialCards);
+  }, [initialCards]);
+
+  const inventoryCardMap = useMemo(() => {
+    return new Map(initialCards.map((card) => [card.id, card]));
+  }, [initialCards]);
+
+  const handleInventorySearchResults = useCallback(
+    (searchResults = []) => {
+      const inventoryOnlyResults = searchResults
+        .filter((card) => inventoryCardMap.has(card.id))
+        .map((card) => mergeInventoryData(card, inventoryCardMap.get(card.id)));
+
+      setDisplayedCards(inventoryOnlyResults);
+      setHasSearched(true);
+      setCurrentPage(1);
+    },
+    [inventoryCardMap]
+  );
+
   const visibleCards = useMemo(() => {
     const startIndex = (currentPage - 1) * CARDS_PER_PAGE;
-    return initialCards.slice(startIndex, startIndex + CARDS_PER_PAGE);
-  }, [initialCards, currentPage]);
+    return displayedCards.slice(startIndex, startIndex + CARDS_PER_PAGE);
+  }, [displayedCards, currentPage]);
 
-  const TOTAL_PAGES = Math.max(1, Math.ceil(initialCards.length / CARDS_PER_PAGE));
+  const totalPages = Math.max(1, Math.ceil(displayedCards.length / CARDS_PER_PAGE));
 
   return (
-    <div
-      className="cardgrid-wrapper"
-      style={{
-        backgroundColor: "var(--inventory-page-bg, transparent)",
-        color: "var(--inventory-text, inherit)",
-      }}
-    >
-      <div className="cardgrid-topbar">
+    <div className="pageContainer">
+      <div className="headerBar">
         <div className="page-indicator-top">
-          Page {currentPage} of {TOTAL_PAGES}
+          Page {currentPage} of {totalPages}
         </div>
 
         <PaginationBar
           currentPage={currentPage}
-          totalPages={TOTAL_PAGES}
+          totalPages={totalPages}
           onPageChange={setCurrentPage}
         />
       </div>
 
-      <div className="main-layout">
-        <div className="sidebar-area">
-          {/* Keep the same collapsible sidebar area and component as the search page. */}
-          <Menu setCards={() => {}} setCurrentPage={setCurrentPage} />
+      <div className="pageBody">
+        <div className="sidebar">
+          <Menu setCards={handleInventorySearchResults} setCurrentPage={setCurrentPage} />
         </div>
 
-        <div className="content-area">
-          <div className="card-grid">
-            {initialCards.length > 0 ? (
-              visibleCards.map((card, index) => {
-                // Support both standard cards and double-faced cards.
-                const smallImage =
-                  card.image_uris?.small ||
-                  card.card_faces?.[0]?.image_uris?.small ||
-                  "";
-                const normalImage =
-                  card.image_uris?.normal ||
-                  card.card_faces?.[0]?.image_uris?.normal ||
-                  "";
+        <div className="card-grid">
+          {displayedCards.length > 0 ? (
+            visibleCards.map((card, index) => {
+              const smallImage =
+                card.image_uris?.small || card.card_faces?.[0]?.image_uris?.small || "";
+              const normalImage =
+                card.image_uris?.normal || card.card_faces?.[0]?.image_uris?.normal || "";
 
-                return (
-                  <Link
-                    key={`${card.id}-${card.quantity}-${index}`}
-                    href={`/CardInfo/${card.id}`}
-                  >
-                    <div
-                      className="card"
-                      style={{
-                        backgroundColor: "var(--inventory-card-bg, rgba(255, 255, 255, 0.04))",
-                        color: "var(--inventory-text, inherit)",
-                        borderRadius: "12px",
-                      }}
-                    >
-                      <picture>
-                        <source media="(max-width: 800px)" srcSet={normalImage} />
-                        <img src={smallImage} alt={card.name ?? "Card"} />
-                      </picture>
-
+              return (
+                <div key={`${card.id}-${index}`} className="card">
+                  <Link href={`/CardInfo/${card.id}`}>
+                    {smallImage || normalImage ? (
+                      <img src={smallImage || normalImage} alt={card.name} />
+                    ) : (
                       <div
-                        style={{
-                          padding: "8px 6px 0 6px",
-                          color: "var(--inventory-text, inherit)",
-                        }}
-                      >
-                        <div
-                          style={{
-                            fontSize: "0.95rem",
-                            fontWeight: 600,
-                            marginBottom: "4px",
-                          }}
-                        >
-                          {card.name}
-                        </div>
-
-                        <div
-                          style={{
-                            fontSize: "0.9rem",
-                            opacity: 0.9,
-                          }}
-                        >
-                          Quantity: {card.quantity}
-                        </div>
-                      </div>
-                    </div>
+                        className="card-placeholder"
+                        style={{ backgroundColor: colors[index % colors.length] }}
+                      />
+                    )}
                   </Link>
-                );
-              })
-            ) : (
-              Array.from({ length: CARDS_PER_PAGE }).map((_, i) => (
-                <div
-                  key={i}
-                  className="card-placeholder"
-                  style={{ backgroundColor: currentColor }}
-                />
-              ))
-            )}
-          </div>
+
+                  <p style={{ color: "inherit" }}>{card.name}</p>
+                  <p style={{ color: "inherit" }}>Quantity: {card.quantity}</p>
+                </div>
+              );
+            })
+          ) : hasSearched || initialCards.length === 0 ? (
+            <p style={{ color: "inherit", fontWeight: 700 }}>
+              no card found in your inventory
+            </p>
+          ) : (
+            Array.from({ length: CARDS_PER_PAGE }).map((_, i) => (
+              <div
+                key={i}
+                className="card-placeholder"
+                style={{ backgroundColor: currentColor }}
+              />
+            ))
+          )}
         </div>
       </div>
 
-      <PaginationBar
-        currentPage={currentPage}
-        totalPages={TOTAL_PAGES}
-        onPageChange={setCurrentPage}
-      />
+      <div className="footerBar">
+        <div className="page-indicator-bottom">
+          Page {currentPage} of {totalPages}
+        </div>
 
-      <div className="page-indicator-bottom">
-        Page {currentPage} of {TOTAL_PAGES}
+        <PaginationBar
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </div>
   );
