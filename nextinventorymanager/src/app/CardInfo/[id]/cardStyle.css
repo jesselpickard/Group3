@@ -273,7 +273,7 @@ body {
 }
 .removeButtons p{
     color:red;
-    font-size:20px;
+    font-size:18px;
 }
 .removeButtons button:hover{
     background-color: #5a1080;
