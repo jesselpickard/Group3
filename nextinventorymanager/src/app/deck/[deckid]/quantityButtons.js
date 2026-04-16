@@ -3,8 +3,8 @@
 import { useState, useTransition } from "react";
 import { addCardToDeck, removeCardFromDeck } from "./quantityMod";
 
-export default function QuantityControl({ deckId, cardId, quantity }) {
-  const [quantity, setQuantity] = useState(initialQuantity);
+export default function QuantityControl({ deckId, cardId, quantityIn }) {
+  const [quantity, setQuantity] = useState(quantityIn);
   const [isPending, startTransition] = useTransition();
 
   const handleAdd = () => {
