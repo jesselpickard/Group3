@@ -146,7 +146,7 @@ function DeckTile({ deck }) {
         ref={tileRef}
         className={`deck-tile ${hovered ? 'hovered' : ''}`}
         onMouseEnter={handleMouseEnter}
-        onMouseLeave={() => setHovered(false)}
+        onMouseLeave={() => setTimeout(() => setHovered(false), 150)}
       >
         {/* fanned card visuals */}
         <div className="deck-fan">
