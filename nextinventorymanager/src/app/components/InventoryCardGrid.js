@@ -113,13 +113,13 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
 }
 
 export default function InventoryCardGrid({ initialCards = [] }) {
-  // The inventory page always starts with the cards already loaded from the user's inventory table.
   const [currentPage, setCurrentPage] = useState(1);
 
   const CARDS_PER_PAGE = 81;
   const currentColor = colors[(currentPage - 1) % colors.length];
+  const themeTextColor = "var(--foreground)";
+  const themeBackgroundColor = "var(--background)";
 
-  // Paginate the inventory cards while keeping the same grid behavior as the search page.
   const visibleCards = useMemo(() => {
     const startIndex = (currentPage - 1) * CARDS_PER_PAGE;
     return initialCards.slice(startIndex, startIndex + CARDS_PER_PAGE);
@@ -131,8 +131,8 @@ export default function InventoryCardGrid({ initialCards = [] }) {
     <div
       className="cardgrid-wrapper"
       style={{
-        backgroundColor: "var(--inventory-page-bg, transparent)",
-        color: "var(--inventory-text, inherit)",
+        backgroundColor: themeBackgroundColor,
+        color: themeTextColor,
       }}
     >
       <div className="cardgrid-topbar">
@@ -149,7 +149,6 @@ export default function InventoryCardGrid({ initialCards = [] }) {
 
       <div className="main-layout">
         <div className="sidebar-area">
-          {/* Keep the same collapsible sidebar area and component as the search page. */}
           <Menu setCards={() => {}} setCurrentPage={setCurrentPage} />
         </div>
 
@@ -157,7 +156,6 @@ export default function InventoryCardGrid({ initialCards = [] }) {
           <div className="card-grid">
             {initialCards.length > 0 ? (
               visibleCards.map((card, index) => {
-                // Support both standard cards and double-faced cards.
                 const image =
                   card.image_uris?.small ||
                   card.image_uris?.normal ||
@@ -173,8 +171,8 @@ export default function InventoryCardGrid({ initialCards = [] }) {
                     <div
                       className="card"
                       style={{
-                        backgroundColor: "var(--inventory-card-bg, rgba(255, 255, 255, 0.04))",
-                        color: "var(--inventory-text, inherit)",
+                        backgroundColor: "var(--background)",
+                        color: themeTextColor,
                         borderRadius: "12px",
                       }}
                     >
@@ -186,7 +184,7 @@ export default function InventoryCardGrid({ initialCards = [] }) {
                       <div
                         style={{
                           padding: "8px 6px 0 6px",
-                          color: "var(--inventory-text, inherit)",
+                          color: themeTextColor,
                         }}
                       >
                         <div
@@ -194,6 +192,7 @@ export default function InventoryCardGrid({ initialCards = [] }) {
                             fontSize: "0.95rem",
                             fontWeight: 600,
                             marginBottom: "4px",
+                            color: themeTextColor,
                           }}
                         >
                           {card.name}
@@ -203,6 +202,7 @@ export default function InventoryCardGrid({ initialCards = [] }) {
                           style={{
                             fontSize: "0.9rem",
                             opacity: 0.9,
+                            color: themeTextColor,
                           }}
                         >
                           Quantity: {card.quantity}
