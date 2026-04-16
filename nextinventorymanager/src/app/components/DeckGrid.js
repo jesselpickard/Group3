@@ -283,8 +283,19 @@ export default function DeckGrid() {
               }
             }
 
-            // get fan card images from first 3 cards
-            const fanCardIds = deckCards.slice(0, 3).map(c => c.card_id);
+            // get commander card id if the deck has one
+            const commanderCardId = deck.commander || null;
+
+            // build fan card ids: commander first (goes to middle), then fill from deck cards
+            const otherCardIds = deckCards
+              .filter(c => c.card_id !== commanderCardId)
+              .slice(0, commanderCardId ? 2 : 3)
+              .map(c => c.card_id);
+
+            const fanCardIds = commanderCardId
+              ? [commanderCardId, ...otherCardIds]
+              : otherCardIds;
+            
             const fanCards = await Promise.all(
               fanCardIds.map(async (cardId) => {
                 const { data: cardData } = await supabase
