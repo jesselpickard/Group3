@@ -9,32 +9,7 @@ import { useEffect, useState, Suspense } from "react";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 
-const supabase = createBrowserClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-);
-const [quantity, setQuantity] = useState(0);
 
-useEffect(() => {
-  const fetchQuantity = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user || !card) return;
-
-    const { data } = await supabase
-      .from("inventory")
-      .select("quantity")
-      .eq("user_id", user.id)
-      .eq("card_id", card.id)
-      .single();
-
-    if (data) setQuantity(data.quantity);
-  };
-
-  fetchQuantity();
-}, [card]);
 
 // Wrapper component that enables loading fallback with Suspense
 export default function CardInfoPage() {
@@ -46,18 +21,38 @@ export default function CardInfoPage() {
 }
 
 function CardInfo() {
-  // Get the card ID from the URL (ex: /CardInfo/123)
   const { id } = useParams();
 
-  // Store the main card data
   const [card, setCard] = useState(null);
+  const [quantity, setQuantity] = useState(0);
 
-  // Fetch card data when ID is available
+  const supabase = createClient();
+
   useEffect(() => {
     if (!id) return;
-
     scryfallApi.getCardById(id).then(setCard);
   }, [id]);
+
+  useEffect(() => {
+    const fetchQuantity = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user || !card) return;
+
+      const { data } = await supabase
+        .from("inventory")
+        .select("quantity")
+        .eq("user_id", user.id)
+        .eq("card_id", card.id)
+        .single();
+
+      if (data) setQuantity(data.quantity);
+    };
+
+    fetchQuantity();
+  }, [card]);
 
   // =======================
   // LOADING ANIMATION
@@ -208,6 +203,7 @@ function CardInfo() {
 
   // Use correct face if it's a double-faced card
   const currCard = card.card_faces?.[face] || card;
+
 
   async function addToInventory() {
     const {
