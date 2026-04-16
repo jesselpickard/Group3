@@ -68,7 +68,7 @@ export default async function DeckPage({ params }){
               <QuantityControl
                 deckId={deckId}
                 cardId={card.cards.card_id}
-                quantityIn={card.quantity}
+                quantity={card.quantity}
               />
             </li>
           ))}
