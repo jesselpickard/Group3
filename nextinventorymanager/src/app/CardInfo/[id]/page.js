@@ -308,12 +308,13 @@ function CardInfo() {
 
     setQuantity(newQty);
 
-    if (data.quantity === 0) {
+    if (newQty === 0) {
       await supabase
         .from("inventory")
         .delete()
         .eq("user_id", user.id)
         .eq("card_id", card.id);
+        console.log("Card removed from inventory");
     }
   }
 
