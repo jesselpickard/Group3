@@ -223,40 +223,45 @@ function CardInfo() {
   //Add or remove this card from the user's inventory (linked to their account)
   async function addToInventory() {
   const { data: { user } } = await supabase.auth.getUser();
-  console.log("user:", user);
-  console.log("card:", card?.id);
-
   if (!user || !card) return;
 
-  const { data, error } = await supabase
+  // Insert card into cards table first (ignore if already exists)
+  const { error: cardError } = await supabase.from("cards").upsert({
+    id: card.id,
+    name: card.name,
+    // add any other columns your cards table requires
+  }, { onConflict: "id" });
+
+  if (cardError) {
+    console.log("card upsert error:", cardError);
+    return;
+  }
+
+  // Now safe to insert into inventory
+  const { data } = await supabase
     .from("inventory")
     .select("quantity")
     .eq("user_id", user.id)
     .eq("card_id", card.id)
     .maybeSingle();
 
-  console.log("existing row:", data);
-  console.log("select error:", error);
-
   if (!data) {
-    const { error: insertError } = await supabase.from("inventory").insert({
+    await supabase.from("inventory").insert({
       user_id: user.id,
       card_id: card.id,
       quantity: 1,
     });
-    console.log("insert error:", insertError);
     setQuantity(1);
   } else {
     const newQty = data.quantity + 1;
-    const { error: updateError } = await supabase
-      .from("inventory")
-      .update({ quantity: newQty })
+    await supabase.from("inventory").update({ quantity: newQty })
       .eq("user_id", user.id)
       .eq("card_id", card.id);
-    console.log("update error:", updateError);
     setQuantity(newQty);
   }
 }
+
+
  async function removeFromInventory() {
   const {
     data: { user },
