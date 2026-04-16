@@ -22,9 +22,12 @@ function getSupabaseSafely() {
 
 // fallback placeholder images if deck has fewer than 3 cards
 const PLACEHOLDER_FAN = [
-  'https://via.placeholder.com/150x210/9370DB/white?text=?',
+  /*'https://via.placeholder.com/150x210/9370DB/white?text=?',
   'https://via.placeholder.com/150x210/7B52AB/white?text=?',
-  'https://via.placeholder.com/150x210/6A3D9A/white?text=?',
+  'https://via.placeholder.com/150x210/6A3D9A/white?text=?',*/
+   '#9370DB', 
+   '#7B52AB', 
+   '#6A3D9A',
 ];
 
 const DECKS_PER_PAGE = 20;
@@ -182,7 +185,7 @@ function DeckTile({ deck }) {
             <p className="popup-complete">Deck is complete!</p>
           ) : (
             <>
-              <p className="popup-missing-title">Missing cards:</p>
+              <p className="popup-missing-title">Contains:</p>
               {/* shows up to 5 missing cards, then "and X more" */}
               <ul className="popup-missing-list">
                 {deck.missing.slice(0, 5).map((card, i) => (
@@ -366,7 +369,7 @@ export default function DeckGrid() {
           <PaginationBar currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
           <div className="deck-grid">
             {visibleDecks.map(deck => (
-              <DeckTile key={deck.id} deck={deck} />
+              <DeckTile key={deck.id} deck={deck} href={`/CardInfo/${deck}`} />
             ))}
           </div>
           <PaginationBar currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
