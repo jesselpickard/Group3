@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { addCardToDeck, removeCardFromDeck } from "./actions";
+import { addCardToDeck, removeCardFromDeck } from "./quantityMod";
 
 export default function QuantityControl({ deckId, cardId, initialQuantity }) {
   const [quantity, setQuantity] = useState(initialQuantity);
