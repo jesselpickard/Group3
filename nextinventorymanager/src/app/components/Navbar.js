@@ -6,7 +6,7 @@ import "./Navbar.css";
 import AvatarPicker from "./AvatarPicker";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { scryfallApi } from "@/lib/scryfall";
+import { scryfallApi } from "@/lib/scryfall/Scryfall";
 
 function Navbar() {
   const pathname = usePathname();
@@ -75,7 +75,7 @@ function Navbar() {
       const card = await scryfallApi.namedExact(name);
 
       if (card?.id) {
-        router.push(`/cardInfo/${card.id}`);
+        router.push(`/CardInfo/${card.id}`);
         setSearchOpen(false);
         setSearchValue('');
         setResults([]);
