@@ -42,38 +42,6 @@ function CardInfo() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-
-      if (!user || !card) return;
-
-      const { data } = await supabase
-        .from("inventory")
-        .select("quantity")
-        .eq("user_id", user.id)
-        .eq("card_id", card.id)
-        .single();
-
-      if (data) setQuantity(data.quantity);
-    };
-
-    fetchQuantity();
-  }, [card]);
-  //User authentication check (to link inventory to specific users)
-  // useEffect(() => {
-  //   const getUser = async () => {
-  //     const {
-  //       data: { user },
-  //     } = await supabase.auth.getUser();
-
-  //     setUser(user);
-  //   };
-
-  //   getUser();
-  // }, []);
-  useEffect(() => {
-    const fetchQuantity = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
       if (!user || !card) return;
 
       const { data } = await supabase
@@ -89,6 +57,18 @@ function CardInfo() {
 
     fetchQuantity();
   }, [card]);
+  // User authentication check (to link inventory to specific users)
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      setUser(user);
+    };
+
+    getUser();
+  }, []);
 
   // =======================
   // LOADING ANIMATION
