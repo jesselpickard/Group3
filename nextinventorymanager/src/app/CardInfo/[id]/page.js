@@ -222,38 +222,38 @@ function CardInfo() {
 
   //Add or remove this card from the user's inventory (linked to their account)
   async function addToInventory() {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
+  console.log("user:", user);
+  console.log("card:", card?.id);
 
   if (!user || !card) return;
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("inventory")
     .select("quantity")
     .eq("user_id", user.id)
     .eq("card_id", card.id)
-    .single();
+    .maybeSingle();
+
+  console.log("existing row:", data);
+  console.log("select error:", error);
 
   if (!data) {
-    // create row
-    await supabase.from("inventory").insert({
+    const { error: insertError } = await supabase.from("inventory").insert({
       user_id: user.id,
       card_id: card.id,
       quantity: 1,
     });
-
+    console.log("insert error:", insertError);
     setQuantity(1);
   } else {
-    // update row
     const newQty = data.quantity + 1;
-
-    await supabase
+    const { error: updateError } = await supabase
       .from("inventory")
       .update({ quantity: newQty })
       .eq("user_id", user.id)
       .eq("card_id", card.id);
-
+    console.log("update error:", updateError);
     setQuantity(newQty);
   }
 }
@@ -269,7 +269,7 @@ function CardInfo() {
     .select("quantity")
     .eq("user_id", user.id)
     .eq("card_id", card.id)
-    .single();
+    .maybeSingle();
 
   if (!data) return;
 
