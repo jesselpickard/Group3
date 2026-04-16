@@ -3,6 +3,7 @@ import { useState, useRef } from 'react';
 import './DeckGrid.css';
 import NewDeckButton from "./NewDeckButton";
 import { useEffect } from 'react';
+import Link from "next/link";
 
 //New-Deck-Button is being replaced by a component, its relating space in deckgrid.css will become obsolete
 
