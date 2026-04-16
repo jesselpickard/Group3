@@ -155,10 +155,14 @@ function DeckTile({ deck }) {
         {/* fanned card visuals */}
         <div className="deck-fan">
           <div className="fan-card fan-left">
-            <img src={deck.fanCards[1]} alt={{ backgroundColor: PLACEHOLDER_FAN[0] }} />
+            {deck.fanCards[1].startsWith('#')
+            ? <div style={{ backgroundColor: deck.PLACEHOLDER_FAN[1], width: '100%', height: '100%' }} />
+            : <img src={deck.fanCards[1]} alt="deck card" />}          
           </div>
           <div className="fan-card fan-middle">
-            <img src={deck.fanCards[0]} alt={{ backgroundColor: PLACEHOLDER_FAN[1] }} />
+            {deck.fanCards[0].startsWith('#')
+              ? <div style={{ backgroundColor: deck.PLACEHOLDER_FAN[1], width: '100%', height: '100%' }} />
+              : <img src={deck.fanCards[0]} alt="deck card" />}          
           </div>
           <div className="fan-card fan-right">
             <img src={deck.fanCards[2]} alt={{ backgroundColor: PLACEHOLDER_FAN[2] }} />
