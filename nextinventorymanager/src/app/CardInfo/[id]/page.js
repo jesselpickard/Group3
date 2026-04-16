@@ -228,31 +228,15 @@ function CardInfo() {
 
     if (!user || !card) return;
 
-    const { data } = await supabase
-      .from("inventory")
-      .select("quantity")
-      .eq("user_id", user.id)
-      .eq("card_id", card.id)
-      .single();
+    const newQty = quantity + 1;
 
-    if (!data) {
-      await supabase.from("inventory").upsert({
-        user_id: user.id,
-        card_id: card.id,
-        quantity: 1,
-      });
+    const { error } = await supabase.from("inventory").upsert({
+      user_id: user.id,
+      card_id: card.id,
+      quantity: newQty,
+    });
 
-      setQuantity(1);
-    } else {
-      // update row
-      const newQty = data.quantity + 1;
-
-      await supabase
-        .from("inventory")
-        .update({ quantity: newQty })
-        .eq("user_id", user.id)
-        .eq("card_id", card.id);
-
+    if (!error) {
       setQuantity(newQty);
     }
   }
@@ -263,24 +247,17 @@ function CardInfo() {
 
     if (!user || !card) return;
 
-    const { data } = await supabase
-      .from("inventory")
-      .select("quantity")
-      .eq("user_id", user.id)
-      .eq("card_id", card.id)
-      .single();
+    const newQty = Math.max(0, quantity - 1);
 
-    if (!data) return;
+    const { error } = await supabase.from("inventory").upsert({
+      user_id: user.id,
+      card_id: card.id,
+      quantity: newQty,
+    });
 
-    const newQty = Math.max(0, data.quantity - 1);
-
-    await supabase
-      .from("inventory")
-      .update({ quantity: newQty })
-      .eq("user_id", user.id)
-      .eq("card_id", card.id);
-
-    setQuantity(newQty);
+    if (!error) {
+      setQuantity(newQty);
+    }
   }
 
   // =======================
