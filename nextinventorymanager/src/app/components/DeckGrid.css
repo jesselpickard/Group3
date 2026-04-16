@@ -141,23 +141,9 @@
   color: #71179C;
 }
 
-.deck-count {
+.deck-format {
   font-size: 0.85rem;
   color: #888;
-}
-
-/* complete/incomplete status badge */
-.deck-status {
-  font-size: 0.8rem;
-  font-weight: bold;
-}
-
-.deck-status.complete {
-  color: #4CAF50;
-}
-
-.deck-status.incomplete {
-  color: #FF8C00;
 }
 
 /* ---- HOVER POPUP ---- */
@@ -213,20 +199,14 @@
   margin: 0.5rem 0;
 }
 
-.popup-complete {
-  color: #4CAF50;
-  font-weight: bold;
-  font-size: 0.9rem;
-}
-
-.popup-missing-title {
+.popup-contains-title {
   font-weight: bold;
   color: #71179C;
   font-size: 0.9rem;
   margin-bottom: 0.25rem;
 }
 
-.popup-missing-list {
+.popup-contains-list {
   padding-left: 1rem;
   margin: 0;
   font-size: 0.85rem;
@@ -243,7 +223,7 @@
   margin-top: 0.25rem;
 }
 
-.popup-missing-list li {
+.popup-contains-list li {
   margin-bottom: 0.2rem;
 }
 
@@ -344,7 +324,7 @@
   .deckgrid-wrapper { background-color: #1a1a1a; }
   .deck-name { color: #c084e8; }
   .deck-popup { background-color: #2d1040; color: white; }
-  .popup-missing-list { color: #e0c0f0; }
+  .popup-contains-list { color: #e0c0f0; }
   .popup-divider { border-top-color: #5a1080; }
   .page-indicator { color: #c084e8; }
   .page-btn { background-color: #1a1a1a; color: #c084e8; border-color: #c084e8; }

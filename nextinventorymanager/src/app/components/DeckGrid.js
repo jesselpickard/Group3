@@ -128,7 +128,6 @@ function DeckTile({ deck }) {
   const [popupLeft, setPopupLeft] = useState(false);
   const [popupAbove, setPopupAbove] = useState(false);
   const tileRef = useRef(null);
-  const isComplete = deck.cardCount === deck.totalCards;
   //const fanColors = ['#9370DB', '#7B52AB', '#6A3D9A'];
 
   const handleMouseEnter = () => {
@@ -165,32 +164,24 @@ function DeckTile({ deck }) {
         {/* deck info below the fan */}
         <div className="deck-info">
           <span className="deck-name">{deck.name}</span>
-          <span className="deck-count">{deck.cardCount}/{deck.totalCards} cards</span>
-          <span className={`deck-status ${isComplete ? 'complete' : 'incomplete'}`}>
-            {isComplete ? '✅ Complete' : '⚠️ Incomplete'}
-          </span>
+          {deck.format && (
+            <span className="deck-format">{deck.format}</span>
+          )}
         </div>
 
         {/* hover popup - flips left if near right edge */}
         {hovered && (
           <div className={`deck-popup ${popupLeft ? 'popup-left' : ''} ${popupAbove ? 'popup-above' : ''}`}>          <strong>{deck.name}</strong>
             <hr className="popup-divider" />
-            {isComplete ? (
-              <p className="popup-complete">Deck is complete!</p>
-            ) : (
-              <>
-                <p className="popup-missing-title">Contains:</p>
-                {/* shows up to 5 missing cards, then "and X more" */}
-                <ul className="popup-missing-list">
-                  {deck.missing.slice(0, 5).map((card, i) => (
+                <p className="popup-contains-title">Contains:</p>
+                <ul className="popup-contains-list">
+                  {deck.contains.slice(0, 5).map((card, i) => (
                     <li key={i}>{card}</li>
                   ))}
-                  {deck.missing.length > 5 && (
-                    <li className="popup-more">...and {deck.missing.length - 5} more</li>
+                  {deck.contains.length > 5 && (
+                    <li className="popup-more">...and {deck.contains.length - 5} more</li>
                   )}
                 </ul>
-              </>
-            )}
           </div>
         )}
       </div>
@@ -241,7 +232,7 @@ export default function DeckGrid() {
 
         if (deckError) throw deckError;
 
-        // for each deck, fetch card counts and missing cards
+        // for each deck, fetch card counts and contained cards
         const decksWithCounts = await Promise.all(
           deckData.map(async (deck) => {
             // count total cards in this deck
@@ -252,9 +243,8 @@ export default function DeckGrid() {
 
             if (cardsError) throw cardsError;
 
-            // sum up quantities
+            // sum up quantities. if we need it later
             const cardCount = deckCards.reduce((sum, row) => sum + (row.quantity || 0), 0);
-            const totalCards = 60;
 
             // fetch user's inventory
             const { data: inventoryData } = await supabase
@@ -268,8 +258,8 @@ export default function DeckGrid() {
               owned[row.card_id] = row.quantity;
             });
 
-            // find missing cards
-            const missing = [];
+            // find contained cards
+            const contains = [];
             for (const deckCard of deckCards) {
               const ownedQty = owned[deckCard.card_id] || 0;
               const needed = deckCard.quantity - ownedQty;
@@ -279,7 +269,7 @@ export default function DeckGrid() {
                   .select('name')
                   .eq('card_id', deckCard.card_id)
                   .single();
-                if (cardData) missing.push(`${cardData.name} x${needed}`);
+                if (cardData) contains.push(`${cardData.name} x${needed}`);
               }
             }
 
@@ -314,9 +304,9 @@ export default function DeckGrid() {
               id: deck.deck_id,
               name: deck.name,
               cardCount,
-              totalCards,
-              missing,
+              contains,
               fanCards,
+              format: deck.format || null,
             };
           })
         );
