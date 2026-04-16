@@ -1,43 +1,40 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { addCardToDeck, removeCardFromDeck } from "./quantityMod";
 
-export default function QuantityControl({ deckId, cardId, quantityIn }) {
-  const [quantity, setQuantity] = useState(quantityIn);
+export default function QuantityControl({ deckId, cardId, quantity }) {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const handleAdd = () => {
-    setQuantity(q => q + 1);//assumes success on action
-
     startTransition(async () => {
-      try {
-        await addCardToDeck(deckId, cardId);
-      } catch (err) {//catches failures to correct quantity
-        setQuantity(q => q - 1);
-      }
+      await addCardToDeck(deckId, cardId);
+      router.refresh();
     });
   };
 
   const handleRemove = () => {
-    setQuantity(q => q - 1);//assumes success on action
-
     startTransition(async () => {
-      try {
-        await removeCardFromDeck(deckId, cardId);
-      } catch (err) {
-        setQuantity(q => q + 1);//catches failures to correct quantity
-      }
+      await removeCardFromDeck(deckId, cardId);
+      router.refresh();
     });
   };
 
-  if (quantity <= 0) return null;
-
   return (
-    <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-      <button onClick={handleRemove} disabled={isPending}>−</button>
-      <span>{quantity}</span>
-      <button onClick={handleAdd} disabled={isPending}>+</button>
+    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+      <button onClick={handleRemove} disabled={isPending}>
+        −
+      </button>
+
+      <span style={{ minWidth: "24px", textAlign: "center" }}>
+        {quantity}
+      </span>
+
+      <button onClick={handleAdd} disabled={isPending}>
+        +
+      </button>
     </div>
   );
 }
