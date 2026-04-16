@@ -37,26 +37,26 @@ function CardInfo() {
     scryfallApi.getCardById(id).then(setCard);
   }, [id]);
   // Fetch the quantity of this card in the user's inventory
-  useEffect(() => {
-    const fetchQuantity = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user || !card) return;
+ useEffect(() => {
+  const fetchQuantity = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-      const { data } = await supabase
-        .from("inventory")
-        .select("quantity")
-        .eq("user_id", user.id)
-        .eq("card_id", card.id)
-        .single();
+    if (!user || !card) return;
 
-      if (data) setQuantity(data.quantity);
-      else setQuantity(0);
-    };
+    const { data } = await supabase
+      .from("inventory")
+      .select("quantity")
+      .eq("user_id", user.id)
+      .eq("card_id", card.id)
+      .single();
 
-    fetchQuantity();
-  }, [card]);
+    if (data) setQuantity(data.quantity);
+  };
+
+  fetchQuantity();
+}, [card]);
   // User authentication check (to link inventory to specific users)
   useEffect(() => {
     const getUser = async () => {
