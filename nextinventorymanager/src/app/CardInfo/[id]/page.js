@@ -9,8 +9,6 @@ import { useEffect, useState, Suspense } from "react";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 
-
-
 // Wrapper component that enables loading fallback with Suspense
 export default function CardInfoPage() {
   return (
@@ -25,14 +23,20 @@ function CardInfo() {
 
   const [card, setCard] = useState(null);
   const [quantity, setQuantity] = useState(0);
+const [user, setUser] = useState(null);
+ const supabase = createClient();
 
-  const supabase = createClient();
+useEffect(() => {
+  if (!supabase) return;
+
+  // safe supabase logic here
+}, [supabase]);
 
   useEffect(() => {
     if (!id) return;
     scryfallApi.getCardById(id).then(setCard);
   }, [id]);
-
+// Fetch the quantity of this card in the user's inventory
   useEffect(() => {
     const fetchQuantity = async () => {
       const {
@@ -53,6 +57,18 @@ function CardInfo() {
 
     fetchQuantity();
   }, [card]);
+  //User authentication check (to link inventory to specific users)
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      setUser(user);
+    };
+
+    getUser();
+  }, []);
 
   // =======================
   // LOADING ANIMATION
@@ -204,7 +220,7 @@ function CardInfo() {
   // Use correct face if it's a double-faced card
   const currCard = card.card_faces?.[face] || card;
 
-
+  //Add or remove this card from the user's inventory (linked to their account)
   async function addToInventory() {
     const {
       data: { user },
@@ -368,9 +384,12 @@ function CardInfo() {
               Pioneer: {formatLegality(card.legalities.pioneer)}
             </div>
           </div>
-          <hr />
+          
           {/*ADDING CARD TO INVENTORY */}
+          {user && (
+            
           <div className="addInventory">
+          <hr />
             <div className="cardAmount">Amount Owned: {quantity}</div>
             <div className="inventoryInput">
               <div className="addButtons">
@@ -385,6 +404,7 @@ function CardInfo() {
               </div>
             </div>
           </div>
+          )}
         </div>
       </div>
 
