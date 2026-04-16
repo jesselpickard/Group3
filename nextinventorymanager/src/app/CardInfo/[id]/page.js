@@ -58,17 +58,37 @@ function CardInfo() {
     fetchQuantity();
   }, [card]);
   //User authentication check (to link inventory to specific users)
+  // useEffect(() => {
+  //   const getUser = async () => {
+  //     const {
+  //       data: { user },
+  //     } = await supabase.auth.getUser();
+
+  //     setUser(user);
+  //   };
+
+  //   getUser();
+  // }, []);
   useEffect(() => {
-    const getUser = async () => {
+    const fetchQuantity = async () => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
+      if (!user || !card) return;
 
-      setUser(user);
+      const { data } = await supabase
+        .from("inventory")
+        .select("quantity")
+        .eq("user_id", user.id)
+        .eq("card_id", card.id)
+        .single();
+
+      if (data) setQuantity(data.quantity);
+      else setQuantity(0);
     };
 
-    getUser();
-  }, []);
+    fetchQuantity();
+  }, [card]);
 
   // =======================
   // LOADING ANIMATION
@@ -228,15 +248,31 @@ function CardInfo() {
 
     if (!user || !card) return;
 
-    const newQty = quantity + 1;
+    const { data } = await supabase
+      .from("inventory")
+      .select("quantity")
+      .eq("user_id", user.id)
+      .eq("card_id", card.id)
+      .maybeSingle();
 
-    const { error } = await supabase.from("inventory").upsert({
-      user_id: user.id,
-      card_id: card.id,
-      quantity: newQty,
-    });
+    if (!data) {
+      await supabase.from("inventory").upsert({
+        user_id: user.id,
+        card_id: card.id,
+        quantity: 1,
+      });
 
-    if (!error) {
+      setQuantity(1);
+    } else {
+      // update row
+      const newQty = data.quantity + 1;
+
+      await supabase
+        .from("inventory")
+        .update({ quantity: newQty })
+        .eq("user_id", user.id)
+        .eq("card_id", card.id);
+
       setQuantity(newQty);
     }
   }
@@ -247,17 +283,24 @@ function CardInfo() {
 
     if (!user || !card) return;
 
-    const newQty = Math.max(0, quantity - 1);
+    const { data } = await supabase
+      .from("inventory")
+      .select("quantity")
+      .eq("user_id", user.id)
+      .eq("card_id", card.id)
+      .maybeSingle();
 
-    const { error } = await supabase.from("inventory").upsert({
-      user_id: user.id,
-      card_id: card.id,
-      quantity: newQty,
-    });
+    if (!data) return;
 
-    if (!error) {
-      setQuantity(newQty);
-    }
+    const newQty = Math.max(0, data.quantity - 1);
+
+    await supabase
+      .from("inventory")
+      .update({ quantity: newQty })
+      .eq("user_id", user.id)
+      .eq("card_id", card.id);
+
+    setQuantity(newQty);
   }
 
   // =======================
