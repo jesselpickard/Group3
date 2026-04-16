@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import QuickAdd from "./quickAdd.js";
 import { getDeckCards } from "./deckSummary.js"; 
 import SummaryDisplay  from "./deckSummary.js";
+import QuantityControl from "./quantityButtons.js";
 
 /**
  *  This page is meant to lay out the contents of a deck to its viewer. It will allow
@@ -50,9 +51,24 @@ export default async function DeckPage({ params }){
 
       {deckId ? (
         <ul>
-          {cards.map((card, i) => (
-            <li key={card.cards?.card_id ?? i}>
-              Card: {card.cards ? card.cards.name : 'Missing card'} — Qty: {card.quantity}
+          {cards.map(card => (
+            <li
+              key={card.cards.card_id}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: "12px",
+              }}
+            >
+              <span>
+                {card.cards.name}
+              </span>
+              <QuantityControl
+                deckId={deckId}
+                cardId={card.cards.card_id}
+                quantity={card.quantity}
+              />
             </li>
           ))}
         </ul>
