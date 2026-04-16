@@ -84,6 +84,8 @@ function manaCurve(flat) {//gathers the mana curve of the deck
   const curve = {};
 
   flat.forEach(card => {
+    if (card.type?.toLowerCase().includes("land")) return;//prevents lands from contributing to the curve
+
     const { cmc, quantity } = card;
     const key = cmc == null ? "0" : cmc >= 7 ? "7+" : cmc;//caps it at 7 mana before doing +
     curve[key] = (curve[key] || 0) + quantity;
