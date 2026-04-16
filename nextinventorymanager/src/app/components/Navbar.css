@@ -64,6 +64,7 @@
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   z-index: 999;
   width: 220px;
+  flex-direction: column;
 }
 
 /* input inside the popup */
@@ -157,6 +158,7 @@
   width: 100%;
   align-self: flex-end; /* pushes search bar to the bottom of the navbar */
   margin-top: 0.75rem;
+  position: relative;
 }
 
 /* magnifying glass icon inside the search box */
@@ -261,6 +263,41 @@
   background-color: #f0e0f7;
 }
 
+/* ---- Search Autocomplete Dropdown ---- */
+
+.search-results {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+  z-index: 1000;
+
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+/* each item */
+.search-result-item {
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* hover state */
+.search-result-item:hover {
+  background-color: #f3e6fa;
+}
+
+/* optional: subtle divider between items */
+.search-result-item:not(:last-child) {
+  border-bottom: 1px solid #eee;
+}
+
 /* ---- DARK MODE ADJUSTMENTS ---- */
 /* dark mode - softer navbar */
 @media (prefers-color-scheme: dark) {
@@ -303,5 +340,18 @@
   .login-btn {
     border-color: #9b6bb5;
     color: #9b6bb5;
+  }
+
+  .search-results {
+    background-color: #2d1040;
+    border: 1px solid #5a1080;
+  }
+
+  .search-result-item {
+    color: #e0c0f0;
+  }
+
+  .search-result-item:hover {
+    background-color: #5a1080;
   }
 }

@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import "./Navbar.css";
 import AvatarPicker from "./AvatarPicker";
 import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+import { scryfallApi } from "@/lib/scryfall";
 
 function Navbar() {
   const pathname = usePathname();
@@ -16,6 +18,8 @@ function Navbar() {
   const [selectedAvatar, setSelectedAvatar] = useState("🎮");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const menuRef = useRef(null);
   const searchRef = useRef(null);
@@ -64,6 +68,23 @@ function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const router = useRouter();
+
+  async function handleSelectCard(name) {
+    try {
+      const card = await scryfallApi.namedExact(name);
+
+      if (card?.id) {
+        router.push(`/cardInfo/${card.id}`);
+        setSearchOpen(false);
+        setSearchValue('');
+        setResults([]);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   async function loginWithGoogle(e) {
     e.preventDefault();
 
@@ -99,6 +120,28 @@ function Navbar() {
       setSelectedAvatar(user.user_metadata.avatar);
     }
   }, [user]);
+
+  useEffect(() => {//handles the search population
+    if (!searchValue || searchValue.length < 2) {
+      setResults([]);
+      return;
+    }
+
+    const timeout = setTimeout(async () => {
+      setLoading(true);
+      try {
+        const res = await scryfallApi.autocomplete(searchValue);
+        setResults((res.data || []).slice(0, 5));//sets the results to limit 5
+      } catch (err) {
+        console.error(err);
+        setResults([]);
+      } finally {
+        setLoading(false);
+      }
+    }, 250);
+
+    return () => clearTimeout(timeout);
+  }, [searchValue]);
 
   // Saves the picked avatar to Supabase so it survives refresh.
   async function handleAvatarSelect(emoji) {
@@ -137,6 +180,19 @@ function Navbar() {
                   >
                     ✕
                   </button>
+                  {results.length > 0 && (
+                    <div className="search-results">
+                      {results.map((name) => (
+                        <div
+                          key={name}
+                          className="search-result-item"
+                          onClick={() => handleSelectCard(name)}
+                        >
+                          {name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
           </div>
         </div>
 
@@ -165,6 +221,19 @@ function Navbar() {
                   >
                     ✕
                   </button>
+                  {results.length > 0 && (
+                    <div className="search-results">
+                      {results.map((name) => (
+                        <div
+                          key={name}
+                          className="search-result-item"
+                          onClick={() => handleSelectCard(name)}
+                        >
+                          {name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
               </div>
             )}
           </div>
