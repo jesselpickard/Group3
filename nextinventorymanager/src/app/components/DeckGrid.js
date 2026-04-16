@@ -2,6 +2,7 @@
 import { useState, useRef } from 'react';
 import './DeckGrid.css';
 import NewDeckButton from "./NewDeckButton";
+import { useEffect } from 'react';
 
 //New-Deck-Button is being replaced by a component, its relating space in deckgrid.css will become obsolete
 
@@ -9,53 +10,24 @@ import NewDeckButton from "./NewDeckButton";
 const SF = (name) =>
   `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}&format=image&version=normal`;
 
-const placeholderDecks = [
-  {
-    id: 1, name: "Red Aggro", cardCount: 58, totalCards: 60,
-    missing: ["Lightning Bolt x2"],
-    fanCards: [SF("Goblin Guide"), SF("Zurgo Bellstriker"), SF("Eidolon of the Great Revel")],        // Red Aggro - Lightning Bolt center
-  },
-  {
-    id: 2, name: "Blue Control", cardCount: 60, totalCards: 60,
-    missing: [],
-    fanCards: [SF("Counterspell"), SF("Teferi, Hero of Dominaria"), SF("Snapcaster Mage")],         // Blue Control - Teferi center
-  },
-  {
-    id: 3, name: "Green Ramp", cardCount: 45, totalCards: 60,
-    missing: ["Forest x8", "Llanowar Elves x4", "Cultivate x3"],
-    fanCards: [SF("Llanowar Elves"), SF("Primeval Titan"), SF("Cultivate")],                        // Green Ramp - Primeval Titan center
-  },
-  {
-    id: 4, name: "Black Midrange", cardCount: 60, totalCards: 60,
-    missing: [],
-    fanCards: [SF("Thoughtseize"), SF("Sheoldred, the Apocalypse"), SF("Liliana of the Veil")],     // Black Midrange - Sheoldred center
-  },
-  {
-    id: 5, name: "Angel Ascent", cardCount: 55, totalCards: 60,
-    missing: ["Plains x3", "Serra Angel x2"],
-    fanCards: [SF("Serra Angel"), SF("Avacyn, Angel of Hope"), SF("Lyra Dawnbringer")],             // Angel Ascent - Avacyn center
-  },
-  {
-    id: 6, name: "Izzet Phoenix", cardCount: 60, totalCards: 60,
-    missing: [],
-    fanCards: [SF("Faithless Looting"), SF("Arclight Phoenix"), SF("Thought Scour")],               // Izzet Phoenix - Phoenix center
-  },
-  {
-    id: 7, name: "Golgari Midrange", cardCount: 38, totalCards: 60,
-    missing: ["Thoughtseize x4", "Grim Flayer x4", "Liliana x2", "Overgrown Tomb x4"],
-    fanCards: [SF("Grim Flayer"), SF("Liliana of the Veil"), SF("Assassin's Trophy")],              // Golgari Midrange - Liliana center
-  },
-  {
-    id: 8, name: "Azorius Spirits", cardCount: 60, totalCards: 60,
-    missing: [],
-    fanCards: [SF("Rattlechains"), SF("Supreme Phantom"), SF("Mausoleum Wanderer")],                // Azorius Spirits - Supreme Phantom center
-  },
-  {
-    id: 9, name: "Temur Cascade", cardCount: 23, totalCards: 60,
-    missing: ["Shardless Agent x4", "Bloodbraid Elf x4", "Violent Outburst x4", "Crashing Footfalls x4", "Force of Negation x3", "Rhinos Token x4", "Ketria Triome x3", "Spirebluff Canal x2", "Steam Vents x2"],
-    fanCards: [SF("Violent Outburst"), SF("Bloodbraid Elf"), SF("Force of Negation")],             // Temur Cascade - Bloodbraid center
-  },
+// creates supabase client safely, same pattern as Navbar.js
+function getSupabaseSafely() {
+  try {
+    const { createClient } = require('@/lib/supabase/client');
+    return createClient();
+  } catch {
+    return null;
+  }
+}
+
+// fallback placeholder images if deck has fewer than 3 cards
+const PLACEHOLDER_FAN = [
+  'https://via.placeholder.com/150x210/9370DB/white?text=?',
+  'https://via.placeholder.com/150x210/7B52AB/white?text=?',
+  'https://via.placeholder.com/150x210/6A3D9A/white?text=?',
 ];
+
+const DECKS_PER_PAGE = 20;
 
 // pagination bar - reused from CardGrid logic
 function PaginationBar({ currentPage, totalPages, onPageChange }) {
@@ -228,47 +200,178 @@ function DeckTile({ deck }) {
   )
 }
 
-// main deck grid component
-export default function DeckGrid({ totalPages = 1, decks = null }) {
+export default function DeckGrid() {
   const [currentPage, setCurrentPage] = useState(1);
+  // holds fetched decks from supabase
+  const [decks, setDecks] = useState([]);
+  // tracks loading state
+  const [loading, setLoading] = useState(true);
+  // tracks fetch errors
+  const [error, setError] = useState(null);
 
-  // uses placeholder decks if no real data is passed in
-  const displayDecks = decks || placeholderDecks;
+  const totalPages = Math.ceil(decks.length / DECKS_PER_PAGE) || 1;
+  const startIndex = (currentPage - 1) * DECKS_PER_PAGE;
+  const visibleDecks = decks.slice(startIndex, startIndex + DECKS_PER_PAGE);
+
+  useEffect(() => {
+    async function fetchDecks() {
+      setLoading(true);
+      setError(null);
+
+      const supabase = getSupabaseSafely();
+      if (!supabase) {
+        setDecks([]);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // get current logged in user
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          setDecks([]);
+          setLoading(false);
+          return;
+        }
+
+        // fetch all decks for this user
+        const { data: deckData, error: deckError } = await supabase
+          .from('decks')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false });
+
+        if (deckError) throw deckError;
+
+        // for each deck, fetch card counts and missing cards
+        const decksWithCounts = await Promise.all(
+          deckData.map(async (deck) => {
+            // count total cards in this deck
+            const { data: deckCards, error: cardsError } = await supabase
+              .from('deck_cards')
+              .select('card_id, quantity')
+              .eq('deck_id', deck.deck_id);
+
+            if (cardsError) throw cardsError;
+
+            // sum up quantities
+            const cardCount = deckCards.reduce((sum, row) => sum + (row.quantity || 0), 0);
+            const totalCards = 60;
+
+            // fetch user's inventory
+            const { data: inventoryData } = await supabase
+              .from('inventory')
+              .select('card_id, quantity')
+              .eq('user_id', user.id);
+
+            // build owned cards map
+            const owned = {};
+            (inventoryData || []).forEach(row => {
+              owned[row.card_id] = row.quantity;
+            });
+
+            // find missing cards
+            const missing = [];
+            for (const deckCard of deckCards) {
+              const ownedQty = owned[deckCard.card_id] || 0;
+              const needed = deckCard.quantity - ownedQty;
+              if (needed > 0) {
+                const { data: cardData } = await supabase
+                  .from('cards')
+                  .select('name')
+                  .eq('card_id', deckCard.card_id)
+                  .single();
+                if (cardData) missing.push(`${cardData.name} x${needed}`);
+              }
+            }
+
+            // get fan card images from first 3 cards
+            const fanCardIds = deckCards.slice(0, 3).map(c => c.card_id);
+            const fanCards = await Promise.all(
+              fanCardIds.map(async (cardId) => {
+                const { data: cardData } = await supabase
+                  .from('cards')
+                  .select('name')
+                  .eq('card_id', cardId)
+                  .single();
+                return cardData ? SF(cardData.name) : PLACEHOLDER_FAN[0];
+              })
+            );
+
+            // pad to 3 if fewer cards
+            while (fanCards.length < 3) fanCards.push(PLACEHOLDER_FAN[fanCards.length]);
+
+            return {
+              id: deck.deck_id,
+              name: deck.name,
+              cardCount,
+              totalCards,
+              missing,
+              fanCards,
+            };
+          })
+        );
+
+        setDecks(decksWithCounts);
+      } catch (err) {
+        console.error('Error fetching decks:', err);
+        setError('Failed to load decks. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchDecks();
+  }, []);
+
+  // loading state
+  if (loading) {
+    return (
+      <div className="deckgrid-wrapper">
+        <div className="deck-empty">
+          <p>Loading your decks...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // error state
+  if (error) {
+    return (
+      <div className="deckgrid-wrapper">
+        <div className="deck-empty">
+          <p>{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="deckgrid-wrapper">
       {/* top bar with page indicator and new deck button */}
       <div className="deckgrid-topbar">
-        {/* only show page indicator if there are multiple pages */}
         {totalPages > 1 && (
           <div className="page-indicator">Page {currentPage} of {totalPages}</div>
         )}
-        <NewDeckButton/>
+        <NewDeckButton />
       </div>
 
-      {/* empty state when no decks exist */}
-      {displayDecks.length === 0 ? (
+      {/* empty state when user has no decks or isn't logged in */}
+      {decks.length === 0 ? (
         <div className="deck-empty">
           <p>You don't have any decks yet!</p>
-          <button className="new-deck-btn">＋ Create your first deck</button>
         </div>
       ) : (
         <>
-          {/* pagination at top */}
           <PaginationBar currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
-
-          {/* responsive deck grid */}
           <div className="deck-grid">
-            {displayDecks.map(deck => (
+            {visibleDecks.map(deck => (
               <DeckTile key={deck.id} deck={deck} />
             ))}
           </div>
-
-          {/* pagination at bottom */}
           <PaginationBar currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
         </>
       )}
     </div>
-    
   )
 }
