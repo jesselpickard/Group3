@@ -134,11 +134,6 @@ function DeckTile({ deck }) {
   //const fanColors = ['#9370DB', '#7B52AB', '#6A3D9A'];
 
   const handleMouseEnter = () => {
-    // checks if tile is in the right half of the screen
-    /*if (tileRef.current) {
-      const rect = tileRef.current.getBoundingClientRect();
-      setPopupLeft(rect.right > window.innerWidth / 2);
-    }*/
     if (tileRef.current) {
       const rect = tileRef.current.getBoundingClientRect();
       setPopupLeft(rect.right > window.innerWidth / 2);
@@ -149,57 +144,57 @@ function DeckTile({ deck }) {
   };
 
   return (
-    <div
-      ref={tileRef}
-      className={`deck-tile ${hovered ? 'hovered' : ''}`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={() => setHovered(false)}
-    >
-      {/* fanned card visuals */}
-      <div className="deck-fan">
-        <div className="fan-card fan-left">
-          <img src={deck.fanCards[0]} alt=/*{{ backgroundColor: fanColors[0] }}*/'' />
+    <Link href={`/decks/${deck.id}`} classname="deck-tile-link">
+      <div
+        ref={tileRef}
+        className={`deck-tile ${hovered ? 'hovered' : ''}`}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={() => setHovered(false)}
+      >
+        {/* fanned card visuals */}
+        <div className="deck-fan">
+          <div className="fan-card fan-left" style={{ backgroundColor: PLACEHOLDER_FAN[0] }} />
+          <div className="fan-card fan-middle">
+            <img src={deck.fanCards[1]} alt=/*{{ backgroundColor: fanColors[1] }}*/'' />
+          </div>
+          <div className="fan-card fan-right">
+            <img src={deck.fanCards[2]} alt=/*{{ backgroundColor: fanColors[2] }}*/'' />
+          </div>
         </div>
-        <div className="fan-card fan-middle">
-          <img src={deck.fanCards[1]} alt=/*{{ backgroundColor: fanColors[1] }}*/'' />
-        </div>
-        <div className="fan-card fan-right">
-          <img src={deck.fanCards[2]} alt=/*{{ backgroundColor: fanColors[2] }}*/'' />
-        </div>
-      </div>
 
-      {/* deck info below the fan */}
-      <div className="deck-info">
-        <span className="deck-name">{deck.name}</span>
-        <span className="deck-count">{deck.cardCount}/{deck.totalCards} cards</span>
-        <span className={`deck-status ${isComplete ? 'complete' : 'incomplete'}`}>
-          {isComplete ? '✅ Complete' : '⚠️ Incomplete'}
-        </span>
-      </div>
-
-      {/* hover popup - flips left if near right edge */}
-      {hovered && (
-        <div className={`deck-popup ${popupLeft ? 'popup-left' : ''} ${popupAbove ? 'popup-above' : ''}`}>          <strong>{deck.name}</strong>
-          <hr className="popup-divider" />
-          {isComplete ? (
-            <p className="popup-complete">Deck is complete!</p>
-          ) : (
-            <>
-              <p className="popup-missing-title">Contains:</p>
-              {/* shows up to 5 missing cards, then "and X more" */}
-              <ul className="popup-missing-list">
-                {deck.missing.slice(0, 5).map((card, i) => (
-                  <li key={i}>{card}</li>
-                ))}
-                {deck.missing.length > 5 && (
-                  <li className="popup-more">...and {deck.missing.length - 5} more</li>
-                )}
-              </ul>
-            </>
-          )}
+        {/* deck info below the fan */}
+        <div className="deck-info">
+          <span className="deck-name">{deck.name}</span>
+          <span className="deck-count">{deck.cardCount}/{deck.totalCards} cards</span>
+          <span className={`deck-status ${isComplete ? 'complete' : 'incomplete'}`}>
+            {isComplete ? '✅ Complete' : '⚠️ Incomplete'}
+          </span>
         </div>
-      )}
-    </div>
+
+        {/* hover popup - flips left if near right edge */}
+        {hovered && (
+          <div className={`deck-popup ${popupLeft ? 'popup-left' : ''} ${popupAbove ? 'popup-above' : ''}`}>          <strong>{deck.name}</strong>
+            <hr className="popup-divider" />
+            {isComplete ? (
+              <p className="popup-complete">Deck is complete!</p>
+            ) : (
+              <>
+                <p className="popup-missing-title">Contains:</p>
+                {/* shows up to 5 missing cards, then "and X more" */}
+                <ul className="popup-missing-list">
+                  {deck.missing.slice(0, 5).map((card, i) => (
+                    <li key={i}>{card}</li>
+                  ))}
+                  {deck.missing.length > 5 && (
+                    <li className="popup-more">...and {deck.missing.length - 5} more</li>
+                  )}
+                </ul>
+              </>
+            )}
+          </div>
+        )}
+      </div>
+    </Link>
   )
 }
 
