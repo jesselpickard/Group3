@@ -23,12 +23,9 @@ function getSupabaseSafely() {
 
 // fallback placeholder images if deck has fewer than 3 cards
 const PLACEHOLDER_FAN = [
-  /*'https://via.placeholder.com/150x210/9370DB/white?text=?',
-  'https://via.placeholder.com/150x210/7B52AB/white?text=?',
-  'https://via.placeholder.com/150x210/6A3D9A/white?text=?',*/
-   '#9370DB', 
-   '#7B52AB', 
-   '#6A3D9A',
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='210'%3E%3Crect width='150' height='210' fill='%239370DB'/%3E%3C/svg%3E",
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='210'%3E%3Crect width='150' height='210' fill='%237B52AB'/%3E%3C/svg%3E",
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='210'%3E%3Crect width='150' height='210' fill='%236A3D9A'/%3E%3C/svg%3E",
 ];
 
 const DECKS_PER_PAGE = 20;
@@ -155,17 +152,13 @@ function DeckTile({ deck }) {
         {/* fanned card visuals */}
         <div className="deck-fan">
           <div className="fan-card fan-left">
-            {deck.fanCards[1].startsWith('#')
-            ? <div style={{ backgroundColor: deck.PLACEHOLDER_FAN[1], width: '100%', height: '100%' }} />
-            : <img src={deck.fanCards[1]} alt="deck card" />}          
+            <img src={deck.fanCards[1]} alt="" onError={e => { e.target.src = PLACEHOLDER_FAN[0]; }} />
           </div>
           <div className="fan-card fan-middle">
-            {deck.fanCards[0].startsWith('#')
-              ? <div style={{ backgroundColor: deck.PLACEHOLDER_FAN[1], width: '100%', height: '100%' }} />
-              : <img src={deck.fanCards[0]} alt="deck card" />}          
+            <img src={deck.fanCards[0]} alt="" onError={e => { e.target.src = PLACEHOLDER_FAN[1]; }}/>
           </div>
           <div className="fan-card fan-right">
-            <img src={deck.fanCards[2]} alt={{ backgroundColor: PLACEHOLDER_FAN[2] }} />
+            <img src={deck.fanCards[2]} alt="" onError={e => { e.target.src = PLACEHOLDER_FAN[2]; }} />
           </div>
         </div>
 
