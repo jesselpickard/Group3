@@ -225,20 +225,31 @@ function CardInfo() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user || !card) return;
 
-  const { error: cardError } = await supabase.from("cards").upsert({
-    card_id: card.id,
-    name: card.name,
-    colors: card.colors ?? [],
-    cost: card.mana_cost ?? null,
-    type: card.type_line ?? null,
-    cmc: card.cmc ?? null,
-  }, { onConflict: "card_id" });
+  // Check if card exists in cards table first
+  const { data: existingCard } = await supabase
+    .from("cards")
+    .select("card_id")
+    .eq("card_id", card.id)
+    .maybeSingle();
 
-  if (cardError) {
-    console.log("card upsert error:", cardError);
-    return;
+  // Only insert into cards table if it doesn't exist yet
+  if (!existingCard) {
+    const { error: cardError } = await supabase.from("cards").upsert({
+      card_id: card.id,
+      name: card.name,
+      colors: card.colors ?? [],
+      cost: card.mana_cost ?? null,
+      type: card.type_line ?? null,
+      cmc: card.cmc ?? null,
+    }, { onConflict: "card_id" });
+
+    if (cardError) {
+      console.log("card upsert error:", cardError);
+      return;
+    }
   }
 
+  // Check if this card is already in the user's inventory
   const { data } = await supabase
     .from("inventory")
     .select("quantity")
@@ -247,6 +258,7 @@ function CardInfo() {
     .maybeSingle();
 
   if (!data) {
+    // Card not in inventory yet, create a new row
     await supabase.from("inventory").insert({
       user_id: user.id,
       card_id: card.id,
@@ -254,6 +266,7 @@ function CardInfo() {
     });
     setQuantity(1);
   } else {
+    // Card already in inventory, increment quantity
     const newQty = data.quantity + 1;
     await supabase.from("inventory").update({ quantity: newQty })
       .eq("user_id", user.id)
