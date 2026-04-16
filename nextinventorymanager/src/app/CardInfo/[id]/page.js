@@ -23,20 +23,20 @@ function CardInfo() {
 
   const [card, setCard] = useState(null);
   const [quantity, setQuantity] = useState(0);
-const [user, setUser] = useState(null);
- const supabase = createClient();
+  const [user, setUser] = useState(null);
+  const supabase = createClient();
 
-useEffect(() => {
-  if (!supabase) return;
+  useEffect(() => {
+    if (!supabase) return;
 
-  // safe supabase logic here
-}, [supabase]);
+    // safe supabase logic here
+  }, [supabase]);
 
   useEffect(() => {
     if (!id) return;
     scryfallApi.getCardById(id).then(setCard);
   }, [id]);
-// Fetch the quantity of this card in the user's inventory
+  // Fetch the quantity of this card in the user's inventory
   useEffect(() => {
     const fetchQuantity = async () => {
       const {
@@ -236,8 +236,7 @@ useEffect(() => {
       .single();
 
     if (!data) {
-      // create row
-      await supabase.from("inventory").insert({
+      await supabase.from("inventory").upsert({
         user_id: user.id,
         card_id: card.id,
         quantity: 1,
@@ -384,26 +383,25 @@ useEffect(() => {
               Pioneer: {formatLegality(card.legalities.pioneer)}
             </div>
           </div>
-          
+
           {/*ADDING CARD TO INVENTORY */}
           {user && (
-            
-          <div className="addInventory">
-          <hr />
-            <div className="cardAmount">Amount Owned: {quantity}</div>
-            <div className="inventoryInput">
-              <div className="addButtons">
-                <button onClick={addToInventory}>
-                  Add to Inventory <p>+</p>
-                </button>
-              </div>
-              <div className="removeButtons">
-                <button onClick={removeFromInventory}>
-                  Remove from Inventory <p>-</p>
-                </button>
+            <div className="addInventory">
+              <hr />
+              <div className="cardAmount">Amount Owned: {quantity}</div>
+              <div className="inventoryInput">
+                <div className="addButtons">
+                  <button onClick={addToInventory}>
+                    Add to Inventory <p>+</p>
+                  </button>
+                </div>
+                <div className="removeButtons">
+                  <button onClick={removeFromInventory}>
+                    Remove from Inventory <p>-</p>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
           )}
         </div>
       </div>
