@@ -369,7 +369,7 @@ export default function DeckGrid() {
           <PaginationBar currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
           <div className="deck-grid">
             {visibleDecks.map(deck => (
-              <DeckTile key={deck.id} deck={decks} />
+              <DeckTile key={deck.id} deck={deck} />
             ))}
           </div>
           <PaginationBar currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
