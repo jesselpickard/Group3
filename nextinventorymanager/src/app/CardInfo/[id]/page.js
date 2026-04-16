@@ -6,7 +6,35 @@ import "./cardStyle.css";
 import { scryfallApi } from "../../../lib/scryfall/Scryfall.js";
 import { useParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
+import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
+
+const supabase = createBrowserClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+);
+const [quantity, setQuantity] = useState(0);
+
+useEffect(() => {
+  const fetchQuantity = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user || !card) return;
+
+    const { data } = await supabase
+      .from("inventory")
+      .select("quantity")
+      .eq("user_id", user.id)
+      .eq("card_id", card.id)
+      .single();
+
+    if (data) setQuantity(data.quantity);
+  };
+
+  fetchQuantity();
+}, [card]);
 
 // Wrapper component that enables loading fallback with Suspense
 export default function CardInfoPage() {
@@ -181,11 +209,67 @@ function CardInfo() {
   // Use correct face if it's a double-faced card
   const currCard = card.card_faces?.[face] || card;
 
-  function addToInventory(){
-    
-  }
-  function removeFromInventory(){
+  async function addToInventory() {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
+    if (!user || !card) return;
+
+    const { data } = await supabase
+      .from("inventory")
+      .select("quantity")
+      .eq("user_id", user.id)
+      .eq("card_id", card.id)
+      .single();
+
+    if (!data) {
+      // create row
+      await supabase.from("inventory").insert({
+        user_id: user.id,
+        card_id: card.id,
+        quantity: 1,
+      });
+
+      setQuantity(1);
+    } else {
+      // update row
+      const newQty = data.quantity + 1;
+
+      await supabase
+        .from("inventory")
+        .update({ quantity: newQty })
+        .eq("user_id", user.id)
+        .eq("card_id", card.id);
+
+      setQuantity(newQty);
+    }
+  }
+  async function removeFromInventory() {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user || !card) return;
+
+    const { data } = await supabase
+      .from("inventory")
+      .select("quantity")
+      .eq("user_id", user.id)
+      .eq("card_id", card.id)
+      .single();
+
+    if (!data) return;
+
+    const newQty = Math.max(0, data.quantity - 1);
+
+    await supabase
+      .from("inventory")
+      .update({ quantity: newQty })
+      .eq("user_id", user.id)
+      .eq("card_id", card.id);
+
+    setQuantity(newQty);
   }
 
   // =======================
@@ -291,18 +375,18 @@ function CardInfo() {
           <hr />
           {/*ADDING CARD TO INVENTORY */}
           <div className="addInventory">
-            <div className="cardAmount">Amount Owned:</div>
+            <div className="cardAmount">Amount Owned: {quantity}</div>
             <div className="inventoryInput">
-            <div className="addButtons">
-              <button onClick={addToInventory}>
-              Add to Inventory <p>+</p>
-              </button>
-            </div>
-            <div className="removeButtons">
-              <button onClick={removeFromInventory}>
-                Remove from Inventory <p>-</p>
-              </button>
-            </div>
+              <div className="addButtons">
+                <button onClick={addToInventory}>
+                  Add to Inventory <p>+</p>
+                </button>
+              </div>
+              <div className="removeButtons">
+                <button onClick={removeFromInventory}>
+                  Remove from Inventory <p>-</p>
+                </button>
+              </div>
             </div>
           </div>
         </div>
