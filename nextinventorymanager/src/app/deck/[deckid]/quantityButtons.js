@@ -5,7 +5,6 @@ import { addCardToDeck, removeCardFromDeck } from "./quantityMod";
 
 export default function QuantityControl({ deckId, cardId, quantityIn }) {
   const [quantity, setQuantity] = useState(quantityIn);
-  const [isPending, startTransition] = useTransition();
 
   const handleAdd = () => {
     setQuantity(q => q + 1);//assumes success on action
@@ -35,9 +34,9 @@ export default function QuantityControl({ deckId, cardId, quantityIn }) {
 
   return (
     <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-      <button onClick={handleRemove} disabled={isPending}>−</button>
+      <button onClick={handleRemove}>−</button>
       <span>{quantity}</span>
-      <button onClick={handleAdd} disabled={isPending}>+</button>
+      <button onClick={handleAdd}>+</button>
     </div>
   );
 }
