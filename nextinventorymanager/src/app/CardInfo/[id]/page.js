@@ -225,19 +225,20 @@ function CardInfo() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user || !card) return;
 
-  // Insert card into cards table first (ignore if already exists)
   const { error: cardError } = await supabase.from("cards").upsert({
-    id: card.id,
+    card_id: card.id,
     name: card.name,
-    // add any other columns your cards table requires
-  }, { onConflict: "id" });
+    colors: card.colors ?? [],
+    cost: card.mana_cost ?? null,
+    type: card.type_line ?? null,
+    cmc: card.cmc ?? null,
+  }, { onConflict: "card_id" });
 
   if (cardError) {
     console.log("card upsert error:", cardError);
     return;
   }
 
-  // Now safe to insert into inventory
   const { data } = await supabase
     .from("inventory")
     .select("quantity")
