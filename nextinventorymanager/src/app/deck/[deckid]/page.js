@@ -64,6 +64,7 @@ export default async function DeckPage({ params }){
               <span>
                 {card.cards.name}
               </span>
+
               <QuantityControl
                 deckId={deckId}
                 cardId={card.cards.card_id}

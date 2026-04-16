@@ -46,7 +46,20 @@ export async function removeCardFromDeck(deckId, cardId) {
 export async function addCardToDeck(deckId, cardId) {
   const supabase = await createClient();
 
-  const { error: updateError } = await supabase//increments the card
+  //gets current quantity
+  const { data, error: fetchError } = await supabase
+    .from("deck_cards")
+    .select("quantity")
+    .eq("deck_id", deckId)
+    .eq("card_id", cardId)
+    .single();
+
+  if (fetchError) {
+    throw new Error(fetchError.message);
+  }
+
+  //increments it
+  const { error: updateError } = await supabase
     .from("deck_cards")
     .update({ quantity: data.quantity + 1 })
     .eq("deck_id", deckId)
