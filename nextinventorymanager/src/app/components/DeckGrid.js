@@ -145,7 +145,7 @@ function DeckTile({ deck }) {
   };
 
   return (
-    <Link href={`/decks/${deck.id}`} classname="deck-tile-link">
+    <Link href={`/decks/${deck.id}`} className="deck-tile-link">
       <div
         ref={tileRef}
         className={`deck-tile ${hovered ? 'hovered' : ''}`}
@@ -154,12 +154,14 @@ function DeckTile({ deck }) {
       >
         {/* fanned card visuals */}
         <div className="deck-fan">
-          <div className="fan-card fan-left" style={{ backgroundColor: PLACEHOLDER_FAN[0] }} />
+          <div className="fan-card fan-left">
+            <img src={deck.fanCards[1]} alt={{ backgroundColor: PLACEHOLDER_FAN[0] }} />
+          </div>
           <div className="fan-card fan-middle">
-            <img src={deck.fanCards[1]} alt=/*{{ backgroundColor: fanColors[1] }}*/'' />
+            <img src={deck.fanCards[0]} alt={{ backgroundColor: fanColors[1] }} />
           </div>
           <div className="fan-card fan-right">
-            <img src={deck.fanCards[2]} alt=/*{{ backgroundColor: fanColors[2] }}*/'' />
+            <img src={deck.fanCards[2]} alt={{ backgroundColor: fanColors[2] }} />
           </div>
         </div>
 
