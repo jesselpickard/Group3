@@ -140,13 +140,24 @@ function DeckTile({ deck }) {
     setHovered(true);
   };
 
+  const hideTimeout = useRef(null);
+  const handleMouseLeave = () => {
+    hideTimeout.current = setTimeout(() => setHovered(false), 150);
+  };
+  const handlePopupEnter = () => {
+    clearTimeout(hideTimeout.current);
+  };
+  const handlePopupLeave = () => {
+    hideTimeout.current = setTimeout(() => setHovered(false), 150);
+  };
+
   return (
     <Link href={`/deck/${deck.id}`} className="deck-tile-link">
       <div
         ref={tileRef}
         className={`deck-tile ${hovered ? 'hovered' : ''}`}
         onMouseEnter={handleMouseEnter}
-        onMouseLeave={() => setTimeout(() => setHovered(false), 150)}
+        onMouseLeave={handleMouseLeave}
       >
         {/* fanned card visuals */}
         <div className="deck-fan">
@@ -171,17 +182,22 @@ function DeckTile({ deck }) {
 
         {/* hover popup - flips left if near right edge */}
         {hovered && (
-          <div className={`deck-popup ${popupLeft ? 'popup-left' : ''} ${popupAbove ? 'popup-above' : ''}`}>          <strong>{deck.name}</strong>
-            <hr className="popup-divider" />
-                <p className="popup-contains-title">Contains:</p>
-                <ul className="popup-contains-list">
-                  {deck.contains.slice(0, 5).map((card, i) => (
-                    <li key={i}>{card}</li>
-                  ))}
-                  {deck.contains.length > 5 && (
-                    <li className="popup-more">...and {deck.contains.length - 5} more</li>
-                  )}
-                </ul>
+          <div 
+            className={`deck-popup ${popupLeft ? 'popup-left' : ''} ${popupAbove ? 'popup-above' : ''}`}
+            onMouseEnter={handlePopupEnter}
+            onMouseLeave={handlePopupLeave}
+          >
+          <strong>{deck.name}</strong>
+          <hr className="popup-divider" />
+            <p className="popup-contains-title">Contains:</p>
+            <ul className="popup-contains-list">
+              {deck.contains.slice(0, 5).map((card, i) => (
+                <li key={i}>{card}</li>
+              ))}
+              {deck.contains.length > 5 && (
+                <li className="popup-more">...and {deck.contains.length - 5} more</li>
+              )}
+            </ul>
           </div>
         )}
       </div>
