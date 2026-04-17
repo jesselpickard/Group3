@@ -26,7 +26,7 @@ async function getDeckMeta(deckId) {
 
   const { data, error } = await supabase
     .from("decks")
-    .select("name, format_id")
+    .select("name, format")
     .eq("deck_id", deckId)
     .single();
 
