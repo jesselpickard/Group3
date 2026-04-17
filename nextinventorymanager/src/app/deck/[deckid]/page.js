@@ -41,11 +41,11 @@ export default async function DeckPage({ params }){
 
   let cards = []
   console.log("deckId is:", deckId);
-  let deckName = null;
+  let deckMeta = null;
 
   if (deckId) {
     cards = await getDeckCards(deckId);
-    deckName = await getDeckName(deckId);
+    deckMeta = await getDeckMeta(deckId);
   }
 
   return (
