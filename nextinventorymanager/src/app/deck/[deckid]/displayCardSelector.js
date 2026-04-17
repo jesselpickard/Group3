@@ -21,14 +21,7 @@ export default function CommanderSelector({
     selectedCardData?.image_uris?.large ||
     selectedCardData?.image_uris?.png;
 
-  async function isLegalCommander(card) {
-    const data = await scryfallApi.namedExact(card.name);
 
-    return (
-      data.type_line?.toLowerCase().includes("legendary") &&
-      !data.type_line?.toLowerCase().includes("planeswalker")
-    );
-  }
 
   async function handleSelect(card) {
     setError(null);

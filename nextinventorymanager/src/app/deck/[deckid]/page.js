@@ -60,7 +60,7 @@ export default async function DeckPage({ params }){
       <CommanderSelector
         deckId={deckId}
         format={deckMeta?.format}
-        currentCommander={deckMeta?.commander}
+        currentCard={deckMeta?.commander}
         cards={cards}
       />
 
