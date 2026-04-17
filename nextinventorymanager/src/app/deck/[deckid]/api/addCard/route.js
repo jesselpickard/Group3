@@ -53,7 +53,8 @@ export async function POST(req, { params }) {
       .from("cards")
       .select("card_id, name")
       .eq("name", cardName)
-      .maybeSingle();
+      .limit(1);
+      //.maybeSingle();
 
     console.log("existingCard:", existingCard);
     console.log("cardLookupError:", cardLookupError);
