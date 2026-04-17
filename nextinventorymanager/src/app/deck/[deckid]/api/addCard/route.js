@@ -47,69 +47,96 @@ export async function POST(req, { params }) {
   try {
     const supabase = await createClient();
 
-    // ALWAYS resolve the card from Scryfall first (this becomes canonical)
-    const card = await scryfallApi.namedExact(cardName);
-
-    console.log("scryfall exact card:", card);
-
-    if (!card?.id) {
-      return new Response(
-        JSON.stringify({
-          success: false,
-          step: "fetch exact card from scryfall",
-          error: "Card not found on Scryfall",
-        }),
-        { status: 404 }
-      );
-    }
-
-    let resolvedCardId = card.id;
-
-    const cardData = {
-      card_id: card.id,
-      name: card.name || "Unknown",
-      colors: card.colors || [],
-      cost: card.mana_cost || null,
-      type: card.type_line || null,
-      cmc: card.cmc || null,
-      extra: card,
-    };
-
-    // insert or update card in cards table
-    // (fix: prevents duplicate key violations on card_id)
-    const { data: insertedCard, error: insertCardError } = await supabase
+    // first look for the card in our cards table by NAME
+    // this helps reuse the existing database row instead of creating a new card id
+    const { data: existingCard, error: cardLookupError } = await supabase
       .from("cards")
-      .upsert(cardData, { onConflict: "card_id" })
       .select("card_id, name")
-      .single();
+      .eq("name", cardName)
+      .maybeSingle();
 
-    console.log("insertedCard:", insertedCard);
-    console.log("insertCardError:", insertCardError);
+    console.log("existingCard:", existingCard);
+    console.log("cardLookupError:", cardLookupError);
 
-    if (insertCardError) {
+    if (cardLookupError) {
       return new Response(
         JSON.stringify({
           success: false,
-          step: "insert/upsert card into cards table",
-          error: insertCardError.message,
-          details: insertCardError,
+          step: "lookup cards by name",
+          error: cardLookupError.message,
+          details: cardLookupError,
         }),
         { status: 500 }
       );
     }
 
-    resolvedCardId = insertedCard.card_id;
+    let resolvedCardId;
+
+    // if the card already exists in cards, reuse that exact card_id
+    if (existingCard) {
+      resolvedCardId = existingCard.card_id;
+    } else {
+      // otherwise fetch the exact card from Scryfall by NAME
+      const card = await scryfallApi.namedExact(cardName);
+
+      console.log("scryfall exact card:", card);
+
+      if (!card?.id) {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            step: "fetch exact card from scryfall",
+            error: "Card not found on Scryfall",
+          }),
+          { status: 404 }
+        );
+      }
+
+      // prepare the card row for insertion into cards table
+      const cardData = {
+        card_id: card.id,
+        name: card.name || "Unknown",
+        colors: card.colors || [],
+        cost: card.mana_cost || null,
+        type: card.type_line || null,
+        cmc: card.cmc || null,
+        extra: card,
+      };
+
+      // insert the missing card into cards table
+      const { data: insertedCard, error: insertCardError } = await supabase
+        .from("cards")
+        .insert(cardData)
+        .select("card_id, name")
+        .single();
+
+      console.log("insertedCard:", insertedCard);
+      console.log("insertCardError:", insertCardError);
+
+      if (insertCardError) {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            step: "insert card into cards table",
+            error: insertCardError.message,
+            details: insertCardError,
+          }),
+          { status: 500 }
+        );
+      }
+
+      resolvedCardId = insertedCard.card_id;
+    }
 
     console.log("resolvedCardId:", resolvedCardId);
 
     // check whether the card is already in this deck
-    const { data: existingDeckCard, error: fetchDeckCardError } =
-      await supabase
-        .from("deck_cards")
-        .select("quantity")
-        .eq("deck_id", deckId)
-        .eq("card_id", resolvedCardId)
-        .maybeSingle();
+    const { data: existingDeckCard, error: fetchDeckCardError } = await supabase
+      .from("deck_cards")
+      .select("quantity")
+      .eq("deck_id", deckId)
+      .eq("card_id", resolvedCardId)
+      .maybeSingle();
 
     console.log("existingDeckCard:", existingDeckCard);
     console.log("fetchDeckCardError:", fetchDeckCardError);
