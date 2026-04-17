@@ -29,7 +29,7 @@ export async function POST(req, { params }) {
         success: false,
         error: "Missing deckId in route params and URL",
       }),
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -40,7 +40,7 @@ export async function POST(req, { params }) {
         success: false,
         error: "Missing cardName in request body",
       }),
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -53,15 +53,12 @@ export async function POST(req, { params }) {
       .from("cards")
       .select("card_id, name")
       .eq("name", cardName)
-      .limit(1)
-      //.maybeSingle();
+      .limit(1);
+    //.maybeSingle(); 
+    // we can't use maybeSingle here because we want to distinguish between
+    // "no card found" vs "multiple cards found with same name"
 
-
-      const existingCard = existingCards?.[0] ?? null;
-
-      console.log("existingCards raw:", existingCards);
-      console.log("existingCard picked:", existingCard);
-      console.log("existingCard.card_id:", existingCard?.card_id);
+    const existingCard = existingCards?.[0] ?? null;
 
     console.log("existingCard:", existingCard);
     console.log("cardLookupError:", cardLookupError);
@@ -74,7 +71,7 @@ export async function POST(req, { params }) {
           error: cardLookupError.message,
           details: cardLookupError,
         }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -96,7 +93,7 @@ export async function POST(req, { params }) {
             step: "fetch exact card from scryfall",
             error: "Card not found on Scryfall",
           }),
-          { status: 404 }
+          { status: 404 },
         );
       }
 
@@ -129,7 +126,7 @@ export async function POST(req, { params }) {
             error: insertCardError.message,
             details: insertCardError,
           }),
-          { status: 500 }
+          { status: 500 },
         );
       }
 
@@ -157,7 +154,7 @@ export async function POST(req, { params }) {
           error: fetchDeckCardError.message,
           details: fetchDeckCardError,
         }),
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -179,7 +176,7 @@ export async function POST(req, { params }) {
             error: updateError.message,
             details: updateError,
           }),
-          { status: 500 }
+          { status: 500 },
         );
       }
     } else {
@@ -202,7 +199,7 @@ export async function POST(req, { params }) {
             error: insertDeckCardError.message,
             details: insertDeckCardError,
           }),
-          { status: 500 }
+          { status: 500 },
         );
       }
     }
@@ -214,7 +211,7 @@ export async function POST(req, { params }) {
         cardName,
         resolvedCardId,
       }),
-      { status: 200 }
+      { status: 200 },
     );
   } catch (err) {
     console.log("caught error:", err);
@@ -225,7 +222,7 @@ export async function POST(req, { params }) {
         step: "catch block",
         error: err.message,
       }),
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
