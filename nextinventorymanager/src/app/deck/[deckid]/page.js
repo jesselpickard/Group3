@@ -6,7 +6,6 @@ import SummaryDisplay  from "./deckSummary.js";
 import QuantityControl from "./quantityButtons.js";
 import DeckFormatDisplay from "./formatDisplay.js";
 import FormatSelector from "./formatSelection.js";
-import CommanderSelector from "./displayCardSelector.js";
 
 /**
  *  This page is meant to lay out the contents of a deck to its viewer. It will allow
@@ -27,7 +26,7 @@ async function getDeckMeta(deckId) {
 
   const { data, error } = await supabase
     .from("decks")
-    .select("name, format, commander")
+    .select("name, format")
     .eq("deck_id", deckId)
     .single();
 
@@ -55,14 +54,6 @@ export default async function DeckPage({ params }){
       <h1>Deck: {deckMeta?.name ?? "No deck selected"}</h1> {/* protects the page from an invalid id*/}
       <DeckFormatDisplay deckId={deckId} />
       <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format}/>
-
-      {/* COMMANDER / DISPLAY CARD */}
-      <CommanderSelector
-        deckId={deckId}
-        format={deckMeta?.format}
-        currentCard={deckMeta?.commander}
-        cards={cards}
-      />
 
       {deckId ? (
         <ul>
