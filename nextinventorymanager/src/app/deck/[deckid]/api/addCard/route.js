@@ -49,12 +49,19 @@ export async function POST(req, { params }) {
 
     // first look for the card in our cards table by NAME
     // this helps reuse the existing database row instead of creating a new card id
-    const { data: existingCard, error: cardLookupError } = await supabase
+    const { data: existingCards, error: cardLookupError } = await supabase
       .from("cards")
       .select("card_id, name")
       .eq("name", cardName)
-      .limit(1);
+      .limit(1)
       //.maybeSingle();
+
+
+      const existingCard = existingCards?.[0] ?? null;
+
+      console.log("existingCards raw:", existingCards);
+      console.log("existingCard picked:", existingCard);
+      console.log("existingCard.card_id:", existingCard?.card_id);
 
     console.log("existingCard:", existingCard);
     console.log("cardLookupError:", cardLookupError);
