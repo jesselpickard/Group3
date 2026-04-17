@@ -9,7 +9,7 @@ import Link from "next/link";
 
 // placeholder decks for testing. will be replaced with real data later
 const SF = (name) =>
-  `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}&format=image&version=normal`;
+  `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}&format=image&version=large`;
 
 // creates supabase client safely, same pattern as Navbar.js
 function getSupabaseSafely() {
