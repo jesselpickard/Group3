@@ -53,7 +53,7 @@ export default async function DeckPage({ params }){
       <Navbar />
       <h1>Deck: {deckMeta?.name ?? "No deck selected"}</h1> {/* protects the page from an invalid id*/}
       <DeckFormatDisplay deckId={deckId} />
-      <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format_id}/>
+      <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format}/>
 
       {deckId ? (
         <ul>
