@@ -4,6 +4,8 @@ import QuickAdd from "./quickAdd.js";
 import { getDeckCards } from "./deckSummary.js"; 
 import SummaryDisplay  from "./deckSummary.js";
 import QuantityControl from "./quantityButtons.js";
+import DeckFormatDisplay from "./formatDisplay.js";
+import FormatSelector from "./formatSelection.js";
 
 /**
  *  This page is meant to lay out the contents of a deck to its viewer. It will allow
@@ -19,14 +21,16 @@ import QuantityControl from "./quantityButtons.js";
  * 
  */
 
-async function getDeckName(deckId){
+async function getDeckMeta(deckId) {
   const supabase = await createClient();
-  const {data, error} = await supabase
-    .from('decks')
-    .select('name')
-    .eq('deck_id', deckId)
-    .single()
-  if(error) throw new Error(error.message);
+
+  const { data, error } = await supabase
+    .from("decks")
+    .select("name, format_id")
+    .eq("deck_id", deckId)
+    .single();
+
+  if (error) throw new Error(error.message);
   return data;
 }
 
@@ -47,7 +51,9 @@ export default async function DeckPage({ params }){
   return (
     <div>
       <Navbar />
-      <h1>Deck: {deckName.name ?? "No deck selected"}</h1> {/* protects the page from an invalid id*/}
+      <h1>Deck: {deckMeta?.name ?? "No deck selected"}</h1> {/* protects the page from an invalid id*/}
+      <DeckFormatDisplay deckId={deckId} />
+      <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format_id}/>
 
       {deckId ? (
         <ul>
