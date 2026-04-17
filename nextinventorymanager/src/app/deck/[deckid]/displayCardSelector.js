@@ -11,9 +11,15 @@ export default function CommanderSelector({
   label,
 }) {
   const [selected, setSelected] = useState(currentCard || null);
+  const [selectedCardData, setSelectedCardData] = useState(null);
   const [error, setError] = useState(null);
 
   const pool = cards.map(c => c.cards);
+
+  const imageUrl =
+    selectedCardData?.image_uris?.normal ||
+    selectedCardData?.image_uris?.large ||
+    selectedCardData?.image_uris?.png;
 
   async function isLegalCommander(card) {
     const data = await scryfallApi.namedExact(card.name);
@@ -32,7 +38,10 @@ export default function CommanderSelector({
       return;
     }
 
-    //NON-commander format → no restrictions
+    const data = await scryfallApi.namedExact(card.name);
+    setSelectedCardData(data);
+
+    //NON-commander format
     if (format !== "Commander") {
       await save(card.card_id);
       setSelected(card.card_id);
@@ -40,7 +49,9 @@ export default function CommanderSelector({
     }
 
     //Commander format
-    const ok = await isLegalCommander(card);
+    const ok =
+      data.type_line?.toLowerCase().includes("legendary") &&
+      !data.type_line?.toLowerCase().includes("planeswalker");
 
     if (!ok) {
       setError("This card is not a legal commander.");
@@ -54,31 +65,39 @@ export default function CommanderSelector({
   async function save(cardId) {
     await fetch(`/api/decks/${deckId}/displayCard`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ cardId }),
     });
   }
 
   return (
-    <div>
-      <h3>{label}</h3>
+    <div style={{ display: "flex", gap: "20px" }}>
+      {/* LEFT: selector */}
+      <div>
+        <h3>{label}</h3>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
 
-      {!pool.length ? (
-        <p>Deck must contain at least one card.</p>
-      ) : (
-        <ul>
-          {pool.map(card => (
-            <li key={card.card_id}>
-              <button onClick={() => handleSelect(card)}>
-                {card.name}
-              </button>
+        {!pool.length ? (
+          <p>Deck must contain at least one card.</p>
+        ) : (
+          <ul>
+            {pool.map(card => (
+              <li key={card.card_id}>
+                <button onClick={() => handleSelect(card)}>
+                  {card.name}
+                </button>
 
-              {selected === card.card_id && " ✅"}
-            </li>
-          ))}
-        </ul>
-      )}
+                {selected === card.card_id && " ✅"}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {/* RIGHT: IMAGE PREVIEW */}
       <div>
         {imageUrl ? (
           <img

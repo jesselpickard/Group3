@@ -27,7 +27,7 @@ async function getDeckMeta(deckId) {
 
   const { data, error } = await supabase
     .from("decks")
-    .select("name, format")
+    .select("name, format, commander")
     .eq("deck_id", deckId)
     .single();
 
@@ -59,8 +59,8 @@ export default async function DeckPage({ params }){
       {/* COMMANDER / DISPLAY CARD */}
       <CommanderSelector
         deckId={deckId}
-        format={deckMeta.format}
-        currentCommander={deckMeta.commander_card_id}
+        format={deckMeta?.format}
+        currentCommander={deckMeta?.commander}
         cards={cards}
       />
 

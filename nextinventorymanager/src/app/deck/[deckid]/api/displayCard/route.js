@@ -2,8 +2,16 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function POST(req, { params }) {
   const deckId = params.deckid;
-  const { cardId } = await req.json();
+  const body = await req.json();
+  const cardId = body?.cardId;
 
+  if (!cardId) {
+    return Response.json(
+      { error: "cardId is required" },
+      { status: 400 }
+    );
+  }
+  
   const supabase = await createClient();
 
   const { error } = await supabase
