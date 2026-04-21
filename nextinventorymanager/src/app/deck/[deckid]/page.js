@@ -1,12 +1,10 @@
 import Navbar from "@/app/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
-import QuickAdd from "./quickAdd.js";
 import { getDeckCards } from "./deckSummary.js"; 
-import SummaryDisplay  from "./deckSummary.js";
-import QuantityControl from "./quantityButtons.js";
 import DeckFormatDisplay from "./formatDisplay.js";
 import FormatSelector from "./formatSelection.js";
 import CardStack from "./cardStack.js";
+import SummaryDisplay from "./summaryDisplay.js";
 
 /**
  *  This page is meant to lay out the contents of a deck to its viewer. It will allow
@@ -55,9 +53,8 @@ export default async function DeckPage({ params }){
       <h1>Deck: {deckMeta?.name ?? "No deck selected"}</h1> {/* protects the page from an invalid id*/}
       <DeckFormatDisplay deckId={deckId} />
       <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format}/>
+      <SummaryDisplay deckId={deckId} />
 
-      <QuickAdd deckId={deckId} />
-      <SummaryDisplay deckId={deckId}/>
       <CardStack
         type="Main Deck"
         cards={cards}
