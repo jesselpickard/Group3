@@ -117,9 +117,11 @@ function CardImg({
       >
         <img src={imageUrl} alt={card.name} className="cardImage" />
 
-        <div
-          className="cardOverlay"
-          onClick={(e) => e.stopPropagation()}
+        <div className="cardOverlay"
+            onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            }}
         >
           <QuantityControl
             deckId={deckId}
