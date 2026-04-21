@@ -11,6 +11,14 @@
   box-sizing: border-box;
 }
 
+.cardStackItem {
+  display: block;
+}
+
+.cardStackContent {
+  display: block;
+}
+
 @media (max-width: 800px) {
   .cardStackContainer {
     grid-template-columns: 1fr;
