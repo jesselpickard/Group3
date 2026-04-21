@@ -54,12 +54,12 @@ export default async function DeckPage({ params }){
       <DeckFormatDisplay deckId={deckId} />
       <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format}/>
 
-      <QuickAdd deckId={deckId} />
       <CardStack
         type="Main Deck"
         cards={cards}
         deckId={deckId}
       />
+      <QuickAdd deckId={deckId} />
     </div>
   )
 }
