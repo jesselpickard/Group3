@@ -7,7 +7,7 @@ import FormatSelector from "./formatSelection.js";
 import CardStack from "./cardStack.js";
 import "./main.css";
 import Masonry from "./masonry.js";
-import Display from "./summaryDisplay.js";
+
 
 /**
  *  This page is meant to lay out the contents of a deck to its viewer. It will allow
@@ -94,7 +94,7 @@ export default async function DeckPage({ params }){
       <DeckFormatDisplay deckId={deckId} />
       <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format}/>
       <QuickAdd deckId={deckId} />
-      <Display deckId={deckId}/>
+
 
       <div className="cardStackContainer">
         {Object.entries(groupedCards).map(([type, group]) =>
