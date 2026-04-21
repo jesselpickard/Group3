@@ -5,6 +5,7 @@ import { getDeckCards } from "./deckSummary.js";
 import DeckFormatDisplay from "./formatDisplay.js";
 import FormatSelector from "./formatSelection.js";
 import CardStack from "./cardStack.js";
+import "./main.css";
 
 /**
  *  This page is meant to lay out the contents of a deck to its viewer. It will allow
@@ -92,16 +93,18 @@ export default async function DeckPage({ params }){
       <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format}/>
       <QuickAdd deckId={deckId} />
 
-      {Object.entries(groupedCards).map(([type, group]) =>
-        group.length > 0 ? (
-          <CardStack
-            key={type}
-            type={type.charAt(0).toUpperCase() + type.slice(1)}
-            cards={group}
-            deckId={deckId}
-          />
-        ) : null
-      )}
+      <div className="cardStackContainer">
+        {Object.entries(groupedCards).map(([type, group]) =>
+          group.length > 0 ? (
+            <CardStack
+              key={type}
+              type={type.charAt(0).toUpperCase() + type.slice(1)}
+              cards={group}
+              deckId={deckId}
+            />
+          ) : null
+        )}
+      </div>
     </div>
   )
 }

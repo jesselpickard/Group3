@@ -1,0 +1,21 @@
+.cardStackContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.cardStackContainer > * {
+  flex: 1 1 300px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 800px) {
+  .cardStackContainer {
+    flex-direction: column;
+  }
+
+  .cardStackContainer > * {
+    flex: 1 1 100%;
+  }
+}
