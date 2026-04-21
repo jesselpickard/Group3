@@ -8,12 +8,21 @@ export default function MasonryItem({ children }) {
     const el = ref.current;
     if (!el) return;
 
-    const rowHeight = 10; // must match CSS
-    const gap = 16;       // must match CSS
-
     const resizeObserver = new ResizeObserver(() => {
+      const grid = el.parentElement;
+
+      const rowHeight = parseFloat(
+        getComputedStyle(grid).getPropertyValue("grid-auto-rows")
+      );
+
+      const gap = parseFloat(
+        getComputedStyle(grid).getPropertyValue("row-gap")
+      );
+
       const height = el.getBoundingClientRect().height;
+
       const rowSpan = Math.ceil((height + gap) / (rowHeight + gap));
+
       el.style.gridRowEnd = `span ${rowSpan}`;
     });
 
@@ -21,10 +30,4 @@ export default function MasonryItem({ children }) {
 
     return () => resizeObserver.disconnect();
   }, []);
-
-  return (
-    <div ref={ref} className="cardStackItem">
-      {children}
-    </div>
-  );
 }
