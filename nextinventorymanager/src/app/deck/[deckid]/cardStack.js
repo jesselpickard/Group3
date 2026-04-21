@@ -10,10 +10,7 @@ export default function CardStack({ type, cards, deckId }) {
   const [hoveredId, setHoveredId] = useState(null);
   const [activeId, setActiveId] = useState(null);
 
-  const STACK_OFFSET = 40;
-  const CARD_HEIGHT = 280; 
-
-  const stackHeight = cards.length * STACK_OFFSET + CARD_HEIGHT;
+  const stackHeight = cards.length * 40;
 
   // click outside clears focus
   useEffect(() => {
@@ -29,7 +26,7 @@ export default function CardStack({ type, cards, deckId }) {
   }, [activeId]);
 
   return (
-    <div className="stackWrapper" style={{ height: `${stackHeight + 60}px` }}>
+    <div className="stackWrapper">
       <div className="stackTitleBox">
         <span className="stackTitleText">{type}</span>
 

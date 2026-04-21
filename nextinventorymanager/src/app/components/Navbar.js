@@ -112,7 +112,6 @@ function Navbar() {
 
     await supabase.auth.signOut();
     setMenuOpen(false);
-    router.push('/');
   }
 
   // Load avatar from Supabase user metadata whenever the user object updates

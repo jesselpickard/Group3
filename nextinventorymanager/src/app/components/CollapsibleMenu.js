@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { scryfallApi } from "../../lib/scryfall/Scryfall";
 import "./Menu.css";
 import FourBox from "./CheckBox4";
 import { STATES } from './CheckBox4';
 import CheckSpread from "./CheckSpread";
+
 
 export default function CollapsibleMenu({ setCards, setCurrentPage}) {
   const [open, setOpen] = useState(true);
@@ -16,7 +17,6 @@ export default function CollapsibleMenu({ setCards, setCurrentPage}) {
   const [toughness, setToughness] = useState({ op: "=", value: "" });
   const [mana, setMana] = useState({ op: "=", value: "" });
   const [setCode, setSetCode] = useState("");
-  const isFirstRender = useRef(true);
 
   const [colors, setColors] = useState({//tracks the states of the color boxes
     white: STATES.UNMARKED,
@@ -84,12 +84,6 @@ export default function CollapsibleMenu({ setCards, setCurrentPage}) {
 
   const CardSearch = async () => {
     const searchQuery = buildQuery();
-    if (!searchQuery) {
-      const data = await scryfallApi.browse();
-      setCards(data.data || []);
-      setCurrentPage(1);
-      return;
-    }
     const data = await scryfallApi.search(searchQuery);
     setCards(data.data || []);
     setCurrentPage(1);//resets the selected page when a search is triggered
@@ -97,13 +91,10 @@ export default function CollapsibleMenu({ setCards, setCurrentPage}) {
 
 
   useEffect(() => {
-  if (isFirstRender.current) {
-    isFirstRender.current = false;
-    return;
-  }
-  const timeout = setTimeout(() => {
-    CardSearch();
-  }, 300);
+    const timeout = setTimeout(() => {
+      CardSearch();
+    }, 300);
+
     return () => clearTimeout(timeout);
   }, [query, type, subtype, power, toughness, mana, setCode, colors]);
 

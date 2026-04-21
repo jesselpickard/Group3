@@ -5,10 +5,9 @@ export async function GET(request) {
   const { searchParams, origin } = new URL(request.url);
 
   const code = searchParams.get("code");
-  const cookieHeader = request.headers.get('cookie') || '';
-  const match = cookieHeader.match(/redirectAfterLogin=([^;]+)/);
-  const next = match ? decodeURIComponent(match[1]) : '/';
-  const safeNext = next.startsWith('/') ? next : '/';
+  const next = searchParams.get("next") ?? "/";
+
+  const safeNext = next.startsWith("/") ? next : "/";
 
   if (!code) {
     return NextResponse.redirect(`${origin}/login?error=missing_code`);
@@ -24,13 +23,8 @@ export async function GET(request) {
   const forwardedHost = request.headers.get("x-forwarded-host");
   const isLocal = process.env.NODE_ENV === "development";
 
-  const destination = isLocal
-    ? `${origin}${safeNext}`
-    : forwardedHost
-    ? `https://${forwardedHost}${safeNext}`
-    : `${origin}${safeNext}`;
+  if (isLocal) return NextResponse.redirect(`${origin}${safeNext}`);
+  if (forwardedHost) return NextResponse.redirect(`https://${forwardedHost}${safeNext}`);
 
-  const response = NextResponse.redirect(destination);
-  response.cookies.delete('redirectAfterLogin');
-  return response;
+  return NextResponse.redirect(`${origin}${safeNext}`);
 }

@@ -31,7 +31,7 @@ export default async function InventoryPage() {
   } = await supabase.auth.getUser();
 
   if (authError || !user) {
-    redirect("/login?next=/Inventory");
+    redirect("/login");
   }
 
   const { data: inventoryRows = [], error: inventoryError } = await supabase

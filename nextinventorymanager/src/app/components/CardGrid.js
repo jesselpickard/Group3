@@ -1,10 +1,8 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import './CardGrid.css';
 import Link from "next/link";
 import Menu from './CollapsibleMenu.js';
-import { scryfallApi } from "../../lib/scryfall/Scryfall";
-
 
 // placeholder colors, one per page. cycles if there are more pages than colors
 const colors = [
@@ -107,20 +105,8 @@ export default function CardGrid({ totalPages = 20 }) {
   // tracks which page the user is currently on
   const [currentPage, setCurrentPage] = useState(1);
   const [cards, setCards] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    scryfallApi.browse().then(data => {
-      setCards(data.data || []);
-      setLoading(false);
-    });
-  }, []);
-
   // picks a color based on the current page, cycling through the colors array
   const currentColor = colors[(currentPage - 1) % colors.length];
-  useEffect(() => {
-    scryfallApi.browse().then(data => setCards(data.data || []));
-  }, []);
 
   //page data
   const CARDS_PER_PAGE = 81;
@@ -144,28 +130,40 @@ export default function CardGrid({ totalPages = 20 }) {
         <div className="content-area">
           {/* 81 placeholder card rectangles in the current page color */}
           <div className="card-grid">
-            {visibleCards.map((card) => (
-              <Link key={card.id} href={`/CardInfo/${card.id}`}>
-                <div className="card">
-                  <picture>
-                    <source
-                      media="(max-width: 800px)"
-                      srcSet={
-                        card.image_uris?.large ||
-                        card.card_faces?.[0]?.image_uris?.large
-                      }
-                    />
-                    <img
-                      src={
-                        card.image_uris?.small ||
-                        card.card_faces?.[0]?.image_uris?.small
-                      }
-                      alt={card.name}
-                    />
-                  </picture>
-                </div>
-              </Link>
-            ))}
+            {cards.length > 0 ? (
+              visibleCards.map((card) => (
+                <Link key={card.id} href={`/CardInfo/${card.id}`}>
+                  <div key={card.id} className="card">
+                    <picture>
+                      {/*Higher res images on mobile*/}
+                      <source
+                        media="(max-width: 800px)"
+                        srcSet={
+                          card.image_uris?.large ||
+                          card.card_faces?.[0]?.image_uris?.large
+                        }
+                      />
+                      {/*small image res on desktop*/}
+                      <img
+                        src={
+                          card.image_uris?.small ||
+                          card.card_faces?.[0]?.image_uris?.small
+                        }
+                        alt={card.name}
+                      />
+                    </picture>
+                  </div>
+                </Link>
+              ))
+            ) : (
+              Array.from({ length: CARDS_PER_PAGE }).map((_, i) => (
+                <div
+                  key={i}
+                  className="card-placeholder"
+                  style={{ backgroundColor: currentColor }}
+                />
+              ))
+            )}
           </div>
         </div>
       </div>

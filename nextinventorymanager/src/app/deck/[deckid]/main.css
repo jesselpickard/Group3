@@ -1,26 +1,21 @@
 .cardStackContainer {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  grid-auto-rows: 10px; /* base row height */
+  display: flex;
+  flex-wrap: wrap;
   gap: 16px;
-  width: 100%;
-  min-height: 100vh;
+  align-items: flex-start;
 }
 
 .cardStackContainer > * {
+  flex: 0 0 220px;
   box-sizing: border-box;
-}
-
-.cardStackItem {
-  display: block;
-}
-
-.cardStackContent {
-  display: block;
 }
 
 @media (max-width: 800px) {
   .cardStackContainer {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+
+  .cardStackContainer > * {
+    flex: 1 1 100%;
   }
 }
