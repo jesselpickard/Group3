@@ -25,26 +25,27 @@ export default function CardStack({ type, cards, deckId }) {
     <div>
       <h3>{type}</h3>
 
-      <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-        {cards.map((card) => {
+      <div className={styles.stack}>
+        {cards.map((card, index) => {
           const cardId = card.cards.card_id;
           const quantity = card.quantity;
 
           return (
-            <CardImg
-              key={cardId}
-              cardId={cardId}
-              quantity={quantity}
-              deckId={deckId}
-            />
+          <CardImg
+            key={cardId}
+            cardId={cardId}
+            quantity={quantity}
+            deckId={deckId}
+            index={index}
+          />
           );
         })}
-      </div>
+        </div>
     </div>
   );
 }
 
-function CardImg({ cardId, quantity, deckId }) {
+function CardImg({ cardId, quantity, deckId, index }) {
   const [card, setCard] = useState(null);
 
   useEffect(() => {
@@ -62,7 +63,9 @@ function CardImg({ cardId, quantity, deckId }) {
     card.card_faces?.[0]?.image_uris?.normal;
 
   return (
-    <div className="cardContainer">
+    <div className={styles.cardContainer} style={{position: "relative",
+    zIndex: index, transform: `translateY(${index * 20}px)`,}}>
+
       <img src={imageUrl} alt={card.name} className="cardImage" />
 
       <div className="cardOverlay">

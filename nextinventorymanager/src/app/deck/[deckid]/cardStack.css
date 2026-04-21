@@ -1,6 +1,14 @@
 .cardContainer {
   position: relative;
   width: 200px;
+  transition: transform 0.2s ease;
+}
+
+.stack {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .cardImage {
@@ -13,6 +21,7 @@
 .cardContainer:hover .cardImage {
   transform: scale(1.05);
 }
+
 
 /* overlay (hidden by default) */
 .cardOverlay {
