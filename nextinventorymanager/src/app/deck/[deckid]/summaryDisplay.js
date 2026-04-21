@@ -1,24 +1,21 @@
-"use client"
+"use client";
 
 import { useEffect, useState } from "react";
-import { getCommander, setCommander } from "./deckSummary";
 import { scryfallApi } from "@/lib/scryfall/Scryfall";
-/**
- * This file takes the deck's summary data and creates a visual representation of it.
- * The purpose of this is to clean up the page.js file to reduce clutter. I have yet to decide
- * whether I want the summary above or below the card stacks so this component will make it easy
- * to maneuver.
- */
 
-export default function Display({data}){
-    return(
-        <div>
-            <CommanderSection deckId={deckId} cards={data.cards} />
-        </div>
-    );
+export default function Display({ data, deckId, initialCommanderId }) {
+  return (
+    <div>
+      <CommanderSection
+        deckId={deckId}
+        cards={data?.cards || []}
+        initialCommanderId={initialCommanderId}
+      />
+    </div>
+  );
 }
 
-export default function CommanderSection({ deckId, cards }) {
+function CommanderSection({ deckId, cards, initialCommanderId }) {
   const [commander, setCommanderState] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -27,16 +24,17 @@ export default function CommanderSection({ deckId, cards }) {
     card.type?.toLowerCase().includes("legendary")
   );
 
-  // Load commander on mount
+  // Load commander from Scryfall using server-provided ID
   useEffect(() => {
     async function loadCommander() {
       try {
-        const commanderId = await getCommander(deckId);
-
-        if (commanderId) {
-          const card = await scryfallApi.getCardById(commanderId);
-          setCommanderState(card);
+        if (!initialCommanderId) {
+          setCommanderState(null);
+          return;
         }
+
+        const card = await scryfallApi.getCardById(initialCommanderId);
+        setCommanderState(card);
       } catch (err) {
         console.error(err);
       } finally {
@@ -45,11 +43,24 @@ export default function CommanderSection({ deckId, cards }) {
     }
 
     loadCommander();
-  }, [deckId]);
+  }, [initialCommanderId]);
 
+  // NOTE:
+  // You currently cannot safely use setCommander() from server here.
+  // You should replace this with an API route or Supabase browser client later.
   async function handleSetCommander(cardId) {
     try {
-      await setCommander(deckId, cardId);
+      // temporary assumption: backend endpoint exists OR you will replace this later
+      await fetch("/api/commander/set", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          deckId,
+          cardId,
+        }),
+      });
 
       const card = await scryfallApi.getCardById(cardId);
       setCommanderState(card);
@@ -60,7 +71,17 @@ export default function CommanderSection({ deckId, cards }) {
 
   async function handleClearCommander() {
     try {
-      await setCommander(deckId, null);
+      await fetch("/api/commander/set", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          deckId,
+          cardId: null,
+        }),
+      });
+
       setCommanderState(null);
     } catch (err) {
       console.error(err);

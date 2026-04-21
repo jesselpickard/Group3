@@ -1,7 +1,7 @@
 import Navbar from "@/app/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
 import QuickAdd from "./quickAdd.js";
-import { summary } from "./deckSummary.js"; 
+import { summary } from "./deckSummary.js";
 import DeckFormatDisplay from "./formatDisplay.js";
 import FormatSelector from "./formatSelection.js";
 import CardStack from "./cardStack.js";
@@ -33,6 +33,20 @@ async function getDeckMeta(deckId) {
 
   if (error) throw new Error(error.message);
   return data;
+}
+
+async function getCommander(deckId) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("decks")
+    .select("commander")
+    .eq("deck_id", deckId)
+    .single();
+
+  if (error) throw new Error(error.message);
+
+  return data?.commander ?? null;
 }
 
 // CATEGORY RULES FUNCTION
@@ -76,10 +90,12 @@ export default async function DeckPage({ params }) {
 
   let deckMeta = null;
   let summaryData = null;
+  let commanderId = null;
 
   if (deckId) {
     deckMeta = await getDeckMeta(deckId);
     summaryData = await summary(deckId);
+    commanderId = await getCommander(deckId);
   }
 
   const groupedCards = groupCardsByType(summaryData?.cards || []);
@@ -94,7 +110,11 @@ export default async function DeckPage({ params }) {
       <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format} />
       <QuickAdd deckId={deckId} />
 
-      <Display data={summaryData} deckId={deckId} />
+      <Display
+        data={summaryData}
+        deckId={deckId}
+        initialCommanderId={commanderId}
+      />
 
       <div className="cardStackContainer">
         {Object.entries(groupedCards).map(([type, group]) =>
