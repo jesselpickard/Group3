@@ -1,12 +1,11 @@
 import Navbar from "@/app/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
 import QuickAdd from "./quickAdd.js";
-import { summary } from "./deckSummary.js"; 
+import { getDeckCards } from "./deckSummary.js"; 
 import DeckFormatDisplay from "./formatDisplay.js";
 import FormatSelector from "./formatSelection.js";
 import CardStack from "./cardStack.js";
 import "./main.css";
-import Display from "./summaryDisplay.js";
 
 /**
  *  This page is meant to lay out the contents of a deck to its viewer. It will allow
@@ -71,30 +70,28 @@ function groupCardsByType(cards) {
   return groups;
 }
 
-export default async function DeckPage({ params }) {
-  const deckId = params?.deckid;
+export default async function DeckPage({ params }){
+  const awaitParams = await params;
+  const deckId = awaitParams?.deckid;
 
+  let cards = [];
+  console.log("deckId is:", deckId);
   let deckMeta = null;
-  let summaryData = null;
 
   if (deckId) {
+    cards = await getDeckCards(deckId);
     deckMeta = await getDeckMeta(deckId);
-    summaryData = await summary(deckId);
   }
 
-  const groupedCards = groupCardsByType(summaryData?.cards || []);
+  const groupedCards = groupCardsByType(cards);
 
   return (
     <div>
       <Navbar />
-
-      <h1>Deck: {deckMeta?.name ?? "No deck selected"}</h1>
-
+      <h1>Deck: {deckMeta?.name ?? "No deck selected"}</h1> {/* protects the page from an invalid id*/}
       <DeckFormatDisplay deckId={deckId} />
-      <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format} />
+      <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format}/>
       <QuickAdd deckId={deckId} />
-
-      <Display data={summaryData} deckId={deckId} />
 
       <div className="cardStackContainer">
         {Object.entries(groupedCards).map(([type, group]) =>
@@ -109,5 +106,5 @@ export default async function DeckPage({ params }) {
         )}
       </div>
     </div>
-  );
+  )
 }
