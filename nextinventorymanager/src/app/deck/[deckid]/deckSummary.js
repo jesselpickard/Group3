@@ -17,6 +17,46 @@ export async function getDeckCards(deckId){//attempts to access the contents of 
   if (error) throw new Error(error.message)
   return data;
 }
+export async function setCommander(deckId, cardId) {
+  const supabase = await createClient();
+
+  //clears existing commander
+  const { error: clearError } = await supabase
+    .from('decks')
+    .update({ commander: null })
+    .eq('deck_id', deckId);
+
+  if (clearError) {
+    throw new Error(clearError.message);
+  }
+
+  //sets it as the new card
+  const { data, error } = await supabase
+    .from('decks')
+    .update({ commander: cardId })
+    .eq('deck_id', deckId)
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+}
+export async function getCommander(deckId) {
+    const supabase = await createClient();
+
+    const {data, error} = await supabase
+        .from('decks')
+        .select('commander')
+        .eq('deck_id', deckId)
+        .single()
+    
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return data.commander;
+}
 
 export async function summary(deckId){
     let cards = []
