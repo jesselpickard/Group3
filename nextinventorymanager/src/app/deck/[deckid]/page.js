@@ -33,12 +33,47 @@ async function getDeckMeta(deckId) {
   return data;
 }
 
+// CATEGORY RULES FUNCTION
+function groupCardsByType(cards) {
+  const groups = {
+    creature: [],
+    artifact: [],
+    battle: [],
+    enchantment: [],
+    instant: [],
+    kindred: [],
+    land: [],
+    planeswalker: [],
+    sorcery: [],
+  };
+
+  for (const card of cards) {
+    const typeLine = (card?.card?.type || "").toLowerCase();
+
+    // Creature override rule
+    if (typeLine.includes("creature")) {
+      groups.creature.push(card);
+      continue;
+    }
+
+    if (typeLine.includes("artifact")) groups.artifact.push(card);
+    else if (typeLine.includes("battle")) groups.battle.push(card);
+    else if (typeLine.includes("enchantment")) groups.enchantment.push(card);
+    else if (typeLine.includes("instant")) groups.instant.push(card);
+    else if (typeLine.includes("kindred")) groups.kindred.push(card);
+    else if (typeLine.includes("land")) groups.land.push(card);
+    else if (typeLine.includes("planeswalker")) groups.planeswalker.push(card);
+    else if (typeLine.includes("sorcery")) groups.sorcery.push(card);
+  }
+
+  return groups;
+}
+
 export default async function DeckPage({ params }){
   const awaitParams = await params;
   const deckId = awaitParams?.deckid;
 
-
-  let cards = []
+  let cards = [];
   console.log("deckId is:", deckId);
   let deckMeta = null;
 
@@ -47,6 +82,8 @@ export default async function DeckPage({ params }){
     deckMeta = await getDeckMeta(deckId);
   }
 
+  const groupedCards = groupCardsByType(cards);
+
   return (
     <div>
       <Navbar />
@@ -54,11 +91,17 @@ export default async function DeckPage({ params }){
       <DeckFormatDisplay deckId={deckId} />
       <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format}/>
       <QuickAdd deckId={deckId} />
-      <CardStack
-        type="Main Deck"
-        cards={cards}
-        deckId={deckId}
-      />
+
+      {Object.entries(groupedCards).map(([type, group]) =>
+        group.length > 0 ? (
+          <CardStack
+            key={type}
+            type={type.charAt(0).toUpperCase() + type.slice(1)}
+            cards={group}
+            deckId={deckId}
+          />
+        ) : null
+      )}
     </div>
   )
 }

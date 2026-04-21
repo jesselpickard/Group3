@@ -1,107 +1,95 @@
-import Navbar from "@/app/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
-import QuickAdd from "./quickAdd.js";
-import { getDeckCards } from "./deckSummary.js"; 
-import DeckFormatDisplay from "./formatDisplay.js";
-import FormatSelector from "./formatSelection.js";
-import CardStack from "./cardStack.js";
 
 /**
- *  This page is meant to lay out the contents of a deck to its viewer. It will allow
- *  for the quick addition and removal of cards to its list as well as the ability to
- *  modify the quantities.
+ * This file takes all the items within the deck in order to summarize its data. 
+ * This includes the quantity of cards, format legality, as well as insights into the mana spread
+ * of the deck.
  * 
- *  To-do list: (non-exhaustive)
- *      Deck display. -> implemented as text for now
- *      Deck info display/modification.
- *      Quick add search.
- *      Card categories
- *      Deck summary.
- * 
+ * seperate the summaryDisplay into a client component.
  */
 
-async function getDeckMeta(deckId) {
+export async function getDeckCards(deckId){//attempts to access the contents of the deck and return 
   const supabase = await createClient();
-
   const { data, error } = await supabase
-    .from("decks")
-    .select("name, format")
-    .eq("deck_id", deckId)
-    .single();
-
-  if (error) throw new Error(error.message);
+    .from('deck_cards')
+    .select('quantity, cards(card_id,name,colors,cost,type,cmc)')
+    .eq('deck_id', deckId)
+  if (error) throw new Error(error.message)
   return data;
 }
 
-// CATEGORY RULES FUNCTION
-function groupCardsByType(cards) {
-  const groups = {
-    creature: [],
-    artifact: [],
-    battle: [],
-    enchantment: [],
-    instant: [],
-    kindred: [],
-    land: [],
-    planeswalker: [],
-    sorcery: [],
-  };
+export async function summary(deckId){
+    let cards = []
 
-  for (const card of cards) {
-    const typeLine = (card?.card?.type_line || "").toLowerCase();
-
-    // Creature override rule
-    if (typeLine.includes("creature")) {
-      groups.creature.push(card);
-      continue;
+    if (deckId) {
+        cards = await getDeckCards(deckId);
     }
+    const flat = cards.map(entry => ({//flattens the raw data into a simpler format
+        ...entry.cards,
+        quantity: entry.quantity
+    }));
+    const mana = flat.reduce((acc, card) => {//summarizes the mana in the deck
+        const { cost, quantity } = card;
 
-    if (typeLine.includes("artifact")) groups.artifact.push(card);
-    else if (typeLine.includes("battle")) groups.battle.push(card);
-    else if (typeLine.includes("enchantment")) groups.enchantment.push(card);
-    else if (typeLine.includes("instant")) groups.instant.push(card);
-    else if (typeLine.includes("kindred")) groups.kindred.push(card);
-    else if (typeLine.includes("land")) groups.land.push(card);
-    else if (typeLine.includes("planeswalker")) groups.planeswalker.push(card);
-    else if (typeLine.includes("sorcery")) groups.sorcery.push(card);
-  }
+        const symbols = cost?.match(/\{(.*?)\}/g) || [];
 
-  return groups;
+        symbols.forEach(symbol => {
+            const value = symbol.replace(/[{}]/g, '');
+
+            if (!isNaN(value)) {//gathers generic costs
+                acc.totalMana += Number(value) * quantity;
+                return;
+            }
+
+            if (value.includes('/')) {//considers hybrid pips as 1 mana total and includes it in both pip colors
+                acc.totalMana += 1 * quantity;
+
+                const parts = value.split('/');
+
+                parts.forEach(part => {
+                if (acc.colorPips[part] !== undefined) {
+                    acc.colorPips[part] += quantity;
+                }
+                });
+
+                return;
+            }
+            acc.totalMana += 1 * quantity;//counts the regular color pip
+            if (acc.colorPips[value] !== undefined) acc.colorPips[value] += quantity;
+        });
+
+        return acc;
+    }, {
+        totalMana: 0,
+        colorPips: {
+        W: 0,
+        U: 0,
+        B: 0,
+        R: 0,
+        G: 0,
+        C: 0
+        }
+    });
+
+    return{
+        totalCards: flat.reduce((sum, card) => sum + card.quantity, 0),
+        totalMana: mana.totalMana,
+        totalPips: mana.colorPips,
+        manaCurve: manaCurve(flat),
+        cards: flat
+    }
 }
 
-export default async function DeckPage({ params }){
-  const awaitParams = await params;
-  const deckId = awaitParams?.deckid;
+function manaCurve(flat) {//gathers the mana curve of the deck
+  const curve = {};
 
-  let cards = [];
-  console.log("deckId is:", deckId);
-  let deckMeta = null;
+  flat.forEach(card => {
+    if (card.type?.toLowerCase().includes("land")) return;//prevents lands from contributing to the curve
 
-  if (deckId) {
-    cards = await getDeckCards(deckId);
-    deckMeta = await getDeckMeta(deckId);
-  }
+    const { cmc, quantity } = card;
+    const key = cmc == null ? "0" : cmc >= 7 ? "7+" : cmc;//caps it at 7 mana before doing +
+    curve[key] = (curve[key] || 0) + quantity;
+  });
 
-  const groupedCards = groupCardsByType(cards);
-
-  return (
-    <div>
-      <Navbar />
-      <h1>Deck: {deckMeta?.name ?? "No deck selected"}</h1> {/* protects the page from an invalid id*/}
-      <DeckFormatDisplay deckId={deckId} />
-      <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format}/>
-      <QuickAdd deckId={deckId} />
-
-      {Object.entries(groupedCards).map(([type, group]) =>
-        group.length > 0 ? (
-          <CardStack
-            key={type}
-            type={type.charAt(0).toUpperCase() + type.slice(1)}
-            cards={group}
-            deckId={deckId}
-          />
-        ) : null
-      )}
-    </div>
-  )
+  return curve;
 }
