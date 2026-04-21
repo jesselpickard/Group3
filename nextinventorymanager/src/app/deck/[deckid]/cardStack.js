@@ -28,17 +28,6 @@ export default function CardStack({ type, cards, deckId }) {
       <div className="stackTitleBox">
         <span className="stackTitleText">{type}</span>
 
-        {activeId && (
-          <button
-            className="stackClearBtn"
-            onClick={(e) => {
-              e.stopPropagation();
-              setActiveId(null);
-            }}
-          >
-            Clear
-          </button>
-        )}
       </div>
 
       <div className="stack">
@@ -110,7 +99,7 @@ function CardImg({
 
   return (
     <Link
-      href={`/cards/${cardId}`}
+      href={`/CardInfo/${cardId}`}
       className="cardLink"
       onClick={handleClick}
     >
