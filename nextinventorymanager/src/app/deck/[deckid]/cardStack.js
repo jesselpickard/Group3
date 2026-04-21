@@ -6,16 +6,18 @@ import QuantityControl from "./quantityButtons";
 import { scryfallApi } from "@/lib/scryfall/Scryfall";
 import "./cardStack.css";
 
-
-
 export default function CardStack({ type, cards, deckId }) {
   const [hoveredId, setHoveredId] = useState(null);
   const [activeId, setActiveId] = useState(null);
 
   return (
-    <div>
-      <h3 className="stackTitle">{type}</h3>
+    <div className="stackWrapper">
+      {/* Title box */}
+      <div className="stackTitleBox">
+        <span className="stackTitleText">{type}</span>
+      </div>
 
+      {/* Card stack */}
       <div className="stack">
         {cards.map((card, index) => {
           const cardId = card.cards.card_id;
@@ -70,19 +72,18 @@ function CardImg({
   const isActive = activeId === cardId;
 
   function handleClick(e) {
-    // First interaction = focus card (no navigation)
+    // first tap/click = focus card (no navigation)
     if (activeId !== cardId) {
       e.preventDefault();
       setActiveId(cardId);
       return;
     }
-
-    // Second click = allow navigation normally
+    // second tap/click = allow Link navigation
   }
 
   return (
     <Link
-      href={`/CardInfo/${cardId}`}
+      href={`/cards/${cardId}`}
       className="cardLink"
       onClick={handleClick}
     >
@@ -102,10 +103,7 @@ function CardImg({
 
         <div
           className="cardOverlay"
-          onClick={(e) => {
-            // prevents QuantityControl from triggering Link navigation
-            e.stopPropagation();
-          }}
+          onClick={(e) => e.stopPropagation()} // protects Link + stack interaction
         >
           <QuantityControl
             deckId={deckId}
