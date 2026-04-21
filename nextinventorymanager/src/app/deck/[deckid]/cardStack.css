@@ -1,13 +1,11 @@
-/*STACK WRAPPER*/
-
+/* STACK WRAPPER */
 .stackWrapper {
   position: relative;
   width: 220px;
   margin: 0 auto;
 }
 
-/*STACK TITLE BOX*/
-
+/* STACK TITLE BOX */
 .stackTitleBox {
   display: flex;
   justify-content: center;
@@ -24,7 +22,6 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
-/* subtle underline like your navbar dividers */
 .stackTitleBox::after {
   content: "";
   position: absolute;
@@ -43,26 +40,28 @@
   text-align: center;
 }
 
-/*STACK CONTAINER*/
-
+/* STACK */
 .stack {
   position: relative;
   width: 100%;
-  min-height: 400px;
 }
 
-/*CARD CONTAINER*/
+/* NEW CANVAS (FIXES HEIGHT COLLAPSE ISSUE) */
+.stackCanvas {
+  position: relative;
+  width: 100%;
+  min-height: 600px; /* prevents cutoff */
+}
 
+/* CARD CONTAINER */
 .cardContainer {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
   transform-origin: top center;
   width: 200px;
 }
 
-/*CARD IMAGE*/
-
+/* CARD IMAGE */
 .cardImage {
   width: 100%;
   border-radius: 8px;
@@ -70,13 +69,12 @@
   display: block;
 }
 
-/* hover zoom (desktop only effectively) */
+/* hover zoom */
 .cardContainer:hover .cardImage {
   transform: scale(1.05);
 }
 
-/*OVERLAY (QUANTITY CONTROLS)*/
-
+/* OVERLAY */
 .cardOverlay {
   position: absolute;
   bottom: 6px;
@@ -90,7 +88,6 @@
   border-radius: 6px;
 }
 
-/* show controls on hover */
 .cardContainer:hover .cardOverlay {
   opacity: 1;
 }
@@ -100,8 +97,7 @@
   color: inherit;
 }
 
-/*DARK MODE*/
-
+/* DARK MODE */
 @media (prefers-color-scheme: dark) {
   .stackTitleBox {
     background-color: #5a1080;

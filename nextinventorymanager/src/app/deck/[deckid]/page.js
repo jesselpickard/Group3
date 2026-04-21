@@ -53,13 +53,12 @@ export default async function DeckPage({ params }){
       <h1>Deck: {deckMeta?.name ?? "No deck selected"}</h1> {/* protects the page from an invalid id*/}
       <DeckFormatDisplay deckId={deckId} />
       <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format}/>
-
+      <QuickAdd deckId={deckId} />
       <CardStack
         type="Main Deck"
         cards={cards}
         deckId={deckId}
       />
-      <QuickAdd deckId={deckId} />
     </div>
   )
 }
