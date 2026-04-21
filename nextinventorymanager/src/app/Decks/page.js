@@ -14,7 +14,7 @@ export default async function Decks() {
   } = await supabase.auth.getUser();
 
   if (authError || !user) {
-    redirect('/login?next=/Inventory');
+    redirect('/login?next=/Decks');
   }
   return (
     <div>
