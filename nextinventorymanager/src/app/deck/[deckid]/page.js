@@ -6,6 +6,7 @@ import SummaryDisplay  from "./deckSummary.js";
 import QuantityControl from "./quantityButtons.js";
 import DeckFormatDisplay from "./formatDisplay.js";
 import FormatSelector from "./formatSelection.js";
+import CardStack from "./cardStack.js";
 
 /**
  *  This page is meant to lay out the contents of a deck to its viewer. It will allow
@@ -84,6 +85,11 @@ export default async function DeckPage({ params }){
       )}
       <QuickAdd deckId={deckId} />
       <SummaryDisplay deckId={deckId}/>
+      <CardStack
+        type="Main Deck"
+        cards={cards}
+        deckId={deckId}
+      />
     </div>
   )
 }
