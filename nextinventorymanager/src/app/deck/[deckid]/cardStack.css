@@ -54,31 +54,23 @@
 /*CARD CONTAINER*/
 
 .cardContainer {
-  position: relative;
-
+  position: absolute;
   left: 50%;
   transform: translateX(-50%);
   transform-origin: top center;
-
   width: 200px;
+}
 
-  /* stacking effect */
-  margin-top: -140px;
-  z-index: 1;
+/*CARD IMAGE*/
 
+.cardImage {
+  width: 100%;
+  border-radius: 8px;
   transition: transform 0.2s ease;
+  display: block;
 }
 
-/* first card should not overlap upward */
-.cardContainer:first-child {
-  margin-top: 0;
-}
-
-/* hover zoom */
-.cardContainer:hover {
-  z-index: 999;
-}
-
+/* hover zoom (desktop only effectively) */
 .cardContainer:hover .cardImage {
   transform: scale(1.05);
 }
