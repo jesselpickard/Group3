@@ -1,8 +1,9 @@
 /* STACK WRAPPER */
 .stackWrapper {
   position: relative;
-  width: 220px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 220px;
+  margin: 0 auto 40px;
   margin-bottom: 40px;
 }
 
@@ -44,7 +45,6 @@
 .stackCanvas {
   position: relative;
   width: 100%;
-  min-height: 600px; /* prevents cutoff */
   padding-top: 30px;
 }
 

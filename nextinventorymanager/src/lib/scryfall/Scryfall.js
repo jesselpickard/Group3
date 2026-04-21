@@ -61,9 +61,15 @@ function rateLimitedFetch(url) {//ensures we do not exceed the rate limit reques
 }
 
 export const scryfallApi = {
-  async search(query) {
+
+  async browse(order = "name") {
+    return this.search("game:paper", { order });
+  },
+
+  async search(query, options = {}) {
+    const { order } = options;
     let allCards = [];
-    let url = `https://api.scryfall.com/cards/search?q=${encodeURIComponent(query)}`;
+    let url = `https://api.scryfall.com/cards/search?q=${encodeURIComponent(query)}${order ? `&order=${order}` : ''}`;
 
     while (url && allCards.length < MAX_CARDS) {
       const res = await rateLimitedFetch(url);

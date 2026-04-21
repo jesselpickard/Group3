@@ -7,6 +7,7 @@ import FormatSelector from "./formatSelection.js";
 import CardStack from "./cardStack.js";
 import "./main.css";
 import Display from "./summaryDisplay.js";
+import Masonry from "./masonry.js";
 
 /**
  *  This page is meant to lay out the contents of a deck to its viewer. It will allow
@@ -99,12 +100,14 @@ export default async function DeckPage({ params }) {
       <div className="cardStackContainer">
         {Object.entries(groupedCards).map(([type, group]) =>
           group.length > 0 ? (
-            <CardStack
-              key={type}
-              type={type.charAt(0).toUpperCase() + type.slice(1)}
-              cards={group}
-              deckId={deckId}
-            />
+            <Masonry key={type}>
+              <CardStack 
+                key={type}
+                type={type.charAt(0).toUpperCase() + type.slice(1)}
+                cards={group}
+                deckId={deckId}
+              />
+            </Masonry>
           ) : null
         )}
       </div>
