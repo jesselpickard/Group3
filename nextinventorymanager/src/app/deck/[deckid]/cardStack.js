@@ -6,22 +6,9 @@ import QuantityControl from "./quantityButtons";
 import { scryfallApi } from "@/lib/scryfall/Scryfall";
 import "./cardStack.css";
 
-/**
- * This component will allow cards to be visually represented as a stack while in a deck page.
- * When the user hovers their mouse over a card it should gain focus so that they can view the 
- * whole image.
- * 
- * This file should also contain a function that sets up the cards image, overlaying the quantity
- * controls over it. 
- * 
- * CardStack - Type is given to the item to know how to label the stack, while cards will be the contents
- * CardImg - Takes an ID representing a card in order to associate the quantity control and source the image
- *  from scryfall
- */
-
-
-
 export default function CardStack({ type, cards, deckId }) {
+  const [hoveredId, setHoveredId] = useState(null);
+
   return (
     <div>
       <h3>{type}</h3>
@@ -32,21 +19,30 @@ export default function CardStack({ type, cards, deckId }) {
           const quantity = card.quantity;
 
           return (
-          <CardImg
-            key={cardId}
-            cardId={cardId}
-            quantity={quantity}
-            deckId={deckId}
-            index={index}
-          />
+            <CardImg
+              key={cardId}
+              cardId={cardId}
+              quantity={quantity}
+              deckId={deckId}
+              index={index}
+              hoveredId={hoveredId}
+              setHoveredId={setHoveredId}
+            />
           );
         })}
-        </div>
+      </div>
     </div>
   );
 }
 
-function CardImg({ cardId, quantity, deckId, index }) {
+function CardImg({
+  cardId,
+  quantity,
+  deckId,
+  index,
+  hoveredId,
+  setHoveredId,
+}) {
   const [card, setCard] = useState(null);
 
   useEffect(() => {
@@ -62,6 +58,8 @@ function CardImg({ cardId, quantity, deckId, index }) {
   const imageUrl =
     card.image_uris?.normal ||
     card.card_faces?.[0]?.image_uris?.normal;
+
+  const isHovered = hoveredId === cardId;
 
   return (
     <Link href={`/cards/${cardId}`} className="cardLink">
@@ -82,7 +80,6 @@ function CardImg({ cardId, quantity, deckId, index }) {
         <div
           className="cardOverlay"
           onClick={(e) => {
-            // prevents link navigation when clicking controls
             e.preventDefault();
             e.stopPropagation();
           }}
