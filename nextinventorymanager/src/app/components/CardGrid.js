@@ -1,8 +1,10 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './CardGrid.css';
 import Link from "next/link";
 import Menu from './CollapsibleMenu.js';
+import { scryfallApi } from "../../lib/scryfall/Scryfall";
+
 
 // placeholder colors, one per page. cycles if there are more pages than colors
 const colors = [
@@ -105,8 +107,20 @@ export default function CardGrid({ totalPages = 20 }) {
   // tracks which page the user is currently on
   const [currentPage, setCurrentPage] = useState(1);
   const [cards, setCards] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    scryfallApi.browse().then(data => {
+      setCards(data.data || []);
+      setLoading(false);
+    });
+  }, []);
+
   // picks a color based on the current page, cycling through the colors array
   const currentColor = colors[(currentPage - 1) % colors.length];
+  useEffect(() => {
+    scryfallApi.browse().then(data => setCards(data.data || []));
+  }, []);
 
   //page data
   const CARDS_PER_PAGE = 81;

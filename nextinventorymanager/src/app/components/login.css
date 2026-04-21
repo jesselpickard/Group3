@@ -1,0 +1,101 @@
+.login-main {
+  min-height: 100vh;
+  background-color: #f3e6fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.login-card {
+  background: white;
+  border: 2px solid #71179C;
+  border-radius: 12px;
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+}
+
+.login-logo-img {
+  width: 180px;
+  height: auto;
+  display: block;
+  margin: 0 auto 8px;
+}
+
+.login-logo-text {
+  width: 220px;
+  height: auto;
+  display: block;
+  margin: 0 auto 20px;
+}
+
+.login-subtitle {
+  color: #5a1080;
+  font-size: 13px;
+  margin: 0 0 28px;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 12px 20px;
+  background-color: #71179C;
+  color: white;
+  border: 2px solid #c084e8;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background-color 0.2s, opacity 0.2s;
+}
+
+.login-btn:hover {
+  background-color: #5a1080;
+}
+
+.login-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-error {
+  margin-top: 16px;
+  color: #e05c5c;
+  font-size: 13px;
+  background-color: #fdecea;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #4a2020;
+}
+
+/* ---- DARK MODE ---- */
+@media (prefers-color-scheme: dark) {
+  .login-main {
+    background-color: #1a1a1a;
+  }
+
+  .login-card {
+    background: #2d1040;
+  }
+
+  .login-title {
+    color: #e0c0f0;
+  }
+
+  .login-subtitle {
+    color: #9b6bb5;
+  }
+
+  .login-btn:hover {
+    background-color: #5a1080;
+  }
+
+  .login-error {
+    background-color: #2a1515;
+  }
+}
