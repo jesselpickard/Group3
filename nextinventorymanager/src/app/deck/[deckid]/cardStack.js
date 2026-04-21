@@ -76,27 +76,36 @@ function CardImg({
   const isHovered = hoveredId === cardId;
 
   return (
-    <div
-      className="cardContainer"
-      onMouseEnter={() => setHoveredId(cardId)}
-      onMouseLeave={() => setHoveredId(null)}
-      style={{
-        position: "absolute",
-        top: `${index * 40}px`,
-        left: "50%",
-        transform: "translateX(-50%)",
-        zIndex: isHovered ? 9999 : index,
-      }}
-    >
-      <img src={imageUrl} alt={card.name} className="cardImage" />
+    <Link href={`/cards/${cardId}`} className="cardLink">
+      <div
+        className="cardContainer"
+        onMouseEnter={() => setHoveredId(cardId)}
+        onMouseLeave={() => setHoveredId(null)}
+        style={{
+          position: "absolute",
+          top: `${index * 40}px`,
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: isHovered ? 9999 : index,
+        }}
+      >
+        <img src={imageUrl} alt={card.name} className="cardImage" />
 
-      <div className="cardOverlay">
-        <QuantityControl
-          deckId={deckId}
-          cardId={cardId}
-          quantity={quantity}
-        />
+        <div
+          className="cardOverlay"
+          onClick={(e) => {
+            // prevents link navigation when clicking controls
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+        >
+          <QuantityControl
+            deckId={deckId}
+            cardId={cardId}
+            quantity={quantity}
+          />
+        </div>
       </div>
-    </div>
+    </Link>
   );
 }
