@@ -30,7 +30,7 @@ export default function CardStack({ type, cards, deckId }) {
 
       </div>
 
-      <div className="stack">
+      <div className="stackCanvas">
         {cards.map((card, index) => {
           const cardId = card.cards.card_id;
           const quantity = card.quantity;
