@@ -8,6 +8,7 @@
 .stack {
   position: relative;
   align-items: center;
+  min-height: 400px; /* helps prevent collapse */
 }
 
 .cardImage {
@@ -20,7 +21,6 @@
 .cardContainer:hover .cardImage {
   transform: scale(1.05);
 }
-
 
 /* overlay (hidden by default) */
 .cardOverlay {

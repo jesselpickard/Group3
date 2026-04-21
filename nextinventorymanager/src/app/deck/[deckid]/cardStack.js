@@ -21,6 +21,8 @@ import "./cardStack.css";
 
 
 export default function CardStack({ type, cards, deckId }) {
+  const [hoveredId, setHoveredId] = useState(null);
+
   return (
     <div>
       <h3>{type}</h3>
@@ -31,21 +33,30 @@ export default function CardStack({ type, cards, deckId }) {
           const quantity = card.quantity;
 
           return (
-          <CardImg
-            key={cardId}
-            cardId={cardId}
-            quantity={quantity}
-            deckId={deckId}
-            index={index}
-          />
+            <CardImg
+              key={cardId}
+              cardId={cardId}
+              quantity={quantity}
+              deckId={deckId}
+              index={index}
+              hoveredId={hoveredId}
+              setHoveredId={setHoveredId}
+            />
           );
         })}
-        </div>
+      </div>
     </div>
   );
 }
 
-function CardImg({ cardId, quantity, deckId, index }) {
+function CardImg({
+  cardId,
+  quantity,
+  deckId,
+  index,
+  hoveredId,
+  setHoveredId,
+}) {
   const [card, setCard] = useState(null);
 
   useEffect(() => {
@@ -62,10 +73,21 @@ function CardImg({ cardId, quantity, deckId, index }) {
     card.image_uris?.normal ||
     card.card_faces?.[0]?.image_uris?.normal;
 
-  return (
-    <div className="cardContainer" style={{ position: "absolute", top: `${index * 40}px`,
-    left: "50%", transform: "translateX(-50%)", zIndex: index }}>
+  const isHovered = hoveredId === cardId;
 
+  return (
+    <div
+      className="cardContainer"
+      onMouseEnter={() => setHoveredId(cardId)}
+      onMouseLeave={() => setHoveredId(null)}
+      style={{
+        position: "absolute",
+        top: `${index * 40}px`,
+        left: "50%",
+        transform: "translateX(-50%)",
+        zIndex: isHovered ? 9999 : index,
+      }}
+    >
       <img src={imageUrl} alt={card.name} className="cardImage" />
 
       <div className="cardOverlay">
