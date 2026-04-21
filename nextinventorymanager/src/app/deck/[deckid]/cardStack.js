@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import QuantityControl from "./quantityButtons";
 import { scryfallApi } from "@/lib/scryfall/Scryfall";
 import "./cardStack.css";
@@ -21,8 +22,6 @@ import "./cardStack.css";
 
 
 export default function CardStack({ type, cards, deckId }) {
-  const [hoveredId, setHoveredId] = useState(null);
-
   return (
     <div>
       <h3>{type}</h3>
@@ -33,30 +32,21 @@ export default function CardStack({ type, cards, deckId }) {
           const quantity = card.quantity;
 
           return (
-            <CardImg
-              key={cardId}
-              cardId={cardId}
-              quantity={quantity}
-              deckId={deckId}
-              index={index}
-              hoveredId={hoveredId}
-              setHoveredId={setHoveredId}
-            />
+          <CardImg
+            key={cardId}
+            cardId={cardId}
+            quantity={quantity}
+            deckId={deckId}
+            index={index}
+          />
           );
         })}
-      </div>
+        </div>
     </div>
   );
 }
 
-function CardImg({
-  cardId,
-  quantity,
-  deckId,
-  index,
-  hoveredId,
-  setHoveredId,
-}) {
+function CardImg({ cardId, quantity, deckId, index }) {
   const [card, setCard] = useState(null);
 
   useEffect(() => {
@@ -72,8 +62,6 @@ function CardImg({
   const imageUrl =
     card.image_uris?.normal ||
     card.card_faces?.[0]?.image_uris?.normal;
-
-  const isHovered = hoveredId === cardId;
 
   return (
     <Link href={`/cards/${cardId}`} className="cardLink">
