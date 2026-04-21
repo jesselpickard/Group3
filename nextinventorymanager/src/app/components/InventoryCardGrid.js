@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import Menu from "./CollapsibleMenu";
+import Menu from "./InventoryMenu";
 import "./CardGrid.css";
 
 const colors = [
@@ -114,6 +114,7 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
 
 export default function InventoryCardGrid({ initialCards = [] }) {
   const [currentPage, setCurrentPage] = useState(1);
+  const [filteredCards, setFilteredCards] = useState(initialCards);
 
   const CARDS_PER_PAGE = 81;
   const currentColor = colors[(currentPage - 1) % colors.length];
@@ -122,10 +123,10 @@ export default function InventoryCardGrid({ initialCards = [] }) {
 
   const visibleCards = useMemo(() => {
     const startIndex = (currentPage - 1) * CARDS_PER_PAGE;
-    return initialCards.slice(startIndex, startIndex + CARDS_PER_PAGE);
-  }, [initialCards, currentPage]);
+    return filteredCards.slice(startIndex, startIndex + CARDS_PER_PAGE);
+  }, [filteredCards, currentPage]);
 
-  const TOTAL_PAGES = Math.max(1, Math.ceil(initialCards.length / CARDS_PER_PAGE));
+  const TOTAL_PAGES = Math.max(1, Math.ceil(filteredCards.length / CARDS_PER_PAGE));
 
   return (
     <div
@@ -149,7 +150,7 @@ export default function InventoryCardGrid({ initialCards = [] }) {
 
       <div className="main-layout">
         <div className="sidebar-area">
-          <Menu setCards={() => {}} setCurrentPage={setCurrentPage} />
+          <Menu inventoryCards={initialCards} setCards={setFilteredCards} setCurrentPage={setCurrentPage} />
         </div>
 
         <div className="content-area">
