@@ -19,23 +19,27 @@ export default function CardStack({ type, cards, deckId }) {
     }
 
     document.addEventListener("click", handleOutsideClick);
-    return () => document.removeEventListener("click", handleOutsideClick);
+    return () =>
+      document.removeEventListener("click", handleOutsideClick);
   }, [activeId]);
 
   return (
     <div className="stackWrapper">
       <div className="stackTitleBox">
         <span className="stackTitleText">{type}</span>
+
       </div>
 
-      {/* NEW: proper layout canvas */}
       <div className="stack">
-        <div className="stackCanvas">
-          {cards.map((card, index) => (
+        {cards.map((card, index) => {
+          const cardId = card.cards.card_id;
+          const quantity = card.quantity;
+
+          return (
             <CardImg
-              key={card.cards.card_id}
-              cardId={card.cards.card_id}
-              quantity={card.quantity}
+              key={cardId}
+              cardId={cardId}
+              quantity={quantity}
               deckId={deckId}
               index={index}
               hoveredId={hoveredId}
@@ -43,8 +47,8 @@ export default function CardStack({ type, cards, deckId }) {
               activeId={activeId}
               setActiveId={setActiveId}
             />
-          ))}
-        </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -82,44 +86,44 @@ function CardImg({
   function handleClick(e) {
     e.stopPropagation();
 
+    // FIRST CLICK: focus (no navigation)
     if (activeId !== cardId) {
       e.preventDefault();
       setActiveId(cardId);
       return;
     }
+
+    // SECOND CLICK: allow Link navigation
+    // (do nothing → Link proceeds normally)
   }
 
   return (
-    <Link
-      href={`/CardInfo/${cardId}`}
-      className="cardLink"
-      onClick={handleClick}
-    >
-      <div
+    <div
         className="cardContainer"
         onMouseEnter={() => setHoveredId(cardId)}
         onMouseLeave={() => setHoveredId(null)}
         style={{
-          top: `${index * 40}px`,
-          transform: isActive
+        top: `${index * 40}px`,
+        transform: isActive
             ? "translateX(-50%) scale(1.05)"
             : "translateX(-50%)",
-          zIndex: isActive ? 1000 : isHovered ? 999 : index,
-        }}
-      >
+        zIndex: isActive ? 1000 : isHovered ? 999 : index,
+    }}>
+        <Link href={`/CardInfo/${cardId}`} className="cardLink">
         <img src={imageUrl} alt={card.name} className="cardImage" />
+        </Link>
 
         <div
-          className="cardOverlay"
-          onClick={(e) => e.stopPropagation()}
+        className="cardOverlay"
+        onMouseDown={(e) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
         >
-          <QuantityControl
+        <QuantityControl
             deckId={deckId}
             cardId={cardId}
             quantity={quantity}
-          />
+        />
         </div>
-      </div>
-    </Link>
-  );
+    </div>
+    );
 }
