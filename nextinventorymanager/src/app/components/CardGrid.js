@@ -144,40 +144,28 @@ export default function CardGrid({ totalPages = 20 }) {
         <div className="content-area">
           {/* 81 placeholder card rectangles in the current page color */}
           <div className="card-grid">
-            {cards.length > 0 ? (
-              visibleCards.map((card) => (
-                <Link key={card.id} href={`/CardInfo/${card.id}`}>
-                  <div key={card.id} className="card">
-                    <picture>
-                      {/*Higher res images on mobile*/}
-                      <source
-                        media="(max-width: 800px)"
-                        srcSet={
-                          card.image_uris?.large ||
-                          card.card_faces?.[0]?.image_uris?.large
-                        }
-                      />
-                      {/*small image res on desktop*/}
-                      <img
-                        src={
-                          card.image_uris?.small ||
-                          card.card_faces?.[0]?.image_uris?.small
-                        }
-                        alt={card.name}
-                      />
-                    </picture>
-                  </div>
-                </Link>
-              ))
-            ) : (
-              Array.from({ length: CARDS_PER_PAGE }).map((_, i) => (
-                <div
-                  key={i}
-                  className="card-placeholder"
-                  style={{ backgroundColor: currentColor }}
-                />
-              ))
-            )}
+            {visibleCards.map((card) => (
+              <Link key={card.id} href={`/CardInfo/${card.id}`}>
+                <div className="card">
+                  <picture>
+                    <source
+                      media="(max-width: 800px)"
+                      srcSet={
+                        card.image_uris?.large ||
+                        card.card_faces?.[0]?.image_uris?.large
+                      }
+                    />
+                    <img
+                      src={
+                        card.image_uris?.small ||
+                        card.card_faces?.[0]?.image_uris?.small
+                      }
+                      alt={card.name}
+                    />
+                  </picture>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </div>

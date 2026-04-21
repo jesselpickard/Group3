@@ -26,9 +26,8 @@ export default function LoginPage() {
 
     try {
       const safeNext = getSafeNextFromUrl();
-      const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(
-        safeNext
-      )}`;
+      document.cookie = `redirectAfterLogin=${encodeURIComponent(safeNext)}; path=/; max-age=300`;
+      const redirectTo = `${window.location.origin}/auth/callback`;
 
       const supabase = createClient();
       const { error } = await supabase.auth.signInWithOAuth({
