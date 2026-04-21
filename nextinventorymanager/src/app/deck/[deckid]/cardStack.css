@@ -3,9 +3,6 @@
   position: relative;
   width: 220px;
   margin: 0 auto;
-
-  display: flex;
-  flex-direction: column;
 }
 
 /* STACK TITLE BOX */
@@ -46,7 +43,7 @@
 .stackCanvas {
   position: relative;
   width: 100%;
-  min-height: 1px; 
+  min-height: 600px; /* prevents cutoff */
 }
 
 /* CARD CONTAINER */
