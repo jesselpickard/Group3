@@ -63,8 +63,8 @@ function CardImg({ cardId, quantity, deckId, index }) {
     card.card_faces?.[0]?.image_uris?.normal;
 
   return (
-    <div className="cardContainer" style={{position: "relative",
-    zIndex: index, transform: `translateY(${index * 20}px)`,}}>
+    <div className="cardContainer" style={{ position: "absolute", top: `${index * 20}px`,
+    left: "50%", transform: "translateX(-50%)", zIndex: index }}>
 
       <img src={imageUrl} alt={card.name} className="cardImage" />
 

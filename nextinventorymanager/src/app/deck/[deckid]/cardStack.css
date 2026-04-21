@@ -1,13 +1,12 @@
 .cardContainer {
-  position: relative;
+  position: absolute;
+  left: 50%;
+  transform-origin: top center;
   width: 200px;
-  transition: transform 0.2s ease;
 }
 
 .stack {
   position: relative;
-  display: flex;
-  flex-direction: column;
   align-items: center;
 }
 
