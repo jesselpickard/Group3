@@ -1,12 +1,12 @@
 import Navbar from "@/app/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
 import QuickAdd from "./quickAdd.js";
-import { summary } from "./deckSummary.js";
+import { getDeckCards } from "./deckSummary.js"; 
 import DeckFormatDisplay from "./formatDisplay.js";
 import FormatSelector from "./formatSelection.js";
 import CardStack from "./cardStack.js";
 import "./main.css";
-import Display from "./summaryDisplay.js";
+import Masonry from "./masonry.js";
 
 /**
  *  This page is meant to lay out the contents of a deck to its viewer. It will allow
@@ -33,20 +33,6 @@ async function getDeckMeta(deckId) {
 
   if (error) throw new Error(error.message);
   return data;
-}
-
-async function getCommander(deckId) {
-  const supabase = await createClient();
-
-  const { data, error } = await supabase
-    .from("decks")
-    .select("commander")
-    .eq("deck_id", deckId)
-    .single();
-
-  if (error) throw new Error(error.message);
-
-  return data?.commander ?? null;
 }
 
 // CATEGORY RULES FUNCTION
@@ -85,49 +71,43 @@ function groupCardsByType(cards) {
   return groups;
 }
 
-export default async function DeckPage({ params }) {
-  const deckId = params?.deckid;
+export default async function DeckPage({ params }){
+  const awaitParams = await params;
+  const deckId = awaitParams?.deckid;
 
+  let cards = [];
+  console.log("deckId is:", deckId);
   let deckMeta = null;
-  let summaryData = null;
-  let commanderId = null;
 
   if (deckId) {
+    cards = await getDeckCards(deckId);
     deckMeta = await getDeckMeta(deckId);
-    summaryData = await summary(deckId);
-    commanderId = await getCommander(deckId);
   }
 
-  const groupedCards = groupCardsByType(summaryData?.cards || []);
+  const groupedCards = groupCardsByType(cards);
 
   return (
     <div>
       <Navbar />
-
-      <h1>Deck: {deckMeta?.name ?? "No deck selected"}</h1>
-
+      <h1>Deck: {deckMeta?.name ?? "No deck selected"}</h1> {/* protects the page from an invalid id*/}
       <DeckFormatDisplay deckId={deckId} />
-      <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format} />
+      <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format}/>
       <QuickAdd deckId={deckId} />
-
-      <Display
-        data={summaryData}
-        deckId={deckId}
-        initialCommanderId={commanderId}
-      />
 
       <div className="cardStackContainer">
         {Object.entries(groupedCards).map(([type, group]) =>
           group.length > 0 ? (
-            <CardStack
-              key={type}
-              type={type.charAt(0).toUpperCase() + type.slice(1)}
-              cards={group}
-              deckId={deckId}
-            />
+            <Masonry key={type}>
+              <CardStack 
+                key={type}
+                type={type.charAt(0).toUpperCase() + type.slice(1)}
+                cards={group}
+                deckId={deckId}
+              />
+            </Masonry>
           ) : null
         )}
       </div>
     </div>
-  );
+  )
 }
