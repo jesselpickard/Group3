@@ -25,7 +25,7 @@ export default function CardStack({ type, cards, deckId }) {
     <div>
       <h3>{type}</h3>
 
-      <div className={styles.stack}>
+      <div className={stack}>
         {cards.map((card, index) => {
           const cardId = card.cards.card_id;
           const quantity = card.quantity;
@@ -63,7 +63,7 @@ function CardImg({ cardId, quantity, deckId, index }) {
     card.card_faces?.[0]?.image_uris?.normal;
 
   return (
-    <div className={styles.cardContainer} style={{position: "relative",
+    <div className={cardContainer} style={{position: "relative",
     zIndex: index, transform: `translateY(${index * 20}px)`,}}>
 
       <img src={imageUrl} alt={card.name} className="cardImage" />
