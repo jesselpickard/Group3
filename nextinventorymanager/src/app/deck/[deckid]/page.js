@@ -48,7 +48,7 @@ function groupCardsByType(cards) {
   };
 
   for (const card of cards) {
-    const typeLine = (card?.card?.type || "").toLowerCase();
+    const typeLine = (card?.cards?.type || "").toLowerCase();
 
     // Creature override rule
     if (typeLine.includes("creature")) {
