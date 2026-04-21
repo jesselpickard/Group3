@@ -1,7 +1,7 @@
 import Navbar from "@/app/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
 import QuickAdd from "./quickAdd.js";
-import { getDeckCards, summary } from "./deckSummary.js"; 
+import { summary } from "./deckSummary.js"; 
 import DeckFormatDisplay from "./formatDisplay.js";
 import FormatSelector from "./formatSelection.js";
 import CardStack from "./cardStack.js";
