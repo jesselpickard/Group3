@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import QuantityControl from "./quantityButtons";
 import { scryfallApi } from "@/lib/scryfall/Scryfall";
 import "./cardStack.css";
+
 
 
 export default function CardStack({ type, cards, deckId }) {
@@ -49,7 +50,6 @@ function CardImg({
   activeId,
   setActiveId,
 }) {
-  const router = useRouter();
   const [card, setCard] = useState(null);
 
   useEffect(() => {
@@ -69,45 +69,51 @@ function CardImg({
   const isHovered = hoveredId === cardId;
   const isActive = activeId === cardId;
 
-  function handleTap() {
-    // First tap = focus card
-    // Second tap = navigate
-    if (activeId === cardId) {
-      router.push(`/cards/${cardId}`);
-    } else {
+  function handleClick(e) {
+    // First interaction = focus card (no navigation)
+    if (activeId !== cardId) {
+      e.preventDefault();
       setActiveId(cardId);
+      return;
     }
+
+    // Second click = allow navigation normally
   }
 
   return (
-    <div
-      className="cardContainer"
-      onClick={handleTap}
-      onMouseEnter={() => setHoveredId(cardId)}
-      onMouseLeave={() => setHoveredId(null)}
-      style={{
-        position: "absolute",
-        top: `${index * 40}px`,
-        left: "50%",
-        transform: "translateX(-50%)",
-        zIndex: isActive ? 9999 : isHovered ? 9998 : index,
-      }}
+    <Link
+      href={`/CardInfo/${cardId}`}
+      className="cardLink"
+      onClick={handleClick}
     >
-      <img src={imageUrl} alt={card.name} className="cardImage" />
-
       <div
-        className="cardOverlay"
-        onClick={(e) => {
-          // prevent clicks on controls from triggering navigation/focus
-          e.stopPropagation();
+        className="cardContainer"
+        onMouseEnter={() => setHoveredId(cardId)}
+        onMouseLeave={() => setHoveredId(null)}
+        style={{
+          position: "absolute",
+          top: `${index * 40}px`,
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: isActive ? 9999 : isHovered ? 9998 : index,
         }}
       >
-        <QuantityControl
-          deckId={deckId}
-          cardId={cardId}
-          quantity={quantity}
-        />
+        <img src={imageUrl} alt={card.name} className="cardImage" />
+
+        <div
+          className="cardOverlay"
+          onClick={(e) => {
+            // prevents QuantityControl from triggering Link navigation
+            e.stopPropagation();
+          }}
+        >
+          <QuantityControl
+            deckId={deckId}
+            cardId={cardId}
+            quantity={quantity}
+          />
+        </div>
       </div>
-    </div>
+    </Link>
   );
 }
