@@ -120,7 +120,8 @@ function CardImg({
           zIndex: isActive ? 1000 : isHovered ? 999 : index,
         }}
       >
-        <img src={imageUrl} alt={card.name} className="cardImage" />
+        <img src={imageUrl} alt={card.name} className="cardImage"
+        onLoad={() => {window.dispatchEvent(new Event("resize"));}} />
 
         <div className="cardOverlay"
             onClick={(e) => {
