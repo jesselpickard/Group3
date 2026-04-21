@@ -62,7 +62,7 @@ function CardImg({
   const isHovered = hoveredId === cardId;
 
   return (
-    <Link href={`/cards/${cardId}`} className="cardLink">
+    <Link href={`/CardInfo/${cardId}`} className="cardLink">
       <div
         className="cardContainer"
         onMouseEnter={() => setHoveredId(cardId)}
