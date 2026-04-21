@@ -98,32 +98,36 @@ function CardImg({
   }
 
   return (
-    <div
+    <Link
+      href={`/CardInfo/${cardId}`}
+      className="cardLink"
+      onClick={handleClick}
+    >
+      <div
         className="cardContainer"
         onMouseEnter={() => setHoveredId(cardId)}
         onMouseLeave={() => setHoveredId(null)}
         style={{
-        top: `${index * 40}px`,
-        transform: isActive
-            ? "translateX(-50%) scale(1.05)"
-            : "translateX(-50%)",
-        zIndex: isActive ? 1000 : isHovered ? 999 : index,
-    }}>
-        <Link href={`/CardInfo/${cardId}`} className="cardLink">
+          position: "absolute",
+          top: `${index * 40}px`,
+          left: "50%",
+          transform: `translateX(-50%) ${isActive ? "scale(1.05)" : ""}`,
+          zIndex: isActive ? 1000 : isHovered ? 999 : index,
+        }}
+      >
         <img src={imageUrl} alt={card.name} className="cardImage" />
-        </Link>
 
         <div
-        className="cardOverlay"
-        onMouseDown={(e) => e.stopPropagation()}
-        onClick={(e) => e.stopPropagation()}
+          className="cardOverlay"
+          onClick={(e) => e.stopPropagation()}
         >
-        <QuantityControl
+          <QuantityControl
             deckId={deckId}
             cardId={cardId}
             quantity={quantity}
-        />
+          />
         </div>
-    </div>
-    );
+      </div>
+    </Link>
+  );
 }
