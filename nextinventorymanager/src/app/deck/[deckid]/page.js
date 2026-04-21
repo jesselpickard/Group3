@@ -56,33 +56,6 @@ export default async function DeckPage({ params }){
       <DeckFormatDisplay deckId={deckId} />
       <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format}/>
 
-      {deckId ? (
-        <ul>
-          {cards.map(card => (
-            <li
-              key={card.cards.card_id}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                gap: "12px",
-              }}
-            >
-              <span>
-                {card.cards.name}
-              </span>
-
-              <QuantityControl
-                deckId={deckId}
-                cardId={card.cards.card_id}
-                quantity={card.quantity}
-              />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>Please select a deck.</p>
-      )}
       <QuickAdd deckId={deckId} />
       <SummaryDisplay deckId={deckId}/>
       <CardStack
