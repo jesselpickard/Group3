@@ -44,7 +44,6 @@
 .stackCanvas {
   position: relative;
   width: 100%;
-  min-height: 600px; /* prevents cutoff */
   padding-top: 30px;
 }
 
