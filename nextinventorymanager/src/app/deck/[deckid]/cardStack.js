@@ -29,7 +29,7 @@ export default function CardStack({ type, cards, deckId }) {
   }, [activeId]);
 
   return (
-    <div className="stackWrapper">
+    <div className="stackWrapper" style={{ height: `${stackHeight + 60}px` }}>
       <div className="stackTitleBox">
         <span className="stackTitleText">{type}</span>
 
@@ -120,8 +120,7 @@ function CardImg({
           zIndex: isActive ? 1000 : isHovered ? 999 : index,
         }}
       >
-        <img src={imageUrl} alt={card.name} className="cardImage"
-        onLoad={() => {window.dispatchEvent(new Event("resize"));}} />
+        <img src={imageUrl} alt={card.name} className="cardImage" />
 
         <div className="cardOverlay"
             onClick={(e) => {

@@ -1,8 +1,9 @@
 /* STACK WRAPPER */
 .stackWrapper {
   position: relative;
-  width: 220px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 220px;
+  margin: 0 auto 40px;
   margin-bottom: 40px;
 }
 
