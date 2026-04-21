@@ -10,14 +10,37 @@ export default function CardStack({ type, cards, deckId }) {
   const [hoveredId, setHoveredId] = useState(null);
   const [activeId, setActiveId] = useState(null);
 
+  // click outside clears focus
+  useEffect(() => {
+    if (activeId === null) return;
+
+    function handleOutsideClick() {
+      setActiveId(null);
+    }
+
+    document.addEventListener("click", handleOutsideClick);
+    return () =>
+      document.removeEventListener("click", handleOutsideClick);
+  }, [activeId]);
+
   return (
     <div className="stackWrapper">
-      {/* Title box */}
       <div className="stackTitleBox">
         <span className="stackTitleText">{type}</span>
+
+        {activeId && (
+          <button
+            className="stackClearBtn"
+            onClick={(e) => {
+              e.stopPropagation();
+              setActiveId(null);
+            }}
+          >
+            Clear
+          </button>
+        )}
       </div>
 
-      {/* Card stack */}
       <div className="stack">
         {cards.map((card, index) => {
           const cardId = card.cards.card_id;
@@ -72,13 +95,17 @@ function CardImg({
   const isActive = activeId === cardId;
 
   function handleClick(e) {
-    // first tap/click = focus card (no navigation)
+    e.stopPropagation();
+
+    // FIRST CLICK: focus (no navigation)
     if (activeId !== cardId) {
       e.preventDefault();
       setActiveId(cardId);
       return;
     }
-    // second tap/click = allow Link navigation
+
+    // SECOND CLICK: allow Link navigation
+    // (do nothing → Link proceeds normally)
   }
 
   return (
@@ -95,15 +122,15 @@ function CardImg({
           position: "absolute",
           top: `${index * 40}px`,
           left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: isActive ? 9999 : isHovered ? 9998 : index,
+          transform: `translateX(-50%) ${isActive ? "scale(1.05)" : ""}`,
+          zIndex: isActive ? 1000 : isHovered ? 999 : index,
         }}
       >
         <img src={imageUrl} alt={card.name} className="cardImage" />
 
         <div
           className="cardOverlay"
-          onClick={(e) => e.stopPropagation()} // protects Link + stack interaction
+          onClick={(e) => e.stopPropagation()}
         >
           <QuantityControl
             deckId={deckId}
