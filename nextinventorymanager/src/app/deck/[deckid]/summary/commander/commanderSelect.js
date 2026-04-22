@@ -48,7 +48,7 @@ export default function CommanderSelector({ deckId, currentCommander }) {
         <option value="">Select a card</option>
 
         {cards.map((row) => (
-            <option key={row.card_id} value={row.cards?.card_id}>
+            <option key={row.card_id} value={row.card_id}>
                 {row.cards?.name}
             </option>
         ))}
