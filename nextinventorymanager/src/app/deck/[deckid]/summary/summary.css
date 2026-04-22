@@ -133,3 +133,21 @@
 
   max-height: 100%;
 }
+
+@media (max-width: 800px) {
+  .summary-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .summary-left,
+  .summary-center,
+  .summary-right {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .summary-right {
+    max-width: none;
+  }
+}
