@@ -1,12 +1,13 @@
 import Navbar from "@/app/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
-import QuickAdd from "./quickAdd.js";
+import QuickAdd from "./summary/quickAdd/quickAdd.js";
 import { getDeckCards, summary } from "./deckSummary.js"; 
-import DeckFormatDisplay from "./formatDisplay.js";
-import FormatSelector from "./formatSelection.js";
-import CardStack from "./cardStack.js";
+import DeckFormatDisplay from "./summary/format/formatDisplay.js";
+import FormatSelector from "./summary/format/formatSelection.js";
+import CardStack from "./summary/cards/cardStack.js";
 import "./main.css";
 import Masonry from "./masonry.js";
+import Display from "./summary/summaryDisplay.js";
 
 
 /**
@@ -94,6 +95,8 @@ export default async function DeckPage({ params }){
       <DeckFormatDisplay deckId={deckId} />
       <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format}/>
       <QuickAdd deckId={deckId} />
+
+      <Display deckId={deckId}/>
 
 
       <div className="cardStackContainer">
