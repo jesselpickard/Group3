@@ -9,7 +9,7 @@ export default function CommanderSelector({ deckId, currentCommander }) {
   const router = useRouter();
 
   const [cards, setCards] = useState([]);
-  const [selected, setSelected] = useState(currentFormat || "");
+  const [selected, setSelected] = useState(currentCommander || "");
 
   useEffect(() => {
     async function fetchCards() {
