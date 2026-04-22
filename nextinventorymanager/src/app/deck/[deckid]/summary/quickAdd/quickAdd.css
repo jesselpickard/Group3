@@ -1,20 +1,66 @@
-.popul {
-  cursor: pointer;
-  width: 100%;
-  text-align: left;
-  padding: 0.25rem 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background: #f9f9f9;
+.quickadd-select {
+  position: relative;
+  width: 240px;
+  margin-top: 0.75rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  .popul {
-    background: #1e1e1e;
-    border: 1px solid #444;
-    color: #f5f5f5;
-  }
-  .popul:hover {
-    background: #2a2a2a;
-  }
+.quickadd-label {
+  color: #e9d5ff;
+  font-size: 0.85rem;
+  margin-bottom: 0.3rem;
+}
+
+.quickadd-selected {
+  width: 100%;
+  background: #faf5ff;
+  border: 1px solid #c084fc;
+  border-radius: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0.5rem 0.75rem;
+}
+
+.quickadd-selected input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #4c1d95;
+  font-size: 0.95rem;
+}
+
+.arrow {
+  font-size: 0.7rem;
+  opacity: 0.7;
+  margin-left: 0.5rem;
+}
+
+.quickadd-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+
+  background: #faf5ff;
+  border: 1px solid #c084fc;
+  border-radius: 8px;
+
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+  z-index: 1000;
+
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.quickadd-option {
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  color: #4c1d95;
+}
+
+.quickadd-option:hover {
+  background: #e9d5ff;
 }

@@ -3,30 +3,29 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { scryfallApi } from "@/lib/scryfall/Scryfall";
+import "./quickAdd.css";
 
 export default function QuickAdd({ deckId }) {
   const router = useRouter();
+
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [adding, setAdding] = useState(false);
 
-  // refs for debounce + preventing stale updates
   const debounceRef = useRef(null);
   const ignoreResultsRef = useRef(false);
 
-  // debounce helper
   function debounce(fn, delay = 250) {
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-    }
+    if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(fn, delay);
   }
 
-  // handle typing
   function handleChange(q) {
     setQuery(q);
-    ignoreResultsRef.current = false; // allow new results
+    setOpen(true);
+    ignoreResultsRef.current = false;
 
     if (q.length < 2) {
       setSuggestions([]);
@@ -38,84 +37,76 @@ export default function QuickAdd({ deckId }) {
       try {
         const { data } = await scryfallApi.autocomplete(q);
 
-        // ignore stale results if user already selected something
         if (ignoreResultsRef.current) return;
 
         setSuggestions(data.slice(0, 10));
       } catch (err) {
-        console.error("autocomplete error:", err);
+        console.error(err);
         setSuggestions([]);
       }
       setLoading(false);
     }, 250);
   }
 
-  // handle selecting a suggestion
   async function handleSelect(name) {
     setAdding(true);
-
-    // stop any pending autocomplete + future updates
     ignoreResultsRef.current = true;
 
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-    }
+    if (debounceRef.current) clearTimeout(debounceRef.current);
 
-    // clear UI immediately
     setSuggestions([]);
     setQuery("");
+    setOpen(false);
 
     try {
       const res = await fetch(`/deck/${deckId}/api/addCard`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cardName: name }),
       });
 
-      const result = await res.json();
-      console.log("addCard result:", result);
-
-      if (!res.ok) {
-        throw new Error(result.error || "Failed to add card");
-      }
+      if (!res.ok) throw new Error("Failed to add card");
 
       router.refresh();
     } catch (err) {
-      console.error("handleSelect error:", err);
+      console.error(err);
     }
 
     setAdding(false);
   }
 
   return (
-    <div style={{ marginBottom: "1rem" }}>
-      <input
-        type="text"
-        placeholder="Search cards..."
-        value={query}
-        onChange={(e) => handleChange(e.target.value)}
-        style={{ width: "100%", padding: "0.5rem" }}
-        disabled={adding}
-      />
+    <div className="quickadd-select">
+      <h3 className="quickadd-label">Quick Add</h3>
 
-      {loading && <p>Searching...</p>}
+      {/* INPUT TRIGGER */}
+      <div className="quickadd-selected" onClick={() => setOpen(true)}>
+        <input
+          value={query}
+          placeholder="Search cards..."
+          onChange={(e) => handleChange(e.target.value)}
+          disabled={adding}
+          onFocus={() => setOpen(true)}
+        />
+        <span className="arrow">{open ? "▲" : "▼"}</span>
+      </div>
 
-      <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-        {suggestions.map((name) => (
-          <li key={name} style={{ margin: "0.25rem 0" }}>
-            <button
-              type="button"
+      {/* DROPDOWN */}
+      {open && (
+        <div className="quickadd-dropdown">
+          {loading && <div className="quickadd-option">Searching...</div>}
+
+          {suggestions.map((name) => (
+            <div
+              key={name}
+              className="quickadd-option"
               onClick={() => handleSelect(name)}
-              disabled={adding}
-              className='popul'
             >
               {name}
-            </button>
-          </li>
-        ))}
-      </ul>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
