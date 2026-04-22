@@ -4,7 +4,10 @@ import FormatSelector from "./format/formatSelection";
 import "./summary.css";
 
 /**
- * Summary display component
+ * This file takes the deck's summary data and creates a visual representation of it.
+ * The purpose of this is to clean up the page.js file to reduce clutter. I have yet to decide
+ * whether I want the summary above or below the card stacks so this component will make it easy
+ * to maneuver.
  */
 
 export default function Display({
@@ -14,20 +17,9 @@ export default function Display({
   currentFormatId,
   summary
 }) {
-
-
-  const manaCurveEntries = summary?.manaCurve
-    ? Object.entries(summary.manaCurve)
-    : [];
-
-  const maxValue = Math.max(
-    ...manaCurveEntries.map(([_, value]) => value),
-    1
-  );
-
   return (
     <div className="summary-container">
-
+      
       {/* Deck title */}
       <h1 className="deck-title">
         {deckName ?? "Untitled Deck"}
@@ -35,59 +27,49 @@ export default function Display({
 
       <div className="summary-content">
 
-        {/* LEFT */}
+        {/* LEFT: Commander */}
         <div className="summary-left">
           <CommanderDisplay deckId={deckId} />
-          <CommanderSelector
-            deckId={deckId}
-            currentCommander={currentCommander}
-          />
+          <CommanderSelector deckId={deckId} currentCommander={currentCommander}/>
         </div>
-
-        {/* CENTER */}
         <div className="summary-center">
-
-          <div className="stat-block stat-curve">
-            <h4>Mana Curve</h4>
-
-            <div className="curve">
-              {manaCurveEntries.map(([key, value]) => {
-                const heightPercent = (value / maxValue) * 100;
-
-                return (
-                  <div key={key} className="curve-bar">
-                    <div
-                      className="curve-fill"
-                      style={{ height: `${heightPercent}%` }}
-                    />
-                    <span className="curve-value">{value}</span>
-                    <small>{key}</small>
-                  </div>
-                );
-              })}
+          {/* MANA CURVE */}
+            <div className="stat-block stat-curve">
+                <h4>Mana Curve</h4>
+                <div className="curve">
+                {summary?.manaCurve &&
+                    Object.entries(summary.manaCurve).map(([key, value]) => (
+                    <div key={key} className="curve-bar">
+                        <span>{value}</span>
+                        <div
+                        className="curve-fill"
+                        style={{ height: `${value * 6}px` }}
+                        />
+                        <small>{key}</small>
+                    </div>
+                    ))}
+                </div>
             </div>
-          </div>
-
         </div>
-
-        {/* RIGHT */}
+        {/* RIGHT: Everything else */}
         <div className="summary-right">
 
-          <div className="stat-block stat-format">
-            <h4>Format</h4>
-            <p>{currentFormatId ?? "None"}</p>
+            {/* FORMAT */}
+            <div className="stat-block stat-format">
+                <h4>Format</h4>
+                <p>{currentFormatId ?? "None"}</p>
 
-            <FormatSelector
-              deckId={deckId}
-              currentFormatId={currentFormatId}
-            />
-          </div>
+                <FormatSelector
+                deckId={deckId}
+                currentFormatId={currentFormatId}
+                />
+            </div>
 
-          <div className="stat-block stat-cardCount">
-            <h4>Total Cards</h4>
-            <p>{summary?.totalCards ?? 0}</p>
-          </div>
-
+            {/* CARD COUNT */}
+            <div className="stat-block stat-cardCount">
+                <h4>Total Cards</h4>
+                <p>{summary?.totalCards ?? 0}</p>
+            </div>
         </div>
       </div>
     </div>
