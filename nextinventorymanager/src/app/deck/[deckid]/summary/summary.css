@@ -35,3 +35,19 @@
   border-radius: 10px;
   padding: 1rem;
 }
+
+.deck-title {
+  display: inline-block;
+  background: linear-gradient(135deg, #7e22ce, #5a1080);
+  color: #f3e8ff;
+  padding: 0.5rem 1.25rem;
+  border-radius: 999px;
+
+  font-size: 1.4rem;
+  font-weight: 600;
+
+  border: 1px solid #c084fc;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+
+  margin-bottom: 1rem;
+}
