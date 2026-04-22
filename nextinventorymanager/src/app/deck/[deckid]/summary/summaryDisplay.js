@@ -19,11 +19,10 @@ export default function Display({
     <div className="summary-container">
       
       {/* Deck title */}
-      <div className="summary-left">
-        <h1 className="deck-title">
-            {deckName ?? "Untitled Deck"}
-        </h1>
-      </div>
+      <h1 className="deck-title">
+        {deckName ?? "Untitled Deck"}
+      </h1>
+
       <div className="summary-content">
 
         {/* LEFT: Commander */}
