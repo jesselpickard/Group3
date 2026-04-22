@@ -50,10 +50,26 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
     }
 
     if (currentPage >= totalPages - 3) {
-      return [1, "...", totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+      return [
+        1,
+        "...",
+        totalPages - 4,
+        totalPages - 3,
+        totalPages - 2,
+        totalPages - 1,
+        totalPages,
+      ];
     }
 
-    return [1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages];
+    return [
+      1,
+      "...",
+      currentPage - 1,
+      currentPage,
+      currentPage + 1,
+      "...",
+      totalPages,
+    ];
   };
 
   return (
@@ -81,7 +97,7 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
               >
                 {page}
               </button>
-            )
+            ),
           )}
         </div>
 
@@ -126,7 +142,10 @@ export default function InventoryCardGrid({ initialCards = [] }) {
     return filteredCards.slice(startIndex, startIndex + CARDS_PER_PAGE);
   }, [filteredCards, currentPage]);
 
-  const TOTAL_PAGES = Math.max(1, Math.ceil(filteredCards.length / CARDS_PER_PAGE));
+  const TOTAL_PAGES = Math.max(
+    1,
+    Math.ceil(filteredCards.length / CARDS_PER_PAGE),
+  );
 
   return (
     <div
@@ -150,78 +169,80 @@ export default function InventoryCardGrid({ initialCards = [] }) {
 
       <div className="main-layout">
         <div className="sidebar-area">
-          <Menu inventoryCards={initialCards} setCards={setFilteredCards} setCurrentPage={setCurrentPage} />
+          <Menu
+            inventoryCards={initialCards}
+            setCards={setFilteredCards}
+            setCurrentPage={setCurrentPage}
+          />
         </div>
 
         <div className="content-area">
           <div className="card-grid">
-            {initialCards.length > 0 ? (
-              visibleCards.map((card, index) => {
-                const image =
-                  card.image_uris?.small ||
-                  card.image_uris?.normal ||
-                  card.card_faces?.[0]?.image_uris?.small ||
-                  card.card_faces?.[0]?.image_uris?.normal ||
-                  "";
+            {filteredCards.length > 0
+              ? visibleCards.map((card, index) => {
+                  const image =
+                    card.image_uris?.small ||
+                    card.image_uris?.normal ||
+                    card.card_faces?.[0]?.image_uris?.small ||
+                    card.card_faces?.[0]?.image_uris?.normal ||
+                    "";
 
-                return (
-                  <Link
-                    key={`${card.id}-${card.quantity}-${index}`}
-                    href={`/CardInfo/${card.id}`}
-                  >
-                    <div
-                      className="card"
-                      style={{
-                        backgroundColor: "var(--background)",
-                        color: themeTextColor,
-                        borderRadius: "12px",
-                      }}
+                  return (
+                    <Link
+                      key={`${card.id}-${card.quantity}-${index}`}
+                      href={`/CardInfo/${card.id}`}
                     >
-                      <picture>
-                        <source media="(max-width: 800px)" srcSet={image} />
-                        <img src={image} alt={card.name ?? "Card"} />
-                      </picture>
-
                       <div
+                        className="card"
                         style={{
-                          padding: "8px 6px 0 6px",
+                          backgroundColor: "var(--background)",
                           color: themeTextColor,
+                          borderRadius: "12px",
                         }}
                       >
-                        <div
-                          style={{
-                            fontSize: "0.95rem",
-                            fontWeight: 600,
-                            marginBottom: "4px",
-                            color: themeTextColor,
-                          }}
-                        >
-                          {card.name}
-                        </div>
+                        <picture>
+                          <source media="(max-width: 800px)" srcSet={image} />
+                          <img src={image} alt={card.name ?? "Card"} />
+                        </picture>
 
                         <div
                           style={{
-                            fontSize: "0.9rem",
-                            opacity: 0.9,
+                            padding: "8px 6px 0 6px",
                             color: themeTextColor,
                           }}
                         >
-                          Quantity: {card.quantity}
+                          <div
+                            style={{
+                              fontSize: "0.95rem",
+                              fontWeight: 600,
+                              marginBottom: "4px",
+                              color: themeTextColor,
+                            }}
+                          >
+                            {card.name}
+                          </div>
+
+                          <div
+                            style={{
+                              fontSize: "0.9rem",
+                              opacity: 0.9,
+                              color: themeTextColor,
+                            }}
+                          >
+                            Quantity: {card.quantity}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Link>
-                );
-              })
-            ) : (
-              Array.from({ length: CARDS_PER_PAGE }).map((_, i) => (
-                <div
-                  key={i}
-                  className="card-placeholder"
-                  style={{ backgroundColor: currentColor }}
-                />
-              ))
-            )}
+                    </Link>
+                  );
+                })
+              : Array.from({ length: CARDS_PER_PAGE }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="card-placeholder"
+                    style={{ backgroundColor: currentColor }}
+                  />
+                ))}
           </div>
         </div>
       </div>

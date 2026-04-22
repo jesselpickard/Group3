@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 //import { scryfallApi } from "../../lib/scryfall/Scryfall";
 import "./Menu.css";
 import FourBox from "./CheckBox4";
-import { STATES } from './CheckBox4';
+import { STATES } from "./CheckBox4";
 import CheckSpread from "./CheckSpread";
 
 function compare(a, op, b) {
@@ -16,7 +16,11 @@ function compare(a, op, b) {
   return false;
 }
 
-export default function InventoryMenu({ inventoryCards, setCards, setCurrentPage }) {
+export default function InventoryMenu({
+  inventoryCards,
+  setCards,
+  setCurrentPage,
+}) {
   const [open, setOpen] = useState(true);
   const [query, setQuery] = useState("");
   const [type, setType] = useState("");
@@ -27,14 +31,16 @@ export default function InventoryMenu({ inventoryCards, setCards, setCurrentPage
   const [setCode, setSetCode] = useState("");
   const isFirstRender = useRef(true);
 
-  const [colors, setColors] = useState({//tracks the states of the color boxes
+  const [colors, setColors] = useState({
+    //tracks the states of the color boxes
     white: STATES.UNMARKED,
     blue: STATES.UNMARKED,
     black: STATES.UNMARKED,
     red: STATES.UNMARKED,
     green: STATES.UNMARKED,
   });
-  const COLOR_CODES = {//converts the colorname into a one letter code
+  const COLOR_CODES = {
+    //converts the colorname into a one letter code
     white: "W",
     blue: "U",
     black: "B",
@@ -43,63 +49,89 @@ export default function InventoryMenu({ inventoryCards, setCards, setCurrentPage
   };
 
   const handleColorChange = (colorName, newState) => {
-    setColors(prev => ({ ...prev, [colorName]: newState }));
+    setColors((prev) => ({ ...prev, [colorName]: newState }));
   };
 
   const filterCards = () => {
-  //   console.log("colors state:", colors);
-  // console.log("STATES values:", STATES);
+    //   console.log("colors state:", colors);
+    // console.log("STATES values:", STATES);
     const filtered = inventoryCards.filter((card) => {
       // Name search
       if (query && !card.name?.toLowerCase().includes(query.toLowerCase()))
         return false;
- 
+
+      // Get front face for double faced cards
+      const face = card.card_faces?.[0];
+
       // Type filter
-      if (type && !card.type_line?.toLowerCase().includes(type.toLowerCase()))
+      if (
+        type &&
+        !(card.type_line ?? face?.type_line)
+          ?.toLowerCase()
+          .includes(type.toLowerCase())
+      )
         return false;
- 
+
       // Subtype filter
       if (
         subtype &&
-        !card.type_line?.toLowerCase().includes(subtype.toLowerCase())
+        !(card.type_line ?? face?.type_line)
+          ?.toLowerCase()
+          .includes(subtype.toLowerCase())
       )
         return false;
- 
+
       // Power filter
       if (power.value !== "") {
-        const p = parseFloat(card.power);
+        const p = parseFloat(card.power ?? face?.power);
         const v = parseFloat(power.value);
         if (isNaN(p) || !compare(p, power.op, v)) return false;
       }
- 
+
       // Toughness filter
       if (toughness.value !== "") {
-        const t = parseFloat(card.toughness);
+        const t = parseFloat(card.toughness ?? face?.toughness);
         const v = parseFloat(toughness.value);
         if (isNaN(t) || !compare(t, toughness.op, v)) return false;
       }
- 
+
       // CMC / Mana Value filter
       if (mana.value !== "") {
         const c = parseFloat(card.cmc);
         const v = parseFloat(mana.value);
         if (isNaN(c) || !compare(c, mana.op, v)) return false;
       }
- 
+
       // Set code filter
-      if (
-        setCode &&
-        !card.set?.toLowerCase().includes(setCode.toLowerCase())
-      )
+      if (setCode && !card.set?.toLowerCase().includes(setCode.toLowerCase()))
         return false;
 
- 
       // Color filters
-      const cardColors = card.colors ?? [];
+      const cardColors = card.colors ?? face?.colors ?? [];
+      const includedColors = Object.entries(colors)
+        .filter(([, state]) => state === STATES.INCLUDE)
+        .map(([colorTest]) => COLOR_CODES[colorTest]);
+
+      if (includedColors.length > 0) {
+        const exactMatch =
+          includedColors.every((c) => cardColors.includes(c)) &&
+          cardColors.every((c) => includedColors.includes(c));
+        if (!exactMatch) return false;
+      }
+
       for (const [colorTest, state] of Object.entries(colors)) {
         const code = COLOR_CODES[colorTest];
-        console.log("colorTest:", colorTest, "state:", state, "code:", code, "cardColors:", cardColors);
-        if (state === STATES.INCLUDE && !cardColors.includes(code)) return false;
+        console.log(
+          "colorTest:",
+          colorTest,
+          "state:",
+          state,
+          "code:",
+          code,
+          "cardColors:",
+          cardColors,
+        );
+        //if (state === STATES.INCLUDE && !cardColors.includes(code)) return false;
         if (state === STATES.EXCLUDE && cardColors.includes(code)) return false;
         // ID state: uses color_identity instead of colors
         if (state === STATES.ID) {
@@ -107,13 +139,13 @@ export default function InventoryMenu({ inventoryCards, setCards, setCurrentPage
           if (!identity.includes(code)) return false;
         }
       }
- 
+
       return true;
     });
- 
+
     setCards(filtered);
     setCurrentPage(1);
-  }
+  };
 
   // const buildQuery = () => {
   //   const parts = [];
@@ -124,7 +156,6 @@ export default function InventoryMenu({ inventoryCards, setCards, setCurrentPage
   //   if (toughness.value) parts.push(`tou${toughness.op}${toughness.value}`);
   //   if (mana.value) parts.push(`cmc${mana.op}${mana.value}`);
   //   if (setCode) parts.push(`set:${setCode}`);
-
 
   //   //Groups colors by state, id needs to be worked a bit
   //     //all included colors should be within the id as well
@@ -173,15 +204,14 @@ export default function InventoryMenu({ inventoryCards, setCards, setCurrentPage
   //   setCurrentPage(1);//resets the selected page when a search is triggered
   // };
 
-
   useEffect(() => {
-  if (isFirstRender.current) {
-    isFirstRender.current = false;
-    return;
-  }
-  const timeout = setTimeout(() => {
-    filterCards();
-  }, 300);
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    const timeout = setTimeout(() => {
+      filterCards();
+    }, 300);
     return () => clearTimeout(timeout);
   }, [query, type, subtype, power, toughness, mana, setCode, colors]);
 
@@ -194,70 +224,95 @@ export default function InventoryMenu({ inventoryCards, setCards, setCurrentPage
         transition: "width 0.3s, padding 0.3s",
       }}
     >
+      {/* Toggle */}
+      <button className="toggleBtn" onClick={() => setOpen(!open)}>
+        {open ? "–" : "+"}
+      </button>
 
-  {/* Toggle */}
-  <button className="toggleBtn" onClick={() => setOpen(!open)}>
-    {open ? "–" : "+"}
-  </button>
+      {open && (
+        <div className="content">
+          {/* Search */}
+          <div className="row full-width">
+            <input
+              type="text"
+              placeholder="Search cards..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && filterCards()}
+            />
+          </div>
 
-  {open && (
-    <div className="content">
+          {/* Type / Subtype */}
+          <div className="row">
+            <div className="itemA">
+              <CardTypeBox value={type} onChange={setType} />
+            </div>
+            <div className="itemB">
+              <TypeSearch
+                value={subtype}
+                onChange={setSubtype}
+                placeholder="Subtype..."
+              />
+            </div>
+          </div>
 
-      {/* Search */}
-      <div className="row full-width">
-        <input
-          type="text"
-          placeholder="Search cards..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && filterCards()}
-        />
-      </div>
-
-      {/* Type / Subtype */}
-      <div className="row">
-        <div className="itemA">
-          <CardTypeBox value={type} onChange={setType} />
-        </div>
-        <div className="itemB">
-          <TypeSearch value={subtype} onChange={setSubtype} placeholder="Subtype..." />
-        </div>
-      </div>
-
-      {/* Power / Toughness / Mana Value Row */}
-      <div className="row">
-        <div className="itemA">
-          <NumberFilter label="Power" filter={power} setFilter={setPower} />
-        </div>
-        <div className="itemB">
-          <NumberFilter label="Toughness" filter={toughness} setFilter={setToughness} />
-        </div>
-        <div className="itemC">
-          <NumberFilter label="Mana Value" filter={mana} setFilter={setMana} />
-        </div>
-      </div>
-      {/* Set Code + Color Filters */}
-      <Row
-        itemA={
-          <TypeSearch
-            value={setCode}
-            onChange={setSetCode}
-            placeholder="Set code..."
+          {/* Power / Toughness / Mana Value Row */}
+          <div className="row">
+            <div className="itemA">
+              <NumberFilter label="Power" filter={power} setFilter={setPower} />
+            </div>
+            <div className="itemB">
+              <NumberFilter
+                label="Toughness"
+                filter={toughness}
+                setFilter={setToughness}
+              />
+            </div>
+            <div className="itemC">
+              <NumberFilter
+                label="Mana Value"
+                filter={mana}
+                setFilter={setMana}
+              />
+            </div>
+          </div>
+          {/* Set Code + Color Filters */}
+          <Row
+            itemA={
+              <TypeSearch
+                value={setCode}
+                onChange={setSetCode}
+                placeholder="Set code..."
+              />
+            }
+            itemB={
+              <CheckSpread>
+                <FourBox
+                  color="#f6e280"
+                  onChange={(v) => handleColorChange("white", v)}
+                />
+                <FourBox
+                  color="#4268ba"
+                  onChange={(v) => handleColorChange("blue", v)}
+                />
+                <FourBox
+                  color="rgb(102, 0, 102)"
+                  onChange={(v) => handleColorChange("black", v)}
+                />
+                <FourBox
+                  color="#ff1919"
+                  onChange={(v) => handleColorChange("red", v)}
+                />
+                <FourBox
+                  color="#267e09"
+                  onChange={(v) => handleColorChange("green", v)}
+                />
+              </CheckSpread>
+            }
           />
-        }
-        itemB={ 
-          <CheckSpread>
-            <FourBox color="#f6e280" onChange={(v) => handleColorChange("white", v)} />
-            <FourBox color="#4268ba" onChange={(v) => handleColorChange("blue", v)} />
-            <FourBox color="rgb(102, 0, 102)" onChange={(v) => handleColorChange("black", v)} />
-            <FourBox color="#ff1919" onChange={(v) => handleColorChange("red", v)} />
-            <FourBox color="#267e09" onChange={(v) => handleColorChange("green", v)} />
-          </CheckSpread>
-        }
-      />
+        </div>
+      )}
     </div>
-  )}
-</div>
   );
 }
 
