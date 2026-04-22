@@ -155,7 +155,7 @@ export default function InventoryCardGrid({ initialCards = [] }) {
 
         <div className="content-area">
           <div className="card-grid">
-            {initialCards.length > 0 ? (
+            {filteredCards.length > 0 ? (
               visibleCards.map((card, index) => {
                 const image =
                   card.image_uris?.small ||
