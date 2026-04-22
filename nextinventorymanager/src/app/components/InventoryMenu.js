@@ -47,7 +47,8 @@ export default function InventoryMenu({ inventoryCards, setCards, setCurrentPage
   };
 
   const filterCards = () => {
-    console.log("test:", inventoryCards[0]);
+    console.log("colors state:", colors);
+  console.log("STATES values:", STATES);
     const filtered = inventoryCards.filter((card) => {
       // Name search
       if (query && !card.name?.toLowerCase().includes(query.toLowerCase()))
