@@ -11,7 +11,6 @@ export default function Home() {
     <div>
       <Navbar />
       <CardGrid />
-      <p>Link to test page [TestPage](<Link href="/Testpage">/Testpage</Link>)(<Link href="/CardInfo">/CardInfo</Link>).</p>
     </div>
   );
 }
