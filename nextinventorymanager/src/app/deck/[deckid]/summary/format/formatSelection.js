@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import "./formatSelect.css";
 
 export default function FormatSelector({ deckId, currentFormat }) {
   const supabase = createClient();
@@ -10,6 +11,7 @@ export default function FormatSelector({ deckId, currentFormat }) {
 
   const [formats, setFormats] = useState([]);
   const [selected, setSelected] = useState(currentFormat || "");
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     async function fetchFormats() {
@@ -23,13 +25,13 @@ export default function FormatSelector({ deckId, currentFormat }) {
     fetchFormats();
   }, []);
 
-  async function handleChange(e) {
-    const newFormat = e.target.value;
-    setSelected(newFormat);
+  async function handleSelect(formatName) {
+    setSelected(formatName);
+    setOpen(false);
 
     const { error } = await supabase
       .from("decks")
-      .update({ format: newFormat }) 
+      .update({ format: formatName })
       .eq("deck_id", deckId);
 
     if (error) {
@@ -40,20 +42,35 @@ export default function FormatSelector({ deckId, currentFormat }) {
     router.refresh();
   }
 
+  const selectedFormat = formats.find(f => f.name === selected);
+
   return (
-    <div>
-      <h3>Change Format</h3>
+    <div className="format-select">
+      <h3 className="format-label">Format</h3>
 
-      <select value={selected} onChange={handleChange}>
-        <option value="">Select a format</option>
+      <button
+        className="format-selected"
+        onClick={() => setOpen(prev => !prev)}
+      >
+        {selectedFormat
+          ? `${selectedFormat.name} (${selectedFormat.minCards} - ${selectedFormat.maxCards ?? "∞"})`
+          : "Select a format"}
+        <span className="arrow">{open ? "▲" : "▼"}</span>
+      </button>
 
-        {formats.map(format => (
-          <option key={format.name} value={format.name}>
-            {format.name} (
-            {format.minCards} - {format.maxCards ?? "∞"})
-          </option>
-        ))}
-      </select>
+      {open && (
+        <div className="format-dropdown">
+          {formats.map((format) => (
+            <div
+              key={format.name}
+              className="format-option"
+              onClick={() => handleSelect(format.name)}
+            >
+              {format.name} ({format.minCards} - {format.maxCards ?? "∞"})
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
