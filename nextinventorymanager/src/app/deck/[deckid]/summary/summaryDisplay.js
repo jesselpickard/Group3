@@ -1,6 +1,6 @@
 import CommanderSelector from "./commander/commanderSelect";
 import CommanderDisplay from "./commander/commanderDisplay";
-import "summary.css";
+import "./summary.css";
 
 /**
  * This file takes the deck's summary data and creates a visual representation of it.
@@ -28,10 +28,7 @@ export default function Display({
         {/* LEFT: Commander */}
         <div className="summary-left">
           <CommanderDisplay deckId={deckId} />
-          <CommanderSelector
-            deckId={deckId}
-            currentCommander={currentCommander}
-          />
+          <CommanderSelector deckId={deckId} currentCommander={currentCommander}/>
         </div>
 
         {/* RIGHT: Everything else */}
