@@ -96,7 +96,7 @@ export default async function DeckPage({ params }){
       <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format}/>
       <QuickAdd deckId={deckId} />
 
-      <Display deckId={deckId}/>
+      <Display deckId={deckId} currentCommander={deckMeta?.commander}/>
 
 
       <div className="cardStackContainer">
