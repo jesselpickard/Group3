@@ -37,7 +37,7 @@
   min-width: 260px;
 }
 
-/*CENTER*/
+/* CENTER */
 .summary-center {
   flex: 1;
   display: flex;
@@ -47,7 +47,7 @@
 
 /* RIGHT SIDE */
 .summary-right {
-  flex: 0 1 520px;   /* prevents infinite stretching */
+  flex: 0 1 520px;
   max-width: 520px;
 }
 
@@ -67,10 +67,12 @@
 }
 
 /* =========================
-   MANA CURVE (CENTERED SECTION)
+   MANA CURVE (FIXED)
 ========================= */
 
 .stat-block.stat-curve {
+  width: 100%;                 
+  max-width: none;             
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -87,18 +89,14 @@
 }
 
 .curve {
-  width: 100%;
-  max-width: 420px;
-  margin: 0 auto;
+  width: 100%;                 
+  max-width: none;             
 
   display: flex;
   align-items: flex-end;
+  justify-content: space-between;
 
-  justify-content: space-between; /* or space-around */
-
-  gap: 0; /* let spacing be handled by justify-content */
-
-  height: 140px;
+  height: 160px;
   padding: 0.75rem;
 
   border: 1px solid #e9d5ff;
@@ -106,6 +104,7 @@
   background: #faf5ff;
 }
 
+/* bars distribute evenly */
 .curve-bar {
   flex: 1;
   display: flex;
@@ -119,7 +118,7 @@
 }
 
 .curve-fill {
-  width: 22px;   /* was 14px */
+  width: 60%;                  
   background: #7e22ce;
   border-radius: 4px 4px 0 0;
   margin: 2px 0;
