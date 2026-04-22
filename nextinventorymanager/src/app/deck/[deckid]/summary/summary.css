@@ -85,9 +85,10 @@
 
   display: flex;
   align-items: flex-end;
-  justify-content: center; /* key change */
 
-  gap: 10px;              /* controls spacing between bars */
+  justify-content: space-between; /* or space-around */
+
+  gap: 0; /* let spacing be handled by justify-content */
 
   height: 140px;
   padding: 0.75rem;
@@ -95,11 +96,10 @@
   border: 1px solid #e9d5ff;
   border-radius: 8px;
   background: #faf5ff;
-
-  overflow: visible;
 }
 
 .curve-bar {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
