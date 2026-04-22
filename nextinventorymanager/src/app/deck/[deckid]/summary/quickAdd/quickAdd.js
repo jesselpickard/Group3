@@ -92,7 +92,7 @@ export default function QuickAdd({ deckId }) {
 
   return (
     <div className="quickadd-select" ref={wrapperRef}>
-      <h3 className="quickadd-label">Quick Add</h3>
+      <h3 className="quickadd-label">Quick Add to Deck</h3>
 
       <div className="quickadd-selected">
         <input

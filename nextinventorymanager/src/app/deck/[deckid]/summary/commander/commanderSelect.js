@@ -47,7 +47,7 @@ export default function CommanderSelector({ deckId, currentCommander }) {
 
   return (
     <div className="commander-select">
-      <h3 className="commander-label">Commander</h3>
+      <h3 className="commander-label">Commander//Display</h3>
 
       {/* Selected display */}
       <button

@@ -5,32 +5,12 @@
 }
 
 .quickadd-label {
-  color: #e9d5ff;
+  color: #4c1d95;
   font-size: 0.85rem;
   margin-bottom: 0.3rem;
 }
 
-.quickadd-selected {
-  width: 100%;
-  background: #faf5ff;
-  border: 1px solid #c084fc;
-  border-radius: 8px;
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 0.5rem 0.75rem;
-}
-
-.quickadd-selected input {
-  width: 100%;
-  border: none;
-  outline: none;
-  background: transparent;
-  color: #4c1d95;
-  font-size: 0.95rem;
-}
 
 .arrow {
   font-size: 0.7rem;

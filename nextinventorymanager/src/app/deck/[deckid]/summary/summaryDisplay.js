@@ -1,6 +1,7 @@
 import CommanderSelector from "./commander/commanderSelect";
 import CommanderDisplay from "./commander/commanderDisplay";
 import FormatSelector from "./format/formatSelection";
+import QuickAdd from "./quickAdd/quickAdd";
 import "./summary.css";
 
 /**
@@ -68,6 +69,9 @@ export default function Display({
             <div className="stat-block stat-cardCount">
                 <h4>Total Cards</h4>
                 <p>{summary?.totalCards ?? 0}</p>
+            </div>
+            <div className="stat-block stat-quickAdd">
+                <QuickAdd deckId={deckId} />
             </div>
         </div>
       </div>

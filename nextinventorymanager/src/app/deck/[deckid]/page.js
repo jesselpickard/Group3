@@ -91,10 +91,6 @@ export default async function DeckPage({ params }){
   return (
     <div>
       <Navbar />
-      <h1>Deck: {deckMeta?.name ?? "No deck selected"}</h1> {/* protects the page from an invalid id*/}
-      <DeckFormatDisplay deckId={deckId} />
-      <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format}/>
-      <QuickAdd deckId={deckId} />
 
       <Display deckId={deckId} deckName={deckMeta?.name} currentCommander={deckMeta?.commander} currentFormatId={deckMeta?.format} summary={deckSummary}/>
 
