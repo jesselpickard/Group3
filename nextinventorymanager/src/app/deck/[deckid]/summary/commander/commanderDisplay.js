@@ -37,20 +37,18 @@ export default async function DeckCommanderDisplay({ deckId }) {
   }
 
   const image =
-    card?.image_uris?.normal ||
-    card?.card_faces?.[0]?.image_uris?.normal;
+    card?.image_uris?.large ||
+    card?.card_faces?.[0]?.image_uris?.large;
 
   if (!image) return <p>No image available.</p>;
 
   return (
     <div>
-      <h2>Commander</h2>
       <img
         src={image}
         alt={card?.name}
         style={{ width: 250, borderRadius: 8 }}
       />
-      <p>{card?.name}</p>
     </div>
   );
 }
