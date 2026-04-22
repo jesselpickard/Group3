@@ -7,9 +7,19 @@
   border: 1px solid #7e22ce;
 }
 
-
 .deck-title {
-  color: #7e22ce;
+  display: inline-block;
+  background: linear-gradient(135deg, #7e22ce, #5a1080);
+  color: #f3e8ff;
+  padding: 0.5rem 1.25rem;
+  border-radius: 999px;
+
+  font-size: 1.4rem;
+  font-weight: 600;
+
+  border: 1px solid #c084fc;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+
   margin-bottom: 1rem;
 }
 
@@ -29,28 +39,8 @@
 
 /* RIGHT SIDE */
 .summary-right {
-  flex: 1;
-  background: #faf5ff;
-  border: 1px solid #e9d5ff;
-  border-radius: 10px;
-  padding: 1rem;
+  flex: 0 1 520px;   /* prevents infinite stretching */
   max-width: 520px;
-}
-
-.deck-title {
-  display: inline-block;
-  background: linear-gradient(135deg, #7e22ce, #5a1080);
-  color: #f3e8ff;
-  padding: 0.5rem 1.25rem;
-  border-radius: 999px;
-
-  font-size: 1.4rem;
-  font-weight: 600;
-
-  border: 1px solid #c084fc;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-
-  margin-bottom: 1rem;
 }
 
 /* RIGHT PANEL BLOCKS */
@@ -69,22 +59,42 @@
 }
 
 /* =========================
-   MANA CURVE
+   MANA CURVE (CENTERED SECTION)
 ========================= */
 
+.stat-block.stat-curve {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  background: #ffffff;
+  border: 1px solid #c084fc;
+  box-shadow: 0 2px 10px rgba(126, 34, 206, 0.12);
+}
+
+.stat-curve h4 {
+  text-align: center;
+  width: 100%;
+  margin-bottom: 0.75rem;
+}
+
 .curve {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
 
-  height: 110px;              
-  padding: 0.5rem;
+  height: 140px;
+  padding: 0.75rem;
 
   border: 1px solid #e9d5ff;
   border-radius: 8px;
-
   background: #faf5ff;
-  overflow: hidden;
+
+  overflow: visible;
 }
 
 .curve-bar {
@@ -93,6 +103,9 @@
   align-items: center;
   font-size: 0.7rem;
   color: #4c1d95;
+
+  height: 100%;
+  justify-content: flex-end;
 }
 
 .curve-fill {
@@ -100,5 +113,5 @@
   background: #7e22ce;
   border-radius: 4px 4px 0 0;
   margin: 2px 0;
-  max-height: 90px;   
+  max-height: 120px;
 }
