@@ -1,124 +1,56 @@
-let queue = Promise.resolve();
-let lastRequestTime = 0;
+import { createClient } from "@/lib/supabase/server";
+import { scryfallApi } from "@/lib/scryfall"; // adjust path
 
-const MAX_CARDS = 500; //caps any search
+async function getCommander(deckId) {
+  const supabase = await createClient();
 
-//cache
-const cache = new Map();
-const CACHE_TTL = 1000 * 60 * 20; //20 minutes
+  const { data, error } = await supabase
+    .from("decks")
+    .select("commander")
+    .eq("deck_id", deckId)
+    .single();
 
-function getCached(url) {
-  const entry = cache.get(url);
-  if (!entry) return null;
+  if (error) throw new Error(error.message);
 
-  const isExpired = Date.now() - entry.timestamp > CACHE_TTL;
-  if (isExpired) {
-    cache.delete(url);
-    return null;
+  return data?.commander || null;
+}
+
+export default async function DeckCommanderDisplay({ deckId }) {
+  if (!deckId) return <p>No deck selected.</p>;
+
+  let commander;
+
+  try {
+    commander = await getCommander(deckId);
+  } catch (err) {
+    return <p>Error loading commander: {err.message}</p>;
   }
 
-  return entry.data;
+  if (!commander) return <p>No commander assigned.</p>;
+
+  let card;
+
+  try {
+    card = await scryfallApi.getCardById(commander);
+  } catch (err) {
+    return <p>Error loading card image.</p>;
+  }
+
+  const image =
+    card?.image_uris?.normal ||
+    card?.card_faces?.[0]?.image_uris?.normal;
+
+  if (!image) return <p>No image available.</p>;
+
+  return (
+    <div>
+      <h2>Commander</h2>
+      <img
+        src={image}
+        alt={card?.name}
+        style={{ width: 250, borderRadius: 8 }}
+      />
+      <p>{card?.name}</p>
+    </div>
+  );
 }
-
-function setCache(url, data) {
-  cache.set(url, {
-    data,
-    timestamp: Date.now(),
-  });
-}
-
-function rateLimitedFetch(url) {//ensures we do not exceed the rate limit requested by scryfall
-  queue = queue.then(async () => {
-    //check cache before making request
-    const cached = getCached(url);
-    if (cached) {
-      return {
-        json: async () => cached,
-      };
-    }
-
-    const now = Date.now();
-    const elapsed = now - lastRequestTime;
-
-    const delay = Math.max(0, 50 - elapsed);
-    if (delay > 0) {
-      await new Promise((res) => setTimeout(res, delay));
-    }
-
-    lastRequestTime = Date.now();
-    const response = await fetch(url);
-    const data = await response.json();
-
-    //store in cache
-    setCache(url, data);
-
-    return {
-      json: async () => data,
-    };
-  });
-
-  return queue;
-}
-
-export const scryfallApi = {
-
-  async browse(order = "name") {
-    return this.search("game:paper", { order });
-  },
-
-  async search(query, options = {}) {
-    const { order } = options;
-    let allCards = [];
-    let url = `https://api.scryfall.com/cards/search?q=${encodeURIComponent(query)}${order ? `&order=${order}` : ''}`;
-
-    while (url && allCards.length < MAX_CARDS) {
-      const res = await rateLimitedFetch(url);
-      const data = await res.json();
-
-      allCards = [...allCards, ...(data.data || [])];
-      url = data.has_more ? data.next_page : null;
-    }
-
-    return { data: allCards };
-  },
-
-  async autocomplete(query) {
-    if (!query || query.length < 2) return { data: [] };
-
-    const res = await rateLimitedFetch(
-      `https://api.scryfall.com/cards/autocomplete?q=${encodeURIComponent(query)}`
-    );
-    const data = await res.json();
-    return { data: data.data || [] }; // array of card names
-  },
-
-  //fetch an exact card by name
-  async namedExact(name) {
-    const res = await rateLimitedFetch(
-      `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}`
-    );
-    return res.json();
-  },
-
-  //fetch a card by scryfall id
-  async getCardById(id) {
-    const res = await rateLimitedFetch(
-      `https://api.scryfall.com/cards/${encodeURIComponent(id)}`
-    );
-    return res.json();
-  },
-
-  getSymbols() {
-    return rateLimitedFetch("https://api.scryfall.com/symbology").then((res) =>
-      res.json()
-    );
-  },
-
-  getPrints(url) {
-    return rateLimitedFetch(url).then((res) => res.json());
-  },
-
-  getSet(url) {
-    return fetch(url).then((res) => res.json());
-  },
-};
