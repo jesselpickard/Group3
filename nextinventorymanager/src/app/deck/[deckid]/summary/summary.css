@@ -1,8 +1,16 @@
+
 .summary-container {
+  background-color: #5a1080; 
+  border-radius: 12px;
   padding: 1.5rem 2rem;
+  margin: 1.5rem 2rem;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  border: 1px solid #7e22ce;
 }
 
+
 .deck-title {
+  color: #f3e8ff;
   margin-bottom: 1rem;
 }
 
@@ -10,6 +18,10 @@
   display: flex;
   gap: 2rem;
   align-items: flex-start;
+
+  background-color: #faf5ff;
+  border-radius: 10px;
+  padding: 1.25rem;
 }
 
 /* LEFT SIDE */
@@ -19,12 +31,7 @@
   align-items: center;
   min-width: 260px;
 }
-
 /* RIGHT SIDE */
 .summary-right {
   flex: 1;
-  background: #faf5ff;
-  border: 1px solid #e9d5ff;
-  border-radius: 10px;
-  padding: 1rem;
 }
