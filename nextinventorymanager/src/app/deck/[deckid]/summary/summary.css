@@ -85,7 +85,9 @@
 
   display: flex;
   align-items: flex-end;
-  justify-content: space-between;
+  justify-content: center; /* key change */
+
+  gap: 10px;              /* controls spacing between bars */
 
   height: 140px;
   padding: 0.75rem;
@@ -109,9 +111,10 @@
 }
 
 .curve-fill {
-  width: 14px;
+  width: 22px;   /* was 14px */
   background: #7e22ce;
   border-radius: 4px 4px 0 0;
   margin: 2px 0;
+
   max-height: 120px;
 }
