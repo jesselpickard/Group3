@@ -1,0 +1,30 @@
+.summary-container {
+  padding: 1.5rem 2rem;
+}
+
+.deck-title {
+  margin-bottom: 1rem;
+}
+
+.summary-content {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+/* LEFT SIDE */
+.summary-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 260px;
+}
+
+/* RIGHT SIDE */
+.summary-right {
+  flex: 1;
+  background: #faf5ff;
+  border: 1px solid #e9d5ff;
+  border-radius: 10px;
+  padding: 1rem;
+}

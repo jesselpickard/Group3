@@ -1,5 +1,6 @@
 import CommanderSelector from "./commander/commanderSelect";
 import CommanderDisplay from "./commander/commanderDisplay";
+import "summary.css";
 
 /**
  * This file takes the deck's summary data and creates a visual representation of it.
@@ -8,11 +9,43 @@ import CommanderDisplay from "./commander/commanderDisplay";
  * to maneuver.
  */
 
-export default function Display({deckId, currentCommander}){
-    return(
-        <div>
-            <CommanderSelector deckId={deckId} currentCommander={currentCommander}/>
-            <CommanderDisplay deckId={deckId}/>
+export default function Display({
+  deckId,
+  deckName,
+  currentCommander,
+  currentFormatId
+}) {
+  return (
+    <div className="summary-container">
+      
+      {/* Deck title */}
+      <h1 className="deck-title">
+        {deckName ?? "Untitled Deck"}
+      </h1>
+
+      <div className="summary-content">
+
+        {/* LEFT: Commander */}
+        <div className="summary-left">
+          <CommanderDisplay deckId={deckId} />
+          <CommanderSelector
+            deckId={deckId}
+            currentCommander={currentCommander}
+          />
         </div>
-    )
+
+        {/* RIGHT: Everything else */}
+        <div className="summary-right">
+          {/* You’ll plug stats/components in here later */}
+          <p>Format: {currentFormatId ?? "None"}</p>
+          {/* future:
+              mana curve
+              color pips
+              totals
+          */}
+        </div>
+
+      </div>
+    </div>
+  );
 }

@@ -96,8 +96,7 @@ export default async function DeckPage({ params }){
       <FormatSelector deckId={deckId} currentFormatId={deckMeta?.format}/>
       <QuickAdd deckId={deckId} />
 
-      <Display deckId={deckId} currentCommander={deckMeta?.commander}/>
-
+      <Display deckId={deckId} deckName={deckMeta?.name} currentCommander={deckMeta?.commander} currentFormatId={deckMeta?.format}/>
 
       <div className="cardStackContainer">
         {Object.entries(groupedCards).map(([type, group]) =>
