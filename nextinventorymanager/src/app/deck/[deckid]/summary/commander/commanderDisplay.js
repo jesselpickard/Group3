@@ -11,7 +11,7 @@ async function getCommander(deckId) {
 
   if (error) throw new Error(error.message);
 
-  return data?.formats || null;
+  return data?.commander || null;
 }
 
 export default async function DeckCommanderDisplay({ deckId }) {
