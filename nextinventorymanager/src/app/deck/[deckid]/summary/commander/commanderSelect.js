@@ -16,7 +16,7 @@ export default function CommanderSelector({ deckId, currentCommander }) {
       const { data, error } = await supabase
         .from(`deck_cards`)
         .select(`card_id, cards(name)`)
-      .eq('deck_id', deckId);
+        .eq('deck_id', deckId);
       if (!error) setCards(data);
     }
 

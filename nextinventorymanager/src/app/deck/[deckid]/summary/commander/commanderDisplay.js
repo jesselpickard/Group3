@@ -30,7 +30,7 @@ export default async function DeckCommanderDisplay({ deckId }) {
   return (
     <div>
       <h2>Commander</h2>
-      <p>{format.minCards}</p>
+      <p>{commander}</p>
     </div>
   );
 }
