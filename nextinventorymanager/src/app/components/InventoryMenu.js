@@ -91,11 +91,12 @@ export default function InventoryMenu({ inventoryCards, setCards, setCurrentPage
         !card.set?.toLowerCase().includes(setCode.toLowerCase())
       )
         return false;
+
  
       // Color filters
       const cardColors = card.colors ?? [];
-      for (const [colorName, state] of Object.entries(colors)) {
-        const code = COLOR_CODES[colorName];
+      for (const [colorTest, state] of Object.entries(colors)) {
+        const code = COLOR_CODES[colorTest];
         if (state === STATES.INCLUDE && !cardColors.includes(code)) return false;
         if (state === STATES.EXCLUDE && cardColors.includes(code)) return false;
         // ID state: uses color_identity instead of colors
