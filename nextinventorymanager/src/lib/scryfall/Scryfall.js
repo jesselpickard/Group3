@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { scryfallApi } from "@/lib/scryfall"; // adjust path
+import { scryfallApi } from "@/lib/scryfall/Scryfall"; 
 
 async function getCommander(deckId) {
   const supabase = await createClient();
