@@ -37,7 +37,7 @@ export default function Display({
         <div className="summary-right">
 
             {/* FORMAT */}
-            <div className="stat-block">
+            <div className="stat-block stat-format">
                 <h4>Format</h4>
                 <p>{currentFormatId ?? "None"}</p>
 
@@ -48,13 +48,13 @@ export default function Display({
             </div>
 
             {/* CARD COUNT */}
-            <div className="stat-block">
+            <div className="stat-block stat-cardCount">
                 <h4>Total Cards</h4>
                 <p>{summary?.totalCards ?? 0}</p>
             </div>
 
             {/* MANA CURVE */}
-            <div className="stat-block">
+            <div className="stat-block stat-curve">
                 <h4>Mana Curve</h4>
 
                 <div className="curve">
