@@ -1,5 +1,6 @@
 import CommanderSelector from "./commander/commanderSelect";
 import CommanderDisplay from "./commander/commanderDisplay";
+import FormatSelector from "./format/formatSelection";
 import "./summary.css";
 
 /**
