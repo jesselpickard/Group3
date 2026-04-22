@@ -61,12 +61,12 @@ export default function Display({
                 {summary?.manaCurve &&
                     Object.entries(summary.manaCurve).map(([key, value]) => (
                     <div key={key} className="curve-bar">
-                        <span>{key}</span>
+                        <span>{value}</span>
                         <div
                         className="curve-fill"
                         style={{ height: `${value * 6}px` }}
                         />
-                        <small>{value}</small>
+                        <small>{key}</small>
                     </div>
                     ))}
                 </div>
