@@ -37,6 +37,13 @@
   min-width: 260px;
 }
 
+/*CENTER*/
+.summary-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
 /* RIGHT SIDE */
 .summary-right {
   flex: 0 1 520px;   /* prevents infinite stretching */

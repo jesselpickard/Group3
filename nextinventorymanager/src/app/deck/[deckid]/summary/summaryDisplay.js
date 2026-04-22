@@ -32,7 +32,25 @@ export default function Display({
           <CommanderDisplay deckId={deckId} />
           <CommanderSelector deckId={deckId} currentCommander={currentCommander}/>
         </div>
-
+        <div className="summary-center">
+          {/* MANA CURVE */}
+            <div className="stat-block stat-curve">
+                <h4>Mana Curve</h4>
+                <div className="curve">
+                {summary?.manaCurve &&
+                    Object.entries(summary.manaCurve).map(([key, value]) => (
+                    <div key={key} className="curve-bar">
+                        <span>{value}</span>
+                        <div
+                        className="curve-fill"
+                        style={{ height: `${value * 6}px` }}
+                        />
+                        <small>{key}</small>
+                    </div>
+                    ))}
+                </div>
+            </div>
+        </div>
         {/* RIGHT: Everything else */}
         <div className="summary-right">
 
@@ -51,25 +69,6 @@ export default function Display({
             <div className="stat-block stat-cardCount">
                 <h4>Total Cards</h4>
                 <p>{summary?.totalCards ?? 0}</p>
-            </div>
-
-            {/* MANA CURVE */}
-            <div className="stat-block stat-curve">
-                <h4>Mana Curve</h4>
-
-                <div className="curve">
-                {summary?.manaCurve &&
-                    Object.entries(summary.manaCurve).map(([key, value]) => (
-                    <div key={key} className="curve-bar">
-                        <span>{value}</span>
-                        <div
-                        className="curve-fill"
-                        style={{ height: `${value * 6}px` }}
-                        />
-                        <small>{key}</small>
-                    </div>
-                    ))}
-                </div>
             </div>
         </div>
       </div>
