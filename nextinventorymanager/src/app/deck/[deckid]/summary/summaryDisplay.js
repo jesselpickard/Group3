@@ -8,7 +8,7 @@ import CommanderDisplay from "./commander/commanderDisplay";
  * to maneuver.
  */
 
-export default function Display({deckId}){
+export default function Display({deckId, currentCommander}){
     return(
         <div>
             <CommanderSelector deckId={deckId} currentCommander={currentCommander}/>
