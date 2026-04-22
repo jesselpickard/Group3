@@ -1,6 +1,6 @@
 
 .summary-container {
-  background-color: #5a1080; 
+  background-color: #faf5ff;
   border-radius: 12px;
   padding: 1.5rem 2rem;
   margin: 1.5rem 2rem;
@@ -19,7 +19,6 @@
   gap: 2rem;
   align-items: flex-start;
 
-  background-color: #faf5ff;
   border-radius: 10px;
   padding: 1.25rem;
 }
