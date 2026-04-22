@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { scryfallApi } from "@/lib/scryfall/Scryfall";
 import "./quickAdd.css";
@@ -14,8 +14,21 @@ export default function QuickAdd({ deckId }) {
   const [loading, setLoading] = useState(false);
   const [adding, setAdding] = useState(false);
 
+  const wrapperRef = useRef(null);
   const debounceRef = useRef(null);
   const ignoreResultsRef = useRef(false);
+
+  // 🔥 click-off detection
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   function debounce(fn, delay = 250) {
     if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -34,6 +47,7 @@ export default function QuickAdd({ deckId }) {
 
     debounce(async () => {
       setLoading(true);
+
       try {
         const { data } = await scryfallApi.autocomplete(q);
 
@@ -44,6 +58,7 @@ export default function QuickAdd({ deckId }) {
         console.error(err);
         setSuggestions([]);
       }
+
       setLoading(false);
     }, 250);
   }
@@ -76,22 +91,19 @@ export default function QuickAdd({ deckId }) {
   }
 
   return (
-    <div className="quickadd-select">
+    <div className="quickadd-select" ref={wrapperRef}>
       <h3 className="quickadd-label">Quick Add</h3>
 
-      {/* INPUT TRIGGER */}
-      <div className="quickadd-selected" onClick={() => setOpen(true)}>
+      <div className="quickadd-selected">
         <input
           value={query}
           placeholder="Search cards..."
           onChange={(e) => handleChange(e.target.value)}
-          disabled={adding}
           onFocus={() => setOpen(true)}
+          disabled={adding}
         />
-        <span className="arrow">{open ? "▲" : "▼"}</span>
       </div>
 
-      {/* DROPDOWN */}
       {open && (
         <div className="quickadd-dropdown">
           {loading && <div className="quickadd-option">Searching...</div>}
