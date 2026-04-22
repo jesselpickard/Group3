@@ -47,8 +47,8 @@ export default function InventoryMenu({ inventoryCards, setCards, setCurrentPage
   };
 
   const filterCards = () => {
-    console.log("colors state:", colors);
-  console.log("STATES values:", STATES);
+  //   console.log("colors state:", colors);
+  // console.log("STATES values:", STATES);
     const filtered = inventoryCards.filter((card) => {
       // Name search
       if (query && !card.name?.toLowerCase().includes(query.toLowerCase()))
@@ -98,6 +98,7 @@ export default function InventoryMenu({ inventoryCards, setCards, setCurrentPage
       const cardColors = card.colors ?? [];
       for (const [colorTest, state] of Object.entries(colors)) {
         const code = COLOR_CODES[colorTest];
+        console.log("colorTest:", colorTest, "state:", state, "code:", code, "cardColors:", cardColors);
         if (state === STATES.INCLUDE && !cardColors.includes(code)) return false;
         if (state === STATES.EXCLUDE && cardColors.includes(code)) return false;
         // ID state: uses color_identity instead of colors
