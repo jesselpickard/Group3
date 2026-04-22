@@ -13,7 +13,8 @@ export default function Display({
   deckId,
   deckName,
   currentCommander,
-  currentFormatId
+  currentFormatId,
+  summary
 }) {
   return (
     <div className="summary-container">
@@ -33,15 +34,43 @@ export default function Display({
 
         {/* RIGHT: Everything else */}
         <div className="summary-right">
-          {/* You’ll plug stats/components in here later */}
-          <p>Format: {currentFormatId ?? "None"}</p>
-          {/* future:
-              mana curve
-              color pips
-              totals
-          */}
-        </div>
 
+            {/* FORMAT */}
+            <div className="stat-block">
+                <h4>Format</h4>
+                <p>{currentFormatId ?? "None"}</p>
+
+                <FormatSelector
+                deckId={deckId}
+                currentFormatId={currentFormatId}
+                />
+            </div>
+
+            {/* CARD COUNT */}
+            <div className="stat-block">
+                <h4>Total Cards</h4>
+                <p>{summary?.totalCards ?? 0}</p>
+            </div>
+
+            {/* MANA CURVE */}
+            <div className="stat-block">
+                <h4>Mana Curve</h4>
+
+                <div className="curve">
+                {summary?.manaCurve &&
+                    Object.entries(summary.manaCurve).map(([key, value]) => (
+                    <div key={key} className="curve-bar">
+                        <span>{key}</span>
+                        <div
+                        className="curve-fill"
+                        style={{ height: `${value * 6}px` }}
+                        />
+                        <small>{value}</small>
+                    </div>
+                    ))}
+                </div>
+            </div>
+        </div>
       </div>
     </div>
   );
