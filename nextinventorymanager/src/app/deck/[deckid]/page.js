@@ -85,7 +85,7 @@ export default async function DeckPage({ params }){
     cards = await getDeckCards(deckId);
     deckMeta = await getDeckMeta(deckId);
   }
-
+  const deckSummary = deckId ? await summary(deckId) : null;
   const groupedCards = groupCardsByType(cards);
 
   return (
