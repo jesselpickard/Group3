@@ -56,7 +56,7 @@ export default function Display({
 
             {/* FORMAT */}
             <div className="stat-block stat-format">
-                <h4 className="title">DeckFormat: {currentFormatId ?? "Unselected"}</h4>
+                <h4 className="title">Deck Format: {currentFormatId ?? "Unselected"}</h4>
 
                 <FormatSelector
                 deckId={deckId}
