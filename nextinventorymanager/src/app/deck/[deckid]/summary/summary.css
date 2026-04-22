@@ -23,10 +23,14 @@
   margin-bottom: 1rem;
 }
 
+/* =========================
+   LAYOUT (FIXED HEIGHT BEHAVIOR)
+========================= */
+
 .summary-content {
   display: flex;
   gap: 2rem;
-  align-items: flex-start;
+  align-items: stretch; /* 🔥 KEY FIX */
 }
 
 /* LEFT SIDE */
@@ -42,7 +46,7 @@
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: stretch; /* 🔥 KEY FIX */
 }
 
 /* RIGHT SIDE */
@@ -67,12 +71,13 @@
 }
 
 /* =========================
-   MANA CURVE (FIXED)
+   MANA CURVE (CENTER FOCUS)
 ========================= */
 
 .stat-block.stat-curve {
-  width: 100%;                 
-  max-width: none;             
+  width: 100%;
+  flex: 1; /* 🔥 fills available center height */
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -88,15 +93,15 @@
   margin-bottom: 0.75rem;
 }
 
+/* CURVE AREA */
 .curve {
-  width: 100%;                 
-  max-width: none;             
+  width: 100%;
+  flex: 1; /* 🔥 fills vertical space */
 
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
 
-  height: 100%;
   padding: 0.75rem;
 
   border: 1px solid #e9d5ff;
@@ -104,7 +109,7 @@
   background: #faf5ff;
 }
 
-/* bars distribute evenly */
+/* BARS */
 .curve-bar {
   flex: 1;
   display: flex;
@@ -113,15 +118,14 @@
   font-size: 0.7rem;
   color: #4c1d95;
 
-  height: 100%;
   justify-content: flex-end;
 }
 
 .curve-fill {
-  width: 60%;                  
+  width: 60%;
   background: #7e22ce;
   border-radius: 4px 4px 0 0;
   margin: 2px 0;
 
-  max-height: 120px;
+  max-height: 100%;
 }
