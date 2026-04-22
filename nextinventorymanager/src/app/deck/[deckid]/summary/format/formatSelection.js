@@ -46,7 +46,7 @@ export default function FormatSelector({ deckId, currentFormat }) {
 
   return (
     <div className="format-select">
-      <h3 className="format-label">Format</h3>
+      <h3 className="format-label">Change Format</h3>
 
       <button
         className="format-selected"
