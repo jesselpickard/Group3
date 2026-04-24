@@ -266,17 +266,17 @@ function Navbar() {
         </div>
       </nav>
 
-      <NavLinks />
+      <NavLinks pathname={pathname} />
     </>
   );
 }
 
-function NavLinks() {
+function NavLinks({ pathname }) {
   return (
     <div className="nav-links">
-      <a href="/">Home</a>
-      <a href="/Inventory">Inventory</a>
-      <a href="/Decks">Decks</a>
+      <a href="/" className={pathname === '/' ? 'active' : ''}>Home</a>
+      <a href="/Inventory" className={pathname === '/Inventory' ? 'active' : ''}>Inventory</a>
+      <a href="/Decks" className={pathname === '/Decks' ? 'active' : ''}>Decks</a>
     </div>
   );
 }

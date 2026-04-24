@@ -218,6 +218,12 @@
   text-decoration: underline;
 }
 
+.nav-links a.active {
+  font-weight: bold;
+  border: 2px solid white;
+  border-radius: 6px;
+  padding: 2px 8px;
+}
 
 /* ---- Submenu ---- */
 /* dropdown card that appears when the avatar is clicked */

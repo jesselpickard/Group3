@@ -5,28 +5,6 @@ import Link from "next/link";
 import Menu from "./InventoryMenu";
 import "./CardGrid.css";
 
-const colors = [
-  "#FF4444",
-  "#FF8C00",
-  "#FFD700",
-  "#4CAF50",
-  "#2196F3",
-  "#4B0082",
-  "#8F00FF",
-  "#FF69B4",
-  "#00CED1",
-  "#FF6347",
-  "#32CD32",
-  "#9370DB",
-  "#FF1493",
-  "#00BFFF",
-  "#FF8C69",
-  "#98FB98",
-  "#DDA0DD",
-  "#F0E68C",
-  "#87CEEB",
-  "#FFA07A",
-];
 
 function PaginationBar({ currentPage, totalPages, onPageChange }) {
   const [jumpValue, setJumpValue] = useState("");
@@ -133,7 +111,6 @@ export default function InventoryCardGrid({ initialCards = [] }) {
   const [filteredCards, setFilteredCards] = useState(initialCards);
 
   const CARDS_PER_PAGE = 81;
-  const currentColor = colors[(currentPage - 1) % colors.length];
   const themeTextColor = "var(--foreground)";
   const themeBackgroundColor = "var(--background)";
 
@@ -236,13 +213,10 @@ export default function InventoryCardGrid({ initialCards = [] }) {
                     </Link>
                   );
                 })
-              : Array.from({ length: CARDS_PER_PAGE }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="card-placeholder"
-                    style={{ backgroundColor: currentColor }}
-                  />
-                ))}
+              : initialCards.length === 0
+              ? <p style={{ color: 'var(--foreground)', padding: '1rem' }}>No cards in inventory!</p>
+              : null
+            }
           </div>
         </div>
       </div>
