@@ -214,7 +214,18 @@ export default function InventoryCardGrid({ initialCards = [] }) {
                   );
                 })
               : initialCards.length === 0
-              ? <p style={{ color: 'var(--foreground)', padding: '1rem' }}>No cards in inventory!</p>
+              ? <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '4rem',
+                color: '#71179C',
+                fontWeight: 'bold',
+                fontSize: '1.2rem',
+              }}>
+                No cards in inventory!
+              </div>
               : null
             }
           </div>

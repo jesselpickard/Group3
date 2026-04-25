@@ -277,16 +277,12 @@ export default function DeckGrid() {
             // find contained cards
             const contains = [];
             for (const deckCard of deckCards) {
-              const ownedQty = owned[deckCard.card_id] || 0;
-              const needed = deckCard.quantity - ownedQty;
-              if (needed > 0) {
-                const { data: cardData } = await supabase
-                  .from('cards')
-                  .select('name')
-                  .eq('card_id', deckCard.card_id)
-                  .single();
-                if (cardData) contains.push(`${cardData.name} x${needed}`);
-              }
+              const { data: cardData } = await supabase
+                .from('cards')
+                .select('name')
+                .eq('card_id', deckCard.card_id)
+                .single();
+              if (cardData) contains.push(`${cardData.name} x${needed}`);
             }
 
             // get commander card id if the deck has one
