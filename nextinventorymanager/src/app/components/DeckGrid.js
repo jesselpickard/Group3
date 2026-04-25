@@ -282,7 +282,14 @@ export default function DeckGrid() {
                 .select('name')
                 .eq('card_id', deckCard.card_id)
                 .single();
-              if (cardData) contains.push(`${cardData.name} x${needed}`);
+              if (cardData) {
+                const ownedQty = owned[deckCard.card_id] || 0;
+                const missing = deckCard.quantity - ownedQty;
+                const label = missing > 0
+                  ? `${cardData.name} x${deckCard.quantity} ⚠️ (missing ${missing})`
+                  : `${cardData.name} x${deckCard.quantity}`;
+                contains.push(label);
+              }
             }
 
             // get commander card id if the deck has one
