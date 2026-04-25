@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import Menu from "./InventoryMenu";
 import "./CardGrid.css";
-import { useRouter } from 'next/navigation';
 
 
 function PaginationBar({ currentPage, totalPages, onPageChange }) {
@@ -110,11 +109,6 @@ function PaginationBar({ currentPage, totalPages, onPageChange }) {
 export default function InventoryCardGrid({ initialCards = [] }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredCards, setFilteredCards] = useState(initialCards);
-  const router = useRouter();
-
-  useEffect(() => {
-    router.refresh();
-  }, []);
 
   const CARDS_PER_PAGE = 81;
   const themeTextColor = "var(--foreground)";
