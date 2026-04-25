@@ -110,6 +110,12 @@ export default function InventoryCardGrid({ initialCards = [] }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredCards, setFilteredCards] = useState(initialCards);
 
+  useEffect(() => {
+    const handleFocus = () => window.location.reload();
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, []);
+
   const CARDS_PER_PAGE = 81;
   const themeTextColor = "var(--foreground)";
   const themeBackgroundColor = "var(--background)";

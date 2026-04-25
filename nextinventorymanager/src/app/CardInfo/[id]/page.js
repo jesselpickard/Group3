@@ -316,7 +316,6 @@ function CardInfo() {
         .eq("card_id", card.id);
         console.log("Card removed from inventory");
     }
-    router.refresh();
   }
 
   // =======================
