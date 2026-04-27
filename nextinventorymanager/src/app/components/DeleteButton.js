@@ -1,8 +1,9 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client'; // client-side import
+import { createClient } from '@/lib/supabase/client';
 
+//Delete button
 export default function DeleteButton({ deckId }) {
   const router = useRouter();
 
@@ -10,7 +11,7 @@ export default function DeleteButton({ deckId }) {
     const confirmed = confirm('Are you sure you want to delete this deck?');
     if (!confirmed) return;
 
-    const supabase = createClient(); // no await needed on client side
+    const supabase = createClient();
 
     const { error } = await supabase
       .from('decks')
