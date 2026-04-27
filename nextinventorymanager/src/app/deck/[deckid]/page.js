@@ -90,7 +90,7 @@ export default async function DeckPage({ params }){
 
   //Delete deck function
   async function deleteDeck() {
-    
+
   const confirmed = confirm('Are you sure you want to delete this deck?');
   if (!confirmed) return;
 
@@ -129,7 +129,7 @@ export default async function DeckPage({ params }){
         )}
       </div>
       <footer>
-        <button onClick="deleteDeck()">Delete Deck</button>
+        <button onClick={deleteDeck}>Delete Deck</button>
       </footer>
     </div>
   )
