@@ -49,16 +49,12 @@ export default function NewDeckButton() {
 
     const deckName = prompt('Enter deck name') || 'New Deck';
 
-    // user cancelled prompt
-    if (deckName == null) {
-      return;
-    } else {
+    if(deckName == null) return; // user cancelled prompt
 
-      const { data, error } = await supabase
-        .from('decks')
-        .insert({ user_id: user.id, name: deckName })
-        .select();
-    }
+    const { data, error } = await supabase
+      .from('decks')
+      .insert({ user_id: user.id, name: deckName })
+      .select();
 
     if (error) {
       console.error(error);
