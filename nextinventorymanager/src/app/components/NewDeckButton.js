@@ -47,14 +47,22 @@ export default function NewDeckButton() {
       return;
     }
 
-    const deckName = prompt('Enter deck name') || 'New Deck';
+    const deckName = prompt('Enter deck name');
 
-    if(deckName == null) return; // user cancelled prompt
+    if(deckName === null) return; // user cancelled prompt
 
+   if(deckName === ""){
+    const newName = deckName.trim() || 'New Deck';
+    const { data, error } = await supabase
+      .from('decks')
+      .insert({ user_id: user.id, name: newName })
+      .select();
+  }else{
     const { data, error } = await supabase
       .from('decks')
       .insert({ user_id: user.id, name: deckName })
       .select();
+  }
 
     if (error) {
       console.error(error);
