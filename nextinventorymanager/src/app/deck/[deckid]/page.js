@@ -8,6 +8,7 @@ import CardStack from "./summary/cards/cardStack.js";
 import "./main.css";
 import Masonry from "./masonry.js";
 import Display from "./summary/summaryDisplay.js";
+import DeleteButton from '@/app/components/DeleteButton';
 
 
 /**
@@ -129,7 +130,9 @@ export default async function DeckPage({ params }){
         )}
       </div>
       <footer>
-        <button onClick={deleteDeck}>Delete Deck</button>
+      <div className="delete-btn">
+        <DeleteButton deckId={deckId} />
+        </div>
       </footer>
     </div>
   )
