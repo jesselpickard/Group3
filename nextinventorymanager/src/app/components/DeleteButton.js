@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-
+import "./deleteStyle.css";
 //Delete button
 export default function DeleteButton({ deckId }) {
   const router = useRouter();
