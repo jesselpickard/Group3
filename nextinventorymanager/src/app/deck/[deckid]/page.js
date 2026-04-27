@@ -88,6 +88,26 @@ export default async function DeckPage({ params }){
   const deckSummary = deckId ? await summary(deckId) : null;
   const groupedCards = groupCardsByType(cards);
 
+  //Delete deck function
+  async function deleteDeck() {
+    
+  const confirmed = confirm('Are you sure you want to delete this deck?');
+  if (!confirmed) return;
+
+  const { error } = await supabase
+    .from('decks')
+    .delete()
+    .eq('deck_id', deckId);
+
+  if (error) {
+    console.error(error);
+    alert(`Failed to delete deck: ${error.message}`);
+    return;
+  }
+
+  router.push('/Decks/page');
+}
+
   return (
     <div>
       <Navbar />
@@ -108,6 +128,9 @@ export default async function DeckPage({ params }){
           ) : null
         )}
       </div>
+      <footer>
+        <button onClick="deleteDeck()">Delete Deck</button>
+      </footer>
     </div>
   )
 }
