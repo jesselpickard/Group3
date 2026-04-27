@@ -23,7 +23,7 @@ export default function DeleteButton({ deckId }) {
       return;
     }
 
-    router.push('/Decks/page');
+    router.push('@/app/Decks/page');
   }
 
   return <button onClick={deleteDeck}>Delete Deck</button>;
