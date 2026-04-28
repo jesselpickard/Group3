@@ -20,8 +20,8 @@
 }
 
 .btn-actions {
-gap: 10px;
-padding:6px;
+display: flex;
+gap: 0.5rem;
 }
 
 @media (max-width: 800px) {
