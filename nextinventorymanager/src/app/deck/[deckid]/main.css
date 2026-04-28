@@ -19,6 +19,11 @@
   display: block;
 }
 
+.btn-actions {
+gap: 10px;
+padding:6px;
+}
+
 @media (max-width: 800px) {
   .cardStackContainer {
     grid-template-columns: 1fr;
