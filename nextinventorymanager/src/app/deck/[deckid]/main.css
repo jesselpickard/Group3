@@ -21,9 +21,10 @@
 
 .btn-actions {
 display: flex;
-gap: 10px;
 justify-content: center;
 align-items: flex-start;
+padding: 8px;
+gap: 0.5rem;
 }
 
 @media (max-width: 800px) {
