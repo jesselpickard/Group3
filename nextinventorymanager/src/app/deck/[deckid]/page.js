@@ -1,28 +1,28 @@
 import Navbar from "@/app/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
 import QuickAdd from "./summary/quickAdd/quickAdd.js";
-import { getDeckCards, summary } from "./deckSummary.js"; 
+import { getDeckCards, summary } from "./deckSummary.js";
 import DeckFormatDisplay from "./summary/format/formatDisplay.js";
 import FormatSelector from "./summary/format/formatSelection.js";
 import CardStack from "./summary/cards/cardStack.js";
 import "./main.css";
 import Masonry from "./masonry.js";
 import Display from "./summary/summaryDisplay.js";
-import DeleteButton from '@/app/components/DeleteButton';
-
+import DeleteButton from "@/app/components/DeleteButton";
+import RenameButton from "@/app/components/RenameButton";
 
 /**
  *  This page is meant to lay out the contents of a deck to its viewer. It will allow
  *  for the quick addition and removal of cards to its list as well as the ability to
  *  modify the quantities.
- * 
+ *
  *  To-do list: (non-exhaustive)
  *      Deck display. -> implemented as text for now
  *      Deck info display/modification.
  *      Quick add search.
  *      Card categories
  *      Deck summary.
- * 
+ *
  */
 
 async function getDeckMeta(deckId) {
@@ -74,7 +74,7 @@ function groupCardsByType(cards) {
   return groups;
 }
 
-export default async function DeckPage({ params }){
+export default async function DeckPage({ params }) {
   const awaitParams = await params;
   const deckId = awaitParams?.deckid;
 
@@ -92,27 +92,34 @@ export default async function DeckPage({ params }){
     <div>
       <Navbar />
 
-      <Display deckId={deckId} deckName={deckMeta?.name} currentCommander={deckMeta?.commander} currentFormatId={deckMeta?.format} summary={deckSummary}/>
+      <Display
+        deckId={deckId}
+        deckName={deckMeta?.name}
+        currentCommander={deckMeta?.commander}
+        currentFormatId={deckMeta?.format}
+        summary={deckSummary}
+      />
 
       <div className="cardStackContainer">
         {Object.entries(groupedCards).map(([type, group]) =>
           group.length > 0 ? (
             <Masonry key={type}>
-              <CardStack 
+              <CardStack
                 key={type}
                 type={type.charAt(0).toUpperCase() + type.slice(1)}
                 cards={group}
                 deckId={deckId}
               />
             </Masonry>
-          ) : null
+          ) : null,
         )}
       </div>
       <footer>
-      <div className="delete-btn">
-        <DeleteButton deckId={deckId} />
+        <div className="btn-actions">
+          <DeleteButton deckId={deckId} />
+          <RenameButton deckId={deckId} deckName={deckMeta?.name} />
         </div>
       </footer>
     </div>
-  )
+  );
 }

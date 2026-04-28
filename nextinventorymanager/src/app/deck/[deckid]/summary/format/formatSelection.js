@@ -42,7 +42,7 @@ export default function FormatSelector({ deckId, currentFormat }) {
     router.refresh();
   }
 
-  const selectedFormat = formats.find(f => f.name === selected);
+  const selectedFormat = formats.find((f) => f.name === selected);
 
   return (
     <div className="format-select">
@@ -50,7 +50,7 @@ export default function FormatSelector({ deckId, currentFormat }) {
 
       <button
         className="format-selected"
-        onClick={() => setOpen(prev => !prev)}
+        onClick={() => setOpen((prev) => !prev)}
       >
         {selectedFormat
           ? `${selectedFormat.name} (${selectedFormat.minCards} - ${selectedFormat.maxCards ?? "∞"})`
