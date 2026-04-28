@@ -60,9 +60,7 @@ export default function FormatSelector({ deckId, currentFormat }) {
 
       {open && (
         <div className="format-dropdown">
-          <div
-            className="format-option"
-            onClick={() => handleSelect(null)}>
+          <div className="format-option" onClick={() => handleSelect(null)}>
             Unselected
           </div>
           {formats.map((format) => (
