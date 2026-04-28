@@ -26,12 +26,12 @@ export default function FormatSelector({ deckId, currentFormat }) {
   }, []);
 
   async function handleSelect(formatName) {
-    setSelected(formatName);
+    setSelected(formatName || "");
     setOpen(false);
 
     const { error } = await supabase
       .from("decks")
-      .update({ format: formatName })
+      .update({ format: formatName || null })
       .eq("deck_id", deckId);
 
     if (error) {
@@ -60,6 +60,11 @@ export default function FormatSelector({ deckId, currentFormat }) {
 
       {open && (
         <div className="format-dropdown">
+          <div
+            className="format-option"
+            onClick={() => handleSelect(null)}>
+            Unselected
+          </div>
           {formats.map((format) => (
             <div
               key={format.name}
