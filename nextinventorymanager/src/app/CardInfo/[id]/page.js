@@ -281,7 +281,7 @@ function CardInfo() {
       setQuantity(newQty);
     }
   }
-
+//removes the card from the user's inventory, and deletes the row if quantity hits 0
   async function removeFromInventory() {
     const {
       data: { user },
