@@ -97,14 +97,14 @@ export default function CollapsibleMenu({ setCards, setCurrentPage}) {
 
 
   useEffect(() => {
-  if (isFirstRender.current) {
-    isFirstRender.current = false;
-    return;
-  }
-  const timeout = setTimeout(() => {
-    CardSearch();
-  }, 300);
-    return () => clearTimeout(timeout);
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    const timeout = setTimeout(() => {
+      CardSearch();
+    }, 300);
+      return () => clearTimeout(timeout);
   }, [query, type, subtype, power, toughness, mana, setCode, colors]);
 
   return (
